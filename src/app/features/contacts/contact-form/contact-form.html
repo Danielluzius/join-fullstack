@@ -3,17 +3,13 @@
     <app-contact-avatar [contact]="formData" [editMode]="editMode"></app-contact-avatar>
 
     <form (ngSubmit)="onSubmit()">
-      <app-contact-form-inputs 
-        [(ngModel)]="formData" 
-        name="contactForm"
-        (ngModelChange)="updateFormData($event)">
+      <app-contact-form-inputs [(ngModel)]="formData" name="contactForm" (ngModelChange)="updateFormData($event)">
       </app-contact-form-inputs>
 
       <div class="modal-actions">
         @if (editMode) {
         <button type="button" class="secondary delete-btn" (click)="onDeleteFromEdit()">Delete</button>
         }
-        <button type="button" class="secondary cancel-btn" (click)="onClose()">Cancel</button>
         <button type="submit" class="primary" [class.save-btn]="editMode">
           {{ editMode ? 'Save' : 'Create contact' }}
           <img src="assets/check.png" alt="Check" class="check-icon" />

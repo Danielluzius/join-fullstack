@@ -152,13 +152,13 @@
     width: 100%;
     left: 50%;
     transform: translateX(-50%);
-    top: 450px;
+    top: 410px;
     padding: 0 16px;
     gap: 12px;
   }
 
   .form-container form {
-    gap: 12px;
+    gap: 8px;
     max-width: 364px;
     margin: 0 auto;
   }
@@ -170,13 +170,9 @@
   .modal-actions {
     max-width: 364px;
     height: 51px;
-    margin-top: 28px;
+    margin-top: 20px;
     justify-content: center;
     gap: 16px;
-  }
-
-  .modal-actions .cancel-btn {
-    display: none;
   }
 
   .modal-actions .delete-btn {
@@ -221,10 +217,9 @@
   }
 }
 
-
 // .input-wrapper.error {
 //   border-color: #ff4646;
-  
+
 //   input {
 //     color: #ff4646;
 //   }
