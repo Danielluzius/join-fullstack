@@ -141,33 +141,33 @@
 
 @media (max-width: 900px) {
   :host {
-    gap: 6px;
+    gap: clamp(1px, 0.8vh, 6px);
   }
 
   .input-wrapper {
     max-width: 364px;
-    height: 41px;
+    height: clamp(45px, 6vh, 49px);
   }
 
   .input-wrapper input {
-    height: 41px;
+    height: clamp(41px, 5.5vh, 49px);
     padding: 13px 21px;
-    font-size: 20px;
+    font-size: clamp(14px, 2vh, 20px);
   }
 
   .error-container {
-    min-height: 18px;
-    height: 18px;
-    margin-bottom: 3px;
+    min-height: clamp(14px, 2vh, 18px);
+    height: clamp(14px, 2vh, 18px);
+    margin-bottom: clamp(0px, 0.4vh, 3px);
     padding-left: 12px;
   }
 
   .error-text {
-    font-size: 11px;
+    font-size: clamp(10px, 1.4vh, 11px);
   }
 
   .input-wrapper {
-    height: 49px;
+    height: clamp(45px, 6vh, 49px);
     padding: 0 18px;
   }
 

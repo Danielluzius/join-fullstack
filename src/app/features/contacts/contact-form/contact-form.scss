@@ -192,15 +192,16 @@
     width: 100%;
     left: 50%;
     transform: translateX(-50%);
-    top: 370px;
+    top: clamp(239px, 40vh + 19px, 370px);
     padding: 0 16px;
-    gap: 12px;
+    gap: clamp(2px, 1.5vh, 12px);
   }
 
   .form-container form {
-    gap: 8px;
+    gap: clamp(1px, 1vh, 8px);
     max-width: 364px;
     margin: 0 auto;
+    padding-top: clamp(25px, 5vh, 40px);
   }
 
   .error-message {
@@ -209,8 +210,8 @@
 
   .modal-actions {
     max-width: 364px;
-    height: 51px;
-    margin-top: 20px;
+    height: clamp(45px, 6.5vh, 51px);
+    margin-top: clamp(4px, 2.5vh, 20px);
     justify-content: center;
     gap: 16px;
   }
@@ -222,7 +223,7 @@
   .modal-actions .delete-btn {
     display: flex;
     min-width: 110px;
-    height: 51px;
+    height: clamp(45px, 6.5vh, 51px);
     padding: 14px 16px;
     font-size: 16px;
   }
@@ -230,7 +231,7 @@
   .modal-actions .primary {
     min-width: 140px;
     max-width: 160px;
-    height: 51px;
+    height: clamp(45px, 6.5vh, 51px);
     padding: 14px 16px;
     font-size: 16px;
   }
@@ -250,34 +251,6 @@
 @media (max-width: 400px) {
   .form-container {
     padding: 0 12px;
-  }
-}
-
-@media (max-width: 900px) and (max-height: 780px) {
-  .form-container {
-    top: 340px;
-  }
-
-  .form-container form {
-    gap: 8px;
-  }
-
-  .modal-actions {
-    margin-top: 18px;
-  }
-}
-
-@media (max-width: 900px) and (max-height: 700px) {
-  .form-container {
-    top: 310px;
-  }
-
-  .form-container form {
-    gap: 8px;
-  }
-
-  .modal-actions {
-    margin-top: 16px;
   }
 }
 
