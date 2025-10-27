@@ -4,10 +4,11 @@ import { BoardTasksService } from '../../core/services/board-tasks-service';
 import { Task } from '../../core/interfaces/board-tasks-interface';
 import { BoardColumns } from './board-columns/board-columns';
 import { TaskModal } from './task-modal/task-modal';
+import { BoardHeader } from './board-header/board-header'; 
 
 @Component({
   selector: 'app-board',
-  imports: [CommonModule, BoardColumns, TaskModal],
+  imports: [CommonModule, BoardColumns, TaskModal, BoardHeader],
   templateUrl: './board.html',
   styleUrl: './board.scss',
   standalone: true,
