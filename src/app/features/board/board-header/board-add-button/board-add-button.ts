@@ -4,7 +4,8 @@ import { Component } from '@angular/core';
   selector: 'app-board-add-button',
   imports: [],
   templateUrl: './board-add-button.html',
-  styleUrl: './board-add-button.scss'
+  styleUrl: './board-add-button.scss',
+  standalone: true
 })
 export class BoardAddButton {
 

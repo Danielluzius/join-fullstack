@@ -4,7 +4,8 @@ import { Component } from '@angular/core';
   selector: 'app-board-search',
   imports: [],
   templateUrl: './board-search.html',
-  styleUrl: './board-search.scss'
+  styleUrl: './board-search.scss',
+  standalone: true
 })
 export class BoardSearch {
 
