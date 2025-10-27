@@ -1,7 +1,24 @@
-h2 {
-    font-family: Inter;
-    font-weight: 700;
-    font-size: 61px;
-    line-height: 120%;
-    letter-spacing: 0%;
+.board-header {
+  width: 1208px;
+  height: 232px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+
+  h2 {
+      font-family: Inter;
+      font-weight: 700;
+      font-size: 61px;
+      line-height: 120%;
+      letter-spacing: 0%;
+      margin: 0;
   }
+
+  .board-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 35px;
+  }
+}
