@@ -9,6 +9,11 @@
       <div class="modal-actions">
         @if (editMode) {
         <button type="button" class="secondary delete-btn" (click)="onDeleteFromEdit()">Delete</button>
+        } @else {
+        <button type="button" class="secondary cancel-btn" (click)="onClose()">
+          Cancel
+          <span class="cancel-x">✕</span>
+        </button>
         }
         <button type="submit" class="primary" [class.save-btn]="editMode">
           {{ editMode ? 'Save' : 'Create contact' }}

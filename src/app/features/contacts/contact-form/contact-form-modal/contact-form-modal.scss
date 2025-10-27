@@ -278,17 +278,38 @@
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 420px) {
   .modal {
-    width: 100%;
+    width: calc(100% - 32px);
     max-width: 396px;
     min-width: 320px;
   }
 }
 
+@media (max-width: 400px) {
+  .modal {
+    width: calc(100% - 24px);
+    max-width: 396px;
+    min-width: 320px;
+  }
+}
+
+@media (max-width: 900px) and (max-height: 780px) {
+  .modal {
+    height: calc(100% - 40px);
+    max-height: 760px;
+  }
+
+  .modal-left {
+    height: 300px;
+    padding: 50px 24px 40px;
+  }
+}
+
 @media (max-width: 900px) and (max-height: 700px) {
   .modal {
-    height: 660px;
+    height: calc(100% - 40px);
+    max-height: 660px;
   }
 
   .modal-left {
