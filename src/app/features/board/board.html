@@ -1,5 +1,5 @@
 <div class="board-container">
-    <app-board-header></app-board-header>
+    <app-board-header (addTaskClicked)="openAddTaskModal($event)"></app-board-header>
     
     <div class="board-columns-wrapper">
         @for (column of columns; track column.id) {

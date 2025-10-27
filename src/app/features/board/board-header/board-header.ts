@@ -1,14 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { BoardAddButton } from './board-add-button/board-add-button';
-import { BoardSearch } from './board-search/board-search'; 
 
 @Component({
   selector: 'app-board-header',
-  imports: [BoardAddButton, BoardSearch],
+  imports: [BoardAddButton],
   templateUrl: './board-header.html',
   styleUrl: './board-header.scss',
-  standalone: true 
+  standalone: true,
 })
 export class BoardHeader {
+  @Output() addTaskClicked = new EventEmitter<string>();
 
+  onAddTaskClick(status: string) {
+    this.addTaskClicked.emit(status);
+  }
 }
