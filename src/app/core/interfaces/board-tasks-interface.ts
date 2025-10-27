@@ -1,20 +1,20 @@
-import { Contact } from "./db-contact-interface";
+import { Timestamp } from '@angular/fire/firestore';
 
-interface Tasks {
-    id: string;
-    title: string;
-    description: string;
-    dueDate: Date;
-    priority: 'Low' | 'Medium' | 'High';
-    category: string;
-    status: 'To Do' | 'In Progress' | 'await Feedback' | 'Done';
-    assignedTo: Contact[];
-    subtasks: Subtask[];
-    createdAt: Date;
+export interface Task {
+  id?: string; 
+  title: string;
+  description: string;
+  dueDate: Timestamp;
+  priority: 'urgent' | 'medium' | 'low';
+  category: string;
+  status: 'todo' | 'inprogress' | 'awaitfeedback' | 'done';
+  assignedTo: string[]; 
+  subtasks: Subtask[];
+  createdAt: Timestamp;
 }
 
-interface Subtask {
-    id: string;
-    title: string;
-    isCompleted: boolean;
+export interface Subtask {
+  id: string;
+  title: string;
+  completed: boolean;
 }
