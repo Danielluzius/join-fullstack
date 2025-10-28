@@ -3,21 +3,10 @@
   align-items: center;
   gap: 8px;
 
-  &__svg {
+  &__img {
     display: block;
     flex-shrink: 0;
-
-    &--urgent {
-      fill: #ff3d00;
-    }
-
-    &--medium {
-      fill: #ffa800;
-    }
-
-    &--low {
-      fill: #7ae229;
-    }
+    object-fit: contain;
   }
 
   &__label {

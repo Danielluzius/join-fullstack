@@ -21,9 +21,9 @@ export class PriorityIcon {
 
   get priorityConfig() {
     const configs = {
-      urgent: { icon: 'arrow_upward', label: 'Urgent', color: '#ff3d00' },
-      medium: { icon: 'drag_handle', label: 'Medium', color: '#ffa800' },
-      low: { icon: 'arrow_downward', label: 'Low', color: '#7ae229' },
+      urgent: { icon: 'assets/board/urgent.png', label: 'Urgent', color: '#ff3d00' },
+      medium: { icon: 'assets/board/medium.png', label: 'Medium', color: '#ffa800' },
+      low: { icon: 'assets/board/low.png', label: 'Low', color: '#7ae229' },
     };
     return configs[this.priority];
   }

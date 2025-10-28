@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { BoardAddButton } from './board-add-button/board-add-button';
 import { BoardSearch } from './board-search/board-search';
 
@@ -10,9 +10,15 @@ import { BoardSearch } from './board-search/board-search';
   standalone: true,
 })
 export class BoardHeader {
-  @Output() addTaskClicked = new EventEmitter<string>();
+  @Input() searchError = '';
+  @Output() addTaskClick = new EventEmitter<void>();
+  @Output() searchQuery = new EventEmitter<string>();
 
-  onAddTaskClick(status: string) {
-    this.addTaskClicked.emit(status);
+  onButtonClick() {
+    this.addTaskClick.emit();
+  }
+
+  onSearch(query: string) {
+    this.searchQuery.emit(query);
   }
 }

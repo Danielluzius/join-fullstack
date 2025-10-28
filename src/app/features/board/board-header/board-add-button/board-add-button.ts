@@ -8,10 +8,9 @@ import { Component, Output, EventEmitter } from '@angular/core';
   standalone: true
 })
 export class BoardAddButton {
-  @Output() addTaskClicked = new EventEmitter<string>();
+  @Output() clicked = new EventEmitter<void>();
 
-  onAddTaskClick() {
-    // Sendet 'todo' als Standard-Status (wie im Design)
-    this.addTaskClicked.emit('todo');
+  onClick() {
+    this.clicked.emit();
   }
 }

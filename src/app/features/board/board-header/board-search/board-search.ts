@@ -1,12 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-board-search',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './board-search.html',
   styleUrl: './board-search.scss',
   standalone: true
 })
 export class BoardSearch {
+  @Input() searchError = '';
+  @Output() search = new EventEmitter<string>();
+  searchValue = '';
 
+  onSearchInput() {
+    this.search.emit(this.searchValue);
+  }
 }

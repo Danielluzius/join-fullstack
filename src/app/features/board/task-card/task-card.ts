@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Task } from '../../../core/interfaces/board-tasks-interface';
 import { Contact } from '../../../core/interfaces/db-contact-interface';
 import { ContactService } from '../../../core/services/db-contact-service';
+import { PriorityIcon } from '../../../shared/components/priority-icon/priority-icon';
 
 @Component({
   selector: 'app-task-card',
-  imports: [CommonModule],
+  imports: [CommonModule, PriorityIcon],
   templateUrl: './task-card.html',
   styleUrl: './task-card.scss',
   standalone: true,

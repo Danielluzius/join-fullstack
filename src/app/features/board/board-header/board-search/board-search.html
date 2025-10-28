@@ -1,6 +1,18 @@
-<div class="search-container">
-    <input type="text" class="search-input" placeholder="Find Task">
+<div class="search-group">
+  <div class="error-container">
+    @if (searchError) {
+    <span class="error-text">{{ searchError }}</span>
+    }
+  </div>
+  <div class="search-container" [class.error]="searchError">
+    <input 
+      type="text" 
+      class="search-input" 
+      placeholder="Find Task"
+      [(ngModel)]="searchValue"
+      (input)="onSearchInput()">
     <button class="search-button">
       <img src="assets/board/search-task.png" alt="Search">
     </button>
   </div>
+</div>

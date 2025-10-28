@@ -19,6 +19,13 @@ export class Board implements OnInit, OnDestroy {
   private taskService = inject(BoardTasksService);
   private tasksSubscription?: Subscription;
 
+  allTasks = {
+    todo: [] as Task[],
+    inprogress: [] as Task[],
+    awaitfeedback: [] as Task[],
+    done: [] as Task[]
+  };
+
   columns = [
     { id: 'todo', title: 'To do', tasks: [] as Task[] },
     { id: 'inprogress', title: 'In progress', tasks: [] as Task[] },
@@ -31,6 +38,8 @@ export class Board implements OnInit, OnDestroy {
   selectedTask: Task | null = null;
   defaultStatus: 'todo' | 'inprogress' | 'awaitfeedback' | 'done' = 'todo';
   isLoading = true;
+  searchQuery = '';
+  searchError = ''; 
 
   ngOnInit() {
     this.loadTasks();
@@ -46,16 +55,72 @@ export class Board implements OnInit, OnDestroy {
     this.isLoading = true;
     this.tasksSubscription = this.taskService.getTasksByStatus().subscribe({
       next: (tasks) => {
-        this.columns[0].tasks = tasks.todo;
-        this.columns[1].tasks = tasks.inprogress;
-        this.columns[2].tasks = tasks.awaitfeedback;
-        this.columns[3].tasks = tasks.done;
+        this.allTasks.todo = tasks.todo;
+        this.allTasks.inprogress = tasks.inprogress;
+        this.allTasks.awaitfeedback = tasks.awaitfeedback;
+        this.allTasks.done = tasks.done;
+        
+        // Update selectedTask if modal is open
+        if (this.showViewTaskModal && this.selectedTask && this.selectedTask.id) {
+          const updatedTask = this.findTaskById(this.selectedTask.id);
+          if (updatedTask) {
+            this.selectedTask = { ...updatedTask };
+          }
+        }
+        
+        this.updateDisplayedTasks();
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading tasks:', error);
         this.isLoading = false;
       },
+    });
+  }
+
+  findTaskById(taskId: string): Task | null {
+    for (const column of this.columns) {
+      const task = column.tasks.find(t => t.id === taskId);
+      if (task) {
+        return task;
+      }
+    }
+    return null;
+  }
+
+  onSearch(query: string) {
+    this.searchQuery = query.toLowerCase().trim();
+    this.updateDisplayedTasks();
+  }
+
+  updateDisplayedTasks() {
+    if (!this.searchQuery) {
+      this.columns[0].tasks = this.allTasks.todo;
+      this.columns[1].tasks = this.allTasks.inprogress;
+      this.columns[2].tasks = this.allTasks.awaitfeedback;
+      this.columns[3].tasks = this.allTasks.done;
+      this.searchError = '';  
+    } else {
+      this.columns[0].tasks = this.filterTasks(this.allTasks.todo);
+      this.columns[1].tasks = this.filterTasks(this.allTasks.inprogress);
+      this.columns[2].tasks = this.filterTasks(this.allTasks.awaitfeedback);
+      this.columns[3].tasks = this.filterTasks(this.allTasks.done);
+      
+      const totalFound = this.columns[0].tasks.length + 
+                        this.columns[1].tasks.length + 
+                        this.columns[2].tasks.length + 
+                        this.columns[3].tasks.length;
+      
+      this.searchError = totalFound === 0 ? 'No tasks found' : '';
+    }
+  }
+
+  filterTasks(tasks: Task[]): Task[] {
+    return tasks.filter(task => {
+      const matchesTitle = task.title.toLowerCase().includes(this.searchQuery);
+      const matchesDescription = task.description && 
+                                 task.description.toLowerCase().includes(this.searchQuery);
+      
+      return matchesTitle || matchesDescription;
     });
   }
 
@@ -69,7 +134,7 @@ export class Board implements OnInit, OnDestroy {
   }
 
   openViewTaskModal(task: Task) {
-    this.selectedTask = task;
+    this.selectedTask = { ...task };
     this.showViewTaskModal = true;
   }
 
@@ -89,7 +154,6 @@ export class Board implements OnInit, OnDestroy {
 
   handleEditTask(task: Task) {
     this.selectedTask = { ...task };
-    this.loadTasks();
   }
 
   async handleDeleteTask(taskId: string) {

@@ -25,23 +25,6 @@
         <div class="avatar more-users">+{{ assignedContacts.length - 3 }}</div>
         }
     </div>
-    <div class="priority-icon" [attr.data-priority]="task.priority">
-        @switch (task.priority) { @case ('urgent') {
-        <svg width="20" height="15" viewBox="0 0 20 15" fill="none">
-            <path d="M10 0L20 15H0L10 0Z" fill="#FF3D00" />
-            <path d="M10 4L17 15H3L10 4Z" fill="#FF3D00" />
-        </svg>
-        } @case ('medium') {
-        <svg width="20" height="8" viewBox="0 0 20 8" fill="none">
-            <path d="M0 0H20V3H0V0Z" fill="#FFA800" />
-            <path d="M0 5H20V8H0V5Z" fill="#FFA800" />
-        </svg>
-        } @case ('low') {
-        <svg width="20" height="15" viewBox="0 0 20 15" fill="none">
-            <path d="M10 15L0 0H20L10 15Z" fill="#7AE229" />
-            <path d="M10 11L3 0H17L10 11Z" fill="#7AE229" />
-        </svg>
-        } }
-    </div>
+    <app-priority-icon [priority]="task.priority"></app-priority-icon>
 </div>
 </div>
