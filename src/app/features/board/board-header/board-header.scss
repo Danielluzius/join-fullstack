@@ -1,13 +1,12 @@
 .board-header {
-  height: 232px;
+  height: 200px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   gap: 40px;
   max-width: 1688px;
-  padding: 0 64px;
-  margin-bottom: 32px;
+  padding: 30px 64px 0;
 
   h2 {
     font-family: Inter;
