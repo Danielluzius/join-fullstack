@@ -15,17 +15,21 @@ import { PriorityIcon } from '../../../shared/components/priority-icon/priority-
 export class TaskCard implements OnInit, OnChanges {
   @Input() task!: Task;
   @Output() cardClicked = new EventEmitter<Task>();
+  @Output() subtaskEdited = new EventEmitter<{ task: Task; subtask: any }>();
+  @Output() subtaskDeleted = new EventEmitter<{ task: Task; subtask: any }>();
 
   private contactService = inject(ContactService);
 
   contacts: Contact[] = [];
   assignedContacts: Contact[] = [];
+  hoveredSubtaskId: string | null = null;
+  showSubtasks = false; 
 
   async ngOnInit() {
     await this.loadContacts();
   }
 
-    async ngOnChanges(changes: SimpleChanges) {
+  async ngOnChanges(changes: SimpleChanges) {
     if (changes['task']) {
       if (this.contacts.length === 0) {
         await this.loadContacts();
@@ -48,29 +52,19 @@ export class TaskCard implements OnInit, OnChanges {
 
   async loadContacts() {
     this.contacts = await this.contactService.getAllContacts();
-    // Filter nur die zugewiesenen Contacts
     this.assignedContacts = this.contacts.filter((c) => this.task.assignedTo.includes(c.id!));
   }
 
-  /**
-   * Berechnet die Anzahl der abgeschlossenen Subtasks
-   */
   get completedSubtasks(): number {
     if (!this.task.subtasks) return 0;
     return this.task.subtasks.filter((s) => s.completed).length;
   }
 
-  /**
-   * Berechnet den Fortschritt in Prozent
-   */
   get progressPercentage(): number {
     if (!this.task.subtasks || this.task.subtasks.length === 0) return 0;
     return (this.completedSubtasks / this.task.subtasks.length) * 100;
   }
 
-  /**
-   * Gibt die Initialen eines Contacts zurück
-   */
   getInitials(contact: Contact): string {
     if (!contact || !contact.firstname) return '';
     const nameParts = contact.firstname.trim().split(' ');
@@ -82,31 +76,12 @@ export class TaskCard implements OnInit, OnChanges {
     return (firstInitial + lastInitial).toUpperCase();
   }
 
-  /**
-   * Farbpalette für Avatare
-   */
   colorPalette = [
-    '#FF7A00', // Orange
-    '#9327FF', // Purple
-    '#6E52FF', // Blue
-    '#FC71FF', // Pink
-    '#FFBB2B', // Yellow
-    '#1FD7C1', // Teal
-    '#462F8A', // Dark Purple
-    '#FF4646', // Red
-    '#00BEE8', // Light Blue
-    '#FF5EB3', // Light Pink
-    '#FF745E', // Coral
-    '#FFA35E', // Light Orange
-    '#FFC701', // Bright Yellow
-    '#0038FF', // Vivid Blue
-    '#C3FF2B', // Lime Green
-    '#FFE62B', // Bright Yellow
+    '#FF7A00', '#9327FF', '#6E52FF', '#FC71FF', '#FFBB2B', '#1FD7C1',
+    '#462F8A', '#FF4646', '#00BEE8', '#FF5EB3', '#FF745E', '#FFA35E',
+    '#FFC701', '#0038FF', '#C3FF2B', '#FFE62B',
   ];
 
-  /**
-   * Generiert eine Farbe basierend auf der Contact-ID
-   */
   getAvatarColor(contact: Contact): string {
     let hash = 0;
     const idString = String(contact.id);
@@ -117,21 +92,25 @@ export class TaskCard implements OnInit, OnChanges {
     return this.colorPalette[index];
   }
 
-  /**
-   * Card Click Handler - z.B. für Modal öffnen
-   */
   onCardClick(): void {
     this.cardClicked.emit(this.task);
   }
 
-  /**
-   * Gibt die Farbe für die Category-Badge zurück
-   */
   getCategoryColor(): string {
     const categoryColors: { [key: string]: string } = {
       'User Story': '#0038FF',
       'Technical Task': '#1FD7C1',
     };
     return categoryColors[this.task.category] || '#0038FF';
+  }
+
+  onEditSubtask(subtask: any): void {
+    this.subtaskEdited.emit({ task: this.task, subtask });
+  }
+
+  onDeleteSubtask(subtask: any): void {
+    if (confirm(`Delete subtask "${subtask.title}"?`)) {
+      this.subtaskDeleted.emit({ task: this.task, subtask });
+    }
   }
 }
