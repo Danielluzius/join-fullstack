@@ -74,16 +74,18 @@
             <div class="form-group">
               <label>Assigned to</label>
               <div class="dropdown-wrapper">
-                <div class="dropdown-toggle" (click)="toggleContactDropdown()">
-                  <span>Select contacts to assign</span>
-                  <svg width="14" height="8" viewBox="0 0 14 8" fill="none" [class.rotated]="showContactDropdown">
-                    <path d="M1 1L7 7L13 1" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
-                  </svg>
+                <div class="dropdown-toggle-input">
+                  <input type="text" [(ngModel)]="contactSearchTerm" name="contactSearch"
+                    placeholder="Select contacts to assign" (focus)="showContactDropdown = true"
+                    (input)="onContactSearch()" autocomplete="off" />
+                  <img
+                    [src]="showContactDropdown ? 'assets/board/arrow-drop-up-transparent.png' : 'assets/board/arrow-drop-down-transparent.png'"
+                    alt="dropdown arrow" class="dropdown-arrow" (click)="toggleContactDropdown()" />
                 </div>
 
                 @if (showContactDropdown) {
                 <div class="dropdown-menu contacts-dropdown">
-                  @for (contact of contacts; track contact.id) {
+                  @for (contact of filteredContacts; track contact.id) {
                   <div class="contact-item" [class.selected]="isContactSelected(contact.id!)"
                     (click)="toggleContact(contact.id!, $event)">
                     <div class="contact-info">
@@ -95,6 +97,11 @@
                     <img
                       [src]="isContactSelected(contact.id!) ? 'assets/check-box/checkbox-white.png' : 'assets/board/check-button.png'"
                       class="contact-checkbox" alt="checkbox">
+                  </div>
+                  }
+                  @if (filteredContacts.length === 0) {
+                  <div class="no-results">
+                    No contacts found
                   </div>
                   }
                 </div>
@@ -118,9 +125,9 @@
               <div class="dropdown-wrapper">
                 <div class="dropdown-toggle" (click)="toggleCategoryDropdown()" [class.error]="categoryError">
                   <span>{{ category || 'Select task category' }}</span>
-                  <svg width="14" height="8" viewBox="0 0 14 8" fill="none" [class.rotated]="showCategoryDropdown">
-                    <path d="M1 1L7 7L13 1" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
-                  </svg>
+                  <img
+                    [src]="showCategoryDropdown ? 'assets/board/arrow-drop-up-transparent.png' : 'assets/board/arrow-drop-down-transparent.png'"
+                    alt="dropdown arrow" class="dropdown-arrow" />
                 </div>
 
                 @if (showCategoryDropdown) {

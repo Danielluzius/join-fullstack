@@ -48,6 +48,8 @@ export class TaskModal implements OnInit {
   showSuccessToast = false;
 
   contacts: Contact[] = [];
+  filteredContacts: Contact[] = [];
+  contactSearchTerm = '';
   categories = ['Technical Task', 'User Story'];
 
   titleError = false;
@@ -62,6 +64,7 @@ export class TaskModal implements OnInit {
 
   async loadContacts() {
     this.contacts = await this.contactService.getAllContacts();
+    this.filteredContacts = [...this.contacts];
   }
 
   @HostListener('document:keydown.escape')
@@ -74,6 +77,22 @@ export class TaskModal implements OnInit {
 
     if (this.showModal && !this.showSuccessToast) {
       this.onClose();
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const clickedInsideDropdown = target.closest('.dropdown-wrapper');
+
+    if (!clickedInsideDropdown && this.showContactDropdown) {
+      this.showContactDropdown = false;
+      this.contactSearchTerm = '';
+      this.filteredContacts = [...this.contacts];
+    }
+
+    if (!clickedInsideDropdown && this.showCategoryDropdown) {
+      this.showCategoryDropdown = false;
     }
   }
 
@@ -98,9 +117,24 @@ export class TaskModal implements OnInit {
     this.showContactDropdown = !this.showContactDropdown;
     if (this.showContactDropdown) {
       this.showCategoryDropdown = false;
+    } else {
+      // Suchfeld leeren und alle Kontakte anzeigen, wenn Dropdown geschlossen wird
+      this.contactSearchTerm = '';
+      this.filteredContacts = [...this.contacts];
     }
   }
 
+  onContactSearch() {
+    const searchTerm = this.contactSearchTerm.toLowerCase().trim();
+
+    if (!searchTerm) {
+      this.filteredContacts = [...this.contacts];
+    } else {
+      this.filteredContacts = this.contacts.filter((contact) =>
+        contact.firstname.toLowerCase().includes(searchTerm)
+      );
+    }
+  }
 
   toggleContact(contactId: string, event?: MouseEvent) {
     if (event) {
@@ -113,7 +147,6 @@ export class TaskModal implements OnInit {
       this.selectedContactIds.push(contactId);
     }
   }
-
 
   isContactSelected(contactId: string): boolean {
     const isSelected = this.selectedContactIds.includes(contactId);
@@ -204,9 +237,22 @@ export class TaskModal implements OnInit {
   }
 
   colorPalette = [
-    '#FF7A00', '#9327FF', '#6E52FF', '#FC71FF', '#FFBB2B', '#1FD7C1',
-    '#462F8A', '#FF4646', '#00BEE8', '#FF5EB3', '#FF745E', '#FFA35E',
-    '#FFC701', '#0038FF', '#C3FF2B', '#FFE62B',
+    '#FF7A00',
+    '#9327FF',
+    '#6E52FF',
+    '#FC71FF',
+    '#FFBB2B',
+    '#1FD7C1',
+    '#462F8A',
+    '#FF4646',
+    '#00BEE8',
+    '#FF5EB3',
+    '#FF745E',
+    '#FFA35E',
+    '#FFC701',
+    '#0038FF',
+    '#C3FF2B',
+    '#FFE62B',
   ];
 
   getAvatarColor(contact: Contact): string {
