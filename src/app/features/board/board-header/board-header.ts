@@ -1,10 +1,11 @@
 import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { BoardAddButton } from './board-add-button/board-add-button';
 import { BoardSearch } from './board-search/board-search';
 
 @Component({
   selector: 'app-board-header',
-  imports: [BoardAddButton, BoardSearch],
+  imports: [BoardAddButton, BoardSearch, CommonModule],
   templateUrl: './board-header.html',
   styleUrl: './board-header.scss',
   standalone: true,
@@ -20,5 +21,9 @@ export class BoardHeader {
 
   onSearch(query: string) {
     this.searchQuery.emit(query);
+  }
+
+  onMobileAddTaskClick(): void {
+    this.addTaskClick.emit();
   }
 }
