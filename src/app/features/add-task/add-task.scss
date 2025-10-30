@@ -192,7 +192,7 @@
   gap: 8px;
   width: 100%;
   max-width: 440px;
-  padding-bottom: 16px; 
+  padding-bottom: 16px;
 
   label {
     font-family: 'Inter', sans-serif;
@@ -241,10 +241,6 @@
 
     &:focus {
       outline: none;
-      border-color: #29abe2;
-    }
-
-    &:hover {
       border-color: #29abe2;
     }
   }
@@ -302,10 +298,6 @@
 
     &:focus {
       outline: none;
-      border-color: #29abe2;
-    }
-
-    &:hover {
       border-color: #29abe2;
     }
   }
