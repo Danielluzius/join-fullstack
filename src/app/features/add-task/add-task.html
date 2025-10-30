@@ -193,7 +193,9 @@
                     @if (subtasks.length > 0) {
                     <div class="subtasks-list">
                         @for (subtask of subtasks; track subtask.id) {
-                        <div class="subtask-item" [class.editing]="editingSubtaskId === subtask.id">
+                        <div class="subtask-item" 
+                        [class.editing]="editingSubtaskId === subtask.id"
+                        (dblclick)="startEditSubtask(subtask.id)">
                             @if (editingSubtaskId === subtask.id) {
                             <div class="subtask-edit-wrapper">
                                 <input type="text" #editInput [value]="subtask.title"

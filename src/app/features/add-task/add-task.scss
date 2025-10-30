@@ -189,11 +189,10 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  // align-items: flex-start;
   gap: 8px;
   width: 100%;
   max-width: 440px;
-  padding-bottom: 16px; // Platz für Error Message (12px) + 4px gap
+  padding-bottom: 16px; 
 
   label {
     font-family: 'Inter', sans-serif;
