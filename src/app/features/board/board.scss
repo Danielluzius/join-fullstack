@@ -18,39 +18,86 @@
   }
 }
 
+// @media (max-width: 1024px) {
+//   .board-container {
+//     padding: 16px;
+//     overflow-x: visible;
+//   }
+//   .task-card
+
+//   .board-columns-wrapper {
+//     flex-direction: column;
+//     padding: 0 24px;
+//     gap: 32px;
+//     min-height: auto;
+
+//     app-board-columns {
+//       width: 100%;
+//       max-width: 600px;
+//     }
+//   }
+// }
+
+
 @media (max-width: 1024px) {
   .board-container {
-    padding: 16px;
+    padding: 12px;
     overflow-x: visible;
   }
 
   .board-columns-wrapper {
-    flex-direction: column;
-    padding: 0 24px;
-    gap: 32px;
-    min-height: auto;
-
-    app-board-columns {
-      width: 100%;
-      max-width: 600px;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .board-container {
-    padding: 12px;
-  }
-
-  .board-columns-wrapper {
+    flex-direction: column; 
     padding: 0 16px;
     gap: 24px;
 
     app-board-columns {
       width: 100%;
+      
+
+      ::ng-deep .tasks-container {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        gap: 16px;
+        padding-bottom: 12px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        
+
+        &::-webkit-scrollbar {
+          height: 8px;
+        }
+        
+        &::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 4px;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+          background: #29abe2;
+          border-radius: 4px;
+          
+          &:hover {
+            background: #1c8bb8;
+          }
+        }
+        
+
+        > div {
+          flex: 0 0 280px;
+          scroll-snap-align: start;
+        }
+        
+        .empty-state {
+          flex: 0 0 100%;
+          justify-content: center;
+        }
+      }
     }
   }
 }
+
 
 @media (max-width: 480px) {
   .board-container {
@@ -60,5 +107,15 @@
   .board-columns-wrapper {
     padding: 0 8px;
     gap: 20px;
+    
+    app-board-columns {
+      ::ng-deep .tasks-container {
+        gap: 12px;
+        
+        > div {
+          flex: 0 0 260px; 
+        }
+      }
+    }
   }
 }
