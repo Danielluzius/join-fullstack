@@ -32,6 +32,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+  white-space: nowrap;
 }
 
 .nav-link {
@@ -50,7 +51,8 @@
   height: 46px;
 
   img.nav-icon {
-    filter: brightness(0) saturate(100%) invert(84%) sepia(0%) saturate(0%) hue-rotate(208deg) brightness(92%) contrast(86%);
+    filter: brightness(0) saturate(100%) invert(84%) sepia(0%) saturate(0%) hue-rotate(208deg)
+      brightness(92%) contrast(86%);
     transition: filter 0.2s ease;
   }
 
@@ -60,7 +62,8 @@
     color: #ffffff;
 
     img.nav-icon {
-      filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
+      filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg)
+        brightness(103%) contrast(103%);
     }
   }
 
@@ -70,7 +73,8 @@
     border-radius: 0;
 
     img.nav-icon {
-      filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
+      filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg)
+        brightness(103%) contrast(103%);
     }
   }
 }
@@ -146,7 +150,6 @@
       border-radius: 8px;
       height: 73px;
       width: 73px;
-
     }
 
     &:hover:not(.active) {

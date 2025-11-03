@@ -14,13 +14,13 @@
 
 .modal-container {
   background: #ffffff;
-  border-radius: 30px;
-  width: 1116px;
+  border-radius: clamp(20px, 3vw, 30px);
+  width: clamp(320px, 90vw, 1116px);
   max-width: 100%;
-  min-height: 870px;
+  min-height: auto;
   max-height: 90vh;
-  overflow-y: auto;
-  padding: 64px 74px;
+  overflow: hidden;
+  padding: clamp(24px, 5vw, 64px) clamp(20px, 6vw, 74px);
   position: relative;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -29,10 +29,10 @@
 
 .close-btn {
   position: absolute;
-  top: 64px;
-  right: 74px;
-  width: 32px;
-  height: 32px;
+  top: clamp(24px, 5vw, 64px);
+  right: clamp(20px, 6vw, 74px);
+  width: clamp(24px, 3vw, 32px);
+  height: clamp(24px, 3vw, 32px);
   background: none;
   border: none;
   border-radius: 56px;
@@ -52,20 +52,20 @@
 }
 
 .modal-title {
-  width: 466px;
-  height: 78px;
+  width: 100%;
+  height: auto;
   font-family: 'Inter', sans-serif;
-  font-size: 61px;
+  font-size: clamp(32px, 5vw, 61px);
   font-weight: 700;
   color: #000000;
-  margin: 0 0 46px 0;
+  margin: 0 0 clamp(24px, 4vw, 46px) 0;
   line-height: 120%;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: clamp(16px, 2vw, 24px);
   flex: 1;
 }
 
@@ -78,6 +78,8 @@ form {
   justify-content: space-between;
   align-items: start;
   position: relative;
+  gap: clamp(20px, 3vw, 40px);
+  flex-wrap: wrap;
 
   &::after {
     content: '';
@@ -89,33 +91,41 @@ form {
     background: #d1d1d1;
     transform: translateX(-50%);
   }
+
+  @media (max-width: 768px) {
+    &::after {
+      display: none;
+    }
+  }
 }
 
 .form-left {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 440px;
-  flex-shrink: 0;
+  gap: clamp(8px, 1vw, 10px);
+  width: clamp(280px, 45%, 440px);
+  flex-shrink: 1;
+  min-width: 280px;
 }
 
 .form-right {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 440px;
-  flex-shrink: 0;
+  gap: clamp(8px, 1vw, 10px);
+  width: clamp(280px, 45%, 440px);
+  flex-shrink: 1;
+  min-width: 280px;
 }
 
 .form-group {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: clamp(6px, 1vw, 8px);
   flex: none;
   align-self: stretch;
   flex-grow: 0;
-  padding-bottom: 20px; // Platz für Error Message (16px) + 4px gap
+  padding-bottom: clamp(16px, 2vw, 20px);
 
   &.has-selected-contacts {
     padding-bottom: 0;
@@ -124,8 +134,8 @@ form {
   // Nur für form-groups mit input-wrapper die spezifischen Layout-Properties
   &:has(.input-wrapper) {
     align-items: flex-start;
-    padding: 0px 0px 20px 0px;
-    width: 440px;
+    padding: 0px 0px clamp(16px, 2vw, 20px) 0px;
+    width: 100%;
   }
 
   &:has(.input-wrapper).has-selected-contacts {
@@ -133,12 +143,12 @@ form {
   }
 
   label {
-    width: 440px;
-    height: 24px;
+    width: 100%;
+    height: auto;
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 400;
-    font-size: 20px;
+    font-size: clamp(16px, 2vw, 20px);
     line-height: 120%;
     color: #2a3647;
     flex: none;
@@ -158,7 +168,7 @@ form {
     flex-direction: column;
     align-items: flex-start;
     padding: 0px;
-    width: 440px;
+    width: 100%;
     flex: none;
     order: 1;
     align-self: stretch;
@@ -166,14 +176,14 @@ form {
 
     .field-error {
       position: absolute;
-      bottom: -20px; // Positioniert unter dem input-wrapper
+      bottom: clamp(-18px, -2vw, -20px);
       left: 0;
-      width: 440px;
-      height: 16px;
+      width: 100%;
+      height: auto;
       font-family: 'Inter', sans-serif;
       font-style: normal;
       font-weight: 400;
-      font-size: 16px;
+      font-size: clamp(14px, 1.5vw, 16px);
       line-height: 120%;
       color: #e60026;
       opacity: 0;
@@ -194,13 +204,13 @@ form {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 12px 21px;
-    gap: 10px;
-    width: 440px;
-    height: 48px;
+    padding: clamp(10px, 1.2vw, 12px) clamp(16px, 2vw, 21px);
+    gap: clamp(8px, 1vw, 10px);
+    width: 100%;
+    height: clamp(40px, 4.5vw, 48px);
     background: #ffffff;
     border: 1px solid #d1d1d1;
-    border-radius: 10px;
+    border-radius: clamp(8px, 1vw, 10px);
     flex: none;
     order: 0;
     align-self: stretch;
@@ -208,7 +218,7 @@ form {
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 400;
-    font-size: 20px;
+    font-size: clamp(16px, 2vw, 20px);
     line-height: 120%;
     color: #000000;
     transition: border-color 0.2s;
@@ -235,8 +245,8 @@ form {
     position: relative;
     display: flex;
     align-items: center;
-    width: 440px;
-    height: 48px;
+    width: 100%;
+    height: clamp(40px, 4.5vw, 48px);
     flex: none;
     order: 0;
     align-self: stretch;
@@ -288,38 +298,39 @@ form {
 
   textarea {
     resize: vertical;
-    min-height: 100px;
-    padding: 18px 16px;
+    min-height: clamp(80px, 10vw, 100px);
+    padding: clamp(14px, 1.8vw, 18px) clamp(12px, 1.5vw, 16px);
   }
 }
 
 // Priority Buttons
 .priority-buttons {
   display: flex;
-  gap: 16px;
+  gap: clamp(12px, 1.5vw, 16px);
 }
 
 .priority-btn {
   flex: 1;
-  padding: 16px 10px;
+  min-width: 0;
+  padding: clamp(10px, 1.2vw, 16px) clamp(6px, 0.8vw, 10px);
   background: #ffffff;
   border: none;
-  border-radius: 10px;
+  border-radius: clamp(8px, 1vw, 10px);
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
   font-family: 'Inter', sans-serif;
-  font-size: 20px;
+  font-size: clamp(14px, 1.6vw, 20px);
   font-weight: 400;
   color: #000000;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  height: 56px;
+  gap: clamp(2px, 0.4vw, 4px);
+  height: clamp(44px, 4.5vw, 56px);
 
   .priority-img {
-    width: 32px;
-    height: 32px;
+    width: clamp(20px, 2.5vw, 32px);
+    height: clamp(20px, 2.5vw, 32px);
     object-fit: contain;
     flex-shrink: 0;
   }
@@ -373,12 +384,12 @@ form {
   transform: translate(-50%, 50%);
   background: #2a3647;
   color: #ffffff;
-  padding: 20px 32px;
-  border-radius: 20px;
+  padding: clamp(16px, 2vw, 20px) clamp(24px, 3vw, 32px);
+  border-radius: clamp(16px, 2vw, 20px);
   display: flex;
   align-items: center;
-  gap: 16px;
-  font-size: 21px;
+  gap: clamp(12px, 1.5vw, 16px);
+  font-size: clamp(17px, 2vw, 21px);
   font-weight: 400;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
   z-index: 1002;
@@ -398,8 +409,8 @@ form {
 
   // Nur für dropdown-wrapper innerhalb von input-wrapper die feste Größe
   .input-wrapper & {
-    width: 440px;
-    height: 48px;
+    width: 100%;
+    height: clamp(40px, 4.5vw, 48px);
   }
 }
 
@@ -409,13 +420,13 @@ form {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 21px;
-  gap: 10px;
-  width: 440px;
-  height: 48px;
+  padding: clamp(10px, 1.2vw, 12px) clamp(16px, 2vw, 21px);
+  gap: clamp(8px, 1vw, 10px);
+  width: 100%;
+  height: clamp(40px, 4.5vw, 48px);
   background: #ffffff;
   border: 1px solid #d1d1d1;
-  border-radius: 10px;
+  border-radius: clamp(8px, 1vw, 10px);
   flex: none;
   order: 0;
   align-self: stretch;
@@ -423,7 +434,7 @@ form {
   font-family: 'Inter', sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 20px;
+  font-size: clamp(16px, 2vw, 20px);
   line-height: 120%;
   color: #000000;
   cursor: pointer;
@@ -438,8 +449,8 @@ form {
   }
 
   .dropdown-arrow {
-    width: 24px;
-    height: 24px;
+    width: clamp(20px, 2.5vw, 24px);
+    height: clamp(20px, 2.5vw, 24px);
     flex-shrink: 0;
   }
 }
@@ -449,9 +460,9 @@ form {
   display: flex;
   align-items: center;
   border: 1px solid #d1d1d1;
-  border-radius: 10px;
+  border-radius: clamp(8px, 1vw, 10px);
   background: #ffffff;
-  height: 48px;
+  height: clamp(40px, 4.5vw, 48px);
   transition: border-color 0.2s;
 
   &:hover {
@@ -465,13 +476,13 @@ form {
   input[type='text'] {
     flex: 1;
     width: 100%;
-    padding: 12px 16px;
-    padding-right: 45px;
+    padding: clamp(10px, 1.2vw, 12px) clamp(12px, 1.5vw, 16px);
+    padding-right: clamp(40px, 5vw, 45px);
     border: none !important;
     border-radius: 0 !important;
     background: transparent;
     font-family: 'Inter', sans-serif;
-    font-size: 20px;
+    font-size: clamp(16px, 2vw, 20px);
     font-weight: 400;
     line-height: 120%;
     color: #000000;
@@ -488,9 +499,9 @@ form {
 
   .dropdown-arrow {
     position: absolute;
-    right: 16px;
-    width: 24px;
-    height: 24px;
+    right: clamp(12px, 1.5vw, 16px);
+    width: clamp(20px, 2.5vw, 24px);
+    height: clamp(20px, 2.5vw, 24px);
     cursor: pointer;
     flex-shrink: 0;
     pointer-events: auto;
@@ -505,17 +516,17 @@ form {
   right: 0;
   background: #ffffff;
   border: 1px solid #d1d1d1;
-  border-radius: 10px;
+  border-radius: clamp(8px, 1vw, 10px);
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  max-height: 244px;
+  max-height: clamp(200px, 25vw, 244px);
   overflow-y: auto;
   z-index: 10;
 }
 
 .dropdown-item {
-  padding: 12px 16px;
+  padding: clamp(10px, 1.2vw, 12px) clamp(12px, 1.5vw, 16px);
   font-family: 'Inter', sans-serif;
-  font-size: 20px;
+  font-size: clamp(16px, 2vw, 20px);
   font-weight: 400;
   line-height: 120%;
   color: #2a3647;
@@ -528,9 +539,9 @@ form {
 }
 
 .no-results {
-  padding: 12px 16px;
+  padding: clamp(10px, 1.2vw, 12px) clamp(12px, 1.5vw, 16px);
   font-family: 'Inter', sans-serif;
-  font-size: 16px;
+  font-size: clamp(14px, 1.6vw, 16px);
   color: #999;
   text-align: center;
 }

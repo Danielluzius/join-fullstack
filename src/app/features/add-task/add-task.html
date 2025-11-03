@@ -14,7 +14,7 @@
                     <label for="title">Title<span class="required">*</span></label>
                     <div class="input-wrapper">
                         <input type="text" id="title" [(ngModel)]="title" name="title" placeholder="Enter a title"
-                            [class.error]="titleError" (input)="titleError = false" required />
+                            [class.error]="titleError" (input)="titleError = false" maxlength="50" required />
                     </div>
                     <span class="field-error" [class.visible]="titleError">This field is required</span>
                 </div>
@@ -24,7 +24,7 @@
                     <label for="description">Description</label>
                     <div class="textarea-wrapper">
                         <textarea id="description" [(ngModel)]="description" name="description"
-                            placeholder="Enter a Description" rows="4"></textarea>
+                            placeholder="Enter a Description" rows="4" maxlength="100"></textarea>
                         <svg class="resize-icon" width="19" height="19" viewBox="0 0 19 19" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 19L19 0" stroke="#D1D1D1" stroke-width="1" />
@@ -39,18 +39,9 @@
                     <label for="dueDate">Due date<span class="required">*</span></label>
                     <div class="input-wrapper">
                         <div class="date-input-container">
-                            <input 
-                                type="text" 
-                                id="dueDate"
-                                [(ngModel)]="dueDate" 
-                                name="dueDate" 
-                                placeholder="dd/mm/yyyy"
-                                [class.error]="dueDateError" 
-                                (input)="formatDateInput($event)"
-                                (change)="dueDateError = false" 
-                                maxlength="10" 
-                                pattern="[0-9\/]*" 
-                                inputmode="numeric"
+                            <input type="text" id="dueDate" [(ngModel)]="dueDate" name="dueDate"
+                                placeholder="dd/mm/yyyy" [class.error]="dueDateError" (input)="formatDateInput($event)"
+                                (change)="dueDateError = false" maxlength="10" pattern="[0-9\/]*" inputmode="numeric"
                                 required />
                             <button type="button" class="calendar-icon-btn" (click)="openDatePicker()">
                                 <svg class="calendar-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -60,15 +51,8 @@
                                         fill="#2A3647" />
                                 </svg>
                             </button>
-                            <input 
-                                type="date" 
-                                id="hiddenDate"
-                                class="hidden-date-picker" 
-                                [(ngModel)]="hiddenDateValue"
-                                name="hiddenDate" 
-                                (change)="onDatePickerChange($event)" 
-                                [min]="minDate" 
-                                #datePicker />
+                            <input type="date" id="hiddenDate" class="hidden-date-picker" [(ngModel)]="hiddenDateValue"
+                                name="hiddenDate" (change)="onDatePickerChange($event)" [min]="minDate" #datePicker />
                         </div>
                         <span class="field-error" [class.visible]="dueDateError">{{ dueDateErrorMessage }}</span>
                     </div>
@@ -107,15 +91,9 @@
                     <label for="assignedTo">Assigned to</label>
                     <div class="dropdown-wrapper">
                         <div class="dropdown-toggle-input">
-                            <input 
-                                type="text" 
-                                id="assignedTo"
-                                [(ngModel)]="contactSearchTerm" 
-                                name="contactSearch"
-                                (focus)="onContactInputFocus()" 
-                                (blur)="onContactInputBlur()"
-                                (input)="onContactSearch()" 
-                                autocomplete="off" />
+                            <input type="text" id="assignedTo" [(ngModel)]="contactSearchTerm" name="contactSearch"
+                                (focus)="onContactInputFocus()" (blur)="onContactInputBlur()"
+                                (input)="onContactSearch()" autocomplete="off" />
                             <img #contactArrow
                                 [src]="showContactDropdown ? 'assets/board/arrow-drop-up-transparent.png' : 'assets/board/arrow-drop-down-transparent.png'"
                                 alt="dropdown arrow" class="dropdown-arrow" (click)="toggleContactDropdown()"
@@ -171,13 +149,8 @@
                     <label id="category-label">Category<span class="required">*</span></label>
                     <div class="input-wrapper">
                         <div class="dropdown-wrapper">
-                            <div 
-                                class="dropdown-toggle" 
-                                role="combobox"
-                                aria-labelledby="category-label"
-                                aria-expanded="{{showCategoryDropdown}}"
-                                tabindex="0"
-                                (click)="toggleCategoryDropdown()"
+                            <div class="dropdown-toggle" role="combobox" aria-labelledby="category-label"
+                                aria-expanded="{{showCategoryDropdown}}" tabindex="0" (click)="toggleCategoryDropdown()"
                                 [class.error]="categoryError">
                                 <span>{{ category || 'Select task category' }}</span>
                                 <img #categoryArrow
@@ -205,15 +178,9 @@
                 <div class="form-field">
                     <label for="subtasks">Subtasks</label>
                     <div class="subtask-input-wrapper">
-                        <input 
-                            type="text" 
-                            id="subtasks"
-                            [(ngModel)]="newSubtaskTitle" 
-                            name="newSubtask" 
-                            placeholder="Add new subtask"
-                            (keyup.enter)="addSubtask()" 
-                            (focus)="subtaskInputFocused = true"
-                            (blur)="onSubtaskInputBlur()" />
+                        <input type="text" id="subtasks" [(ngModel)]="newSubtaskTitle" name="newSubtask"
+                            placeholder="Add new subtask" (keyup.enter)="addSubtask()"
+                            (focus)="subtaskInputFocused = true" (blur)="onSubtaskInputBlur()" />
                         @if (subtaskInputFocused || newSubtaskTitle) {
                         <div class="subtask-actions">
                             <button type="button" class="icon-btn" (click)="clearSubtaskInput()">
