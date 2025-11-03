@@ -127,9 +127,15 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .search-container {
+    width: 100%;
+    max-width: 444px;
+  }
+}
 
 @media (max-width: 480px) {
-  .search-container{
-    width: 250px;
+  .search-container {
+    width: 100%; 
   }
-  }
+}

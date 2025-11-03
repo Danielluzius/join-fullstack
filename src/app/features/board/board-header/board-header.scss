@@ -4,7 +4,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 40px;
+  gap: 20px;
   max-width: 1688px;
   padding: 30px 64px 0;
 
@@ -54,14 +54,19 @@
   }
 }
 
+@media (max-width: 1385px) {
+  .board-header {
+    padding: 30px 16px 0;
+  }
+}
+
 @media (max-width: 1024px) {
   .board-header {
-    padding: 30px 32px 0;
+    padding: 30px 16px 30px;
     gap: 16px;
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
-    padding-bottom: 10px;
 
     h2 {
       font-size: 48px;
@@ -77,6 +82,10 @@
       width: 100%;
       gap: 24px;
       justify-content: flex-start;
+
+      app-board-search {
+        width: 100%; 
+      }
 
       .desktop-add-button,
       app-board-add-button {
