@@ -25,9 +25,18 @@
     <label for="dueDate">Due date<span class="required">*</span></label>
     <div class="input-wrapper">
         <div class="date-input-container">
-            <input type="text" [(ngModel)]="dueDate" name="dueDate" placeholder="dd/mm/yyyy"
-                [class.error]="dueDateError" (input)="formatDateInput($event)" maxlength="10" pattern="[0-9\/]*"
-                inputmode="numeric" required />
+            <input 
+                type="text" 
+                id="dueDate"
+                [(ngModel)]="dueDate" 
+                name="dueDate" 
+                placeholder="dd/mm/yyyy"
+                [class.error]="dueDateError" 
+                (input)="formatDateInput($event)" 
+                maxlength="10" 
+                pattern="[0-9\/]*"
+                inputmode="numeric" 
+                required />
             <button type="button" class="calendar-icon-btn" (click)="openDatePicker()">
                 <svg class="calendar-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -36,8 +45,15 @@
                         fill="#2A3647" />
                 </svg>
             </button>
-            <input type="date" class="hidden-date-picker" [(ngModel)]="hiddenDateValue" name="hiddenDate"
-                (change)="onDatePickerChange($event)" [min]="minDate" #datePicker />
+            <input 
+                type="date" 
+                id="hiddenDate"
+                class="hidden-date-picker" 
+                [(ngModel)]="hiddenDateValue" 
+                name="hiddenDate"
+                (change)="onDatePickerChange($event)" 
+                [min]="minDate" 
+                #datePicker />
         </div>
         <span class="field-error" [class.visible]="dueDateError">{{ dueDateErrorMessage }}</span>
     </div>

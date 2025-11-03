@@ -6,8 +6,15 @@
     <label for="assignedTo">Assigned to</label>
     <div class="dropdown-wrapper">
         <div class="dropdown-toggle-input">
-            <input type="text" [(ngModel)]="contactSearchTerm" name="contactSearch" (focus)="onContactInputFocus()"
-                (blur)="onContactInputBlur()" (input)="onContactSearch()" autocomplete="off" />
+            <input 
+                type="text" 
+                id="assignedTo"
+                [(ngModel)]="contactSearchTerm" 
+                name="contactSearch" 
+                (focus)="onContactInputFocus()"
+                (blur)="onContactInputBlur()" 
+                (input)="onContactSearch()" 
+                autocomplete="off" />
             <img #contactArrow
                 [src]="showContactDropdown ? 'assets/board/arrow-drop-up-transparent.png' : 'assets/board/arrow-drop-down-transparent.png'"
                 alt="dropdown arrow" class="dropdown-arrow" (click)="toggleContactDropdown()"
