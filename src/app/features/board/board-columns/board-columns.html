@@ -33,10 +33,14 @@
             </app-task-card>
             
             @if (isMobile) {
-            <button class="mobile-move-btn" (click)="toggleMoveMenu(task.id!, $event)">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M7 10l5 5 5-5z" fill="#2A3647"/>
-                </svg>
+            <button 
+                class="mobile-move-btn" 
+                [class.open]="showMoveMenu[task.id!]"
+                (click)="toggleMoveMenu(task.id!, $event)">
+                <img 
+                    src="assets/board/arrow-drop-down-transparent.png" 
+                    alt="Move task" 
+                    class="dropdown-arrow" />
             </button>
             
             @if (showMoveMenu[task.id!]) {
