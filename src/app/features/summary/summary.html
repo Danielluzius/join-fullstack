@@ -6,9 +6,11 @@
 
 <div class="main-container">
     <div class="metrics-grid">
-        <div class="metric-card">
-            <div class="icon-placeholder">
-                <img src="assets/summary/edit-white-signup.png" alt="To-do icon" class="metric-icon">
+        <div class="metric-card" (mouseenter)="onTodoHover(true)" (mouseleave)="onTodoHover(false)">
+            <div class="icon-wrapper">
+                <div class="icon-placeholder">
+                    <img [src]="todoIconSrc" alt="To-do icon" class="metric-icon">
+                </div>
             </div>
             <div class="metric-content">
                 <div class="metric-number">0</div>
@@ -16,9 +18,11 @@
             </div>
         </div>
 
-        <div class="metric-card">
-            <div class="icon-placeholder">
-                <img src="assets/summary/done-checkmark.png" alt="Done icon" class="metric-icon">
+        <div class="metric-card" (mouseenter)="onDoneHover(true)" (mouseleave)="onDoneHover(false)">
+            <div class="icon-wrapper">
+                <div class="icon-placeholder">
+                    <img [src]="doneIconSrc" alt="Done icon" class="metric-icon">
+                </div>
             </div>
             <div class="metric-content">
                 <div class="metric-number">0</div>
@@ -26,7 +30,7 @@
             </div>
         </div>
 
-        <div class="metric-card full-width">
+        <div class="metric-card full-width urgent-card">
             <div class="deadline-section">
                 <div class="icon-placeholder urgent-icon">
                     <img src="assets/summary/prio-signup.png" alt="Urgent icon" class="metric-icon">
