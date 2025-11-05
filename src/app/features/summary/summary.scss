@@ -281,3 +281,178 @@ body {
     letter-spacing: 0%;
   }
 }
+
+@media (max-width: 1169px) {
+  .greeting {
+    display: none;
+  }
+
+  .main-container {
+    gap: 60px;
+  }
+
+  .metrics-grid {
+    width: 100%;
+    height: auto;
+  }
+
+  .metric-card {
+    width: 100%;
+    max-width: 264px;
+  }
+
+  .metric-card.full-width {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .bottom-row {
+    grid-template-columns: repeat(3, 1fr);
+
+    .metric-card {
+      max-width: 168px;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .header-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding-left: 60px;
+
+    .divider {
+      width: 90px;
+      height: 3px;
+    }
+
+    p {
+      order: 2;
+    }
+
+    .divider {
+      order: 3;
+    }
+  }
+
+  .metrics-grid {
+    width: 100%;
+    height: auto;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 60px 30px 60px;
+  }
+
+  .metric-card {
+    width: 100%;
+    max-width: none;
+  }
+
+  .metric-card.full-width {
+    width: 100%;
+    max-width: none;
+  }
+
+  .bottom-row {
+    grid-template-columns: repeat(3, 1fr);
+
+    .metric-card {
+      width: 100%;
+      max-width: none;
+    }
+  }
+}
+
+@media (max-width: 660px) {
+  body {
+    padding: 40px 20px;
+  }
+
+  .header-container {
+    padding-left: 20px;
+    padding-top: 30px;
+    margin-bottom: 40px;
+
+    h2 {
+      font-size: clamp(36px, 8vw, 61px);
+    }
+
+    p {
+      font-size: clamp(18px, 4vw, 27px);
+    }
+
+    .divider {
+      width: clamp(60px, 15vw, 90px);
+    }
+  }
+
+  .metrics-grid {
+    padding: 10px 20px;
+    gap: clamp(12px, 3vw, 24px);
+  }
+
+  .metric-card {
+    height: clamp(120px, 25vw, 168px);
+    padding: clamp(20px, 4vw, 38px) clamp(10px, 2vw, 19px);
+    gap: clamp(10px, 2vw, 18px);
+    border-radius: clamp(20px, 4vw, 30px);
+  }
+
+  .icon-placeholder {
+    width: clamp(45px, 10vw, 69px);
+    height: clamp(45px, 10vw, 69px);
+  }
+
+  .metric-icon {
+    width: clamp(26px, 6vw, 40px);
+    height: clamp(26px, 6vw, 40px);
+  }
+
+  .metric-number {
+    font-size: clamp(40px, 9vw, 64px);
+  }
+
+  .metric-label {
+    font-size: clamp(14px, 3vw, 20px);
+  }
+
+  .metric-card.full-width {
+    height: clamp(120px, 25vw, 168px);
+    padding: clamp(18px, 4vw, 28px) clamp(24px, 5vw, 48px);
+    gap: clamp(30px, 6vw, 61px);
+  }
+
+  .deadline-section {
+    gap: clamp(18px, 4vw, 35px);
+  }
+
+  .divider-vertical {
+    height: clamp(70px, 15vw, 102px);
+  }
+
+  .deadline-date {
+    font-size: clamp(16px, 3.5vw, 21px);
+  }
+
+  .deadline-label {
+    font-size: clamp(12px, 2.5vw, 16px);
+  }
+
+  .bottom-row {
+    gap: clamp(12px, 3vw, 24px);
+
+    .metric-card {
+      height: clamp(120px, 25vw, 168px);
+      padding: clamp(18px, 4vw, 25px) 0;
+      gap: clamp(8px, 2vw, 13px);
+    }
+
+    .metric-number {
+      font-size: clamp(40px, 9vw, 64px);
+    }
+
+    .metric-label {
+      font-size: clamp(14px, 3vw, 20px);
+    }
+  }
+}
