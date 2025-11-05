@@ -5,9 +5,14 @@ import { Board } from './features/board/board';
 import { Contacts } from './features/contacts/contacts';
 import { PrivacyPolicy } from './features/privacy-policy/privacy-policy';
 import { LegalNotice } from './features/legal-notice/legal-notice';
+import { LandingPage } from './features/landing-page/landing-page';
+import { LogIn } from './features/landing-page/log-in/log-in';
+import { SignUp } from './features/landing-page/sign-up/sign-up';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/summary', pathMatch: 'full' },
+  { path: '', component: LandingPage },
+  { path: 'login', component: LogIn },
+  { path: 'signup', component: SignUp },
   { path: 'summary', component: Summary },
   { path: 'add-task', component: AddTask },
   { path: 'board', component: Board },
