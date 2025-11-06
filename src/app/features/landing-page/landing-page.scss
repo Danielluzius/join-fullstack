@@ -28,6 +28,14 @@
     .logo {
       animation: logoShrink 1.5s ease-in-out 0.5s forwards;
     }
+
+    @media (max-width: 768px) {
+      animation: logoFadeIn 0.5s ease-in forwards, logoMoveMobile 1.5s ease-in-out 0.5s forwards;
+
+      .logo {
+        animation: logoShrinkMobile 1.5s ease-in-out 0.5s forwards;
+      }
+    }
   }
 
   // Endposition: oben links (ohne Animation)
@@ -58,8 +66,8 @@
     height: 121.97px;
 
     @media (max-width: 768px) {
-      width: 75px;
-      height: 91.48px;
+      width: 64px;
+      height: 78.03px;
     }
   }
 }
@@ -77,6 +85,19 @@
   }
 }
 
+@keyframes logoMoveMobile {
+  0% {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    top: 20px;
+    left: 30px;
+    transform: translate(0, 0);
+  }
+}
+
 @keyframes logoShrink {
   0% {
     width: 274px;
@@ -85,6 +106,17 @@
   100% {
     width: 100.03px;
     height: 121.97px;
+  }
+}
+
+@keyframes logoShrinkMobile {
+  0% {
+    width: 137px;
+    height: 167.04px;
+  }
+  100% {
+    width: 64px;
+    height: 78.03px;
   }
 }
 
