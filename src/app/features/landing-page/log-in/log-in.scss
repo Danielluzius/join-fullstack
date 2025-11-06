@@ -47,31 +47,43 @@
 
 // Login Card
 .login-card {
-  background: white;
+  background: #ffffff;
   border-radius: 30px;
-  padding: 50px 60px;
+  padding: 48px 115px;
   box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.04);
-  max-width: 480px;
-  width: 100%;
+  width: 652px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 
   @media (max-width: 768px) {
     padding: 40px 30px;
-    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
   }
 
   h1 {
-    font-size: 48px;
+    font-family: 'Inter';
+    font-style: normal;
     font-weight: 700;
-    color: #2a3647;
-    margin: 0 0 10px 0;
+    font-size: 61px;
+    line-height: 120%;
     text-align: center;
+    color: #000000;
+    margin: 0;
+
+    @media (max-width: 768px) {
+      font-size: 48px;
+    }
   }
 
   .underline {
-    width: 100px;
+    width: 150px;
     height: 3px;
     background-color: #29abe2;
-    margin: 0 auto 40px auto;
+    border-radius: 2px;
+    margin: 0 0 16px 0;
   }
 }
 
@@ -79,18 +91,32 @@
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  align-items: center;
+  gap: 32px;
+  width: 100%;
 }
 
 .input-group {
   position: relative;
+  width: 422px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 
   .form-input {
     width: 100%;
-    padding: 16px 50px 16px 20px;
+    height: 48px;
+    padding: 12px 21px;
+    background: #ffffff;
     border: 1px solid #d1d1d1;
     border-radius: 10px;
-    font-size: 16px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 120%;
+    color: #000000;
     outline: none;
     transition: border-color 0.2s;
     box-sizing: border-box;
@@ -106,32 +132,58 @@
 
   .input-icon {
     position: absolute;
-    right: 20px;
+    right: 21px;
     top: 50%;
     transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
     pointer-events: none;
   }
 }
 
 .button-group {
   display: flex;
-  gap: 16px;
-  margin-top: 20px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  width: 100%;
+  margin-top: 16px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 16px;
+  }
 
   button {
-    flex: 1;
-    padding: 14px 20px;
+    height: 48px;
+    padding: 15px 24px;
     border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 21px;
+    line-height: 120%;
     cursor: pointer;
     transition: all 0.2s;
     border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
   }
 
   .btn-primary {
+    width: 110px;
     background-color: #2a3647;
-    color: white;
+    color: #ffffff;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
 
     &:hover {
       background-color: #29abe2;
@@ -139,9 +191,14 @@
   }
 
   .btn-secondary {
-    background-color: white;
+    width: 177px;
+    background-color: #ffffff;
     color: #2a3647;
     border: 1px solid #2a3647;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
 
     &:hover {
       background-color: #2a3647;
