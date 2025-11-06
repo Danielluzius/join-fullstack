@@ -6,7 +6,7 @@
 
 <div class="main-container">
     <div class="metrics-grid">
-        <div class="metric-card" (mouseenter)="onTodoHover(true)" (mouseleave)="onTodoHover(false)">
+        <div class="metric-card" (click)="navigateToBoard('todo')" (mouseenter)="onTodoHover(true)" (mouseleave)="onTodoHover(false)">
             <div class="icon-wrapper">
                 <div class="icon-placeholder">
                     <img [src]="todoIconSrc" alt="To-do icon" class="metric-icon">
@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="metric-card" (mouseenter)="onDoneHover(true)" (mouseleave)="onDoneHover(false)">
+        <div class="metric-card" (click)="navigateToBoard('done')" (mouseenter)="onDoneHover(true)" (mouseleave)="onDoneHover(false)">
             <div class="icon-wrapper">
                 <div class="icon-placeholder">
                     <img [src]="doneIconSrc" alt="Done icon" class="metric-icon">
@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <div class="metric-card full-width urgent-card">
+        <div class="metric-card full-width urgent-card" (click)="navigateToBoard('urgent')">
             <div class="deadline-section">
                 <div class="icon-placeholder urgent-icon">
                     <img src="assets/summary/prio-signup.png" alt="Urgent icon" class="metric-icon">
@@ -48,17 +48,17 @@
         </div>
 
         <div class="bottom-row">
-            <div class="metric-card">
+            <div class="metric-card" (click)="navigateToBoard('board')">
                 <div class="metric-number">{{ tasksInBoardCount }}</div>
                 <div class="metric-label">Tasks in<br>Board</div>
             </div>
 
-            <div class="metric-card">
+            <div class="metric-card" (click)="navigateToBoard('progress')">
                 <div class="metric-number">{{ tasksInProgressCount }}</div>
                 <div class="metric-label">Tasks In<br>Progress</div>
             </div>
 
-            <div class="metric-card">
+            <div class="metric-card" (click)="navigateToBoard('feedback')">
                 <div class="metric-number">{{ awaitingFeedbackCount }}</div>
                 <div class="metric-label">Awaiting<br>Feedback</div>
             </div>

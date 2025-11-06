@@ -1,5 +1,6 @@
 import { Component,  OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { BoardTasksService } from '../../core/services/board-tasks-service';
 import { Task } from '../../core/interfaces/board-tasks-interface';
 import { Subscription } from 'rxjs';
@@ -14,6 +15,7 @@ import { Timestamp } from '@angular/fire/firestore';
 
 export class Summary implements OnInit, OnDestroy {
   private boardTasksService = inject(BoardTasksService);
+  private router = inject(Router);
   private tasksSubscription?: Subscription;
 
   todoIconSrc: string = 'assets/summary/edit-white-signup.png';
@@ -110,6 +112,14 @@ export class Summary implements OnInit, OnDestroy {
       this.doneIconSrc = 'assets/summary/done-checkmark-hover.png';
     } else {
       this.doneIconSrc = 'assets/summary/done-checkmark.png';
+    }
+  }
+
+  navigateToBoard(filter?: string): void {
+    if (filter) {
+      this.router.navigate(['/board'], { queryParams: { filter } });
+    } else {
+      this.router.navigate(['/board']);
     }
   }
 }
