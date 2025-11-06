@@ -40,6 +40,15 @@ export class LogIn {
   }
 
   onGuestLogin() {
+    const guestUser = {
+      id: 'guest',
+      email: 'guest@join.com',
+      name: 'Guest User',
+      password: '',
+      createdAt: new Date()
+    }; 
+    localStorage.setItem('currentUser', JSON.stringify(guestUser));
+    this.authService['currentUserSubject'].next(guestUser);
     this.router.navigate(['/summary']);
   }
 
