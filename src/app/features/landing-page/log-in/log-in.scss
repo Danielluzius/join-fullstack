@@ -1,56 +1,27 @@
-.login-page {
-  min-height: 100vh;
-  background-color: #f6f7f8;
+.login-container {
+  width: 100%;
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 20px;
 }
 
-// Header
-.login-header {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 40px 80px;
-
-  @media (max-width: 768px) {
-    padding: 20px 30px;
-  }
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  .logo-img {
-    height: 60px;
-    width: auto;
-
-    @media (max-width: 768px) {
-      height: 45px;
-    }
-  }
-
-  .logo-text {
-    font-size: 32px;
-    font-weight: 700;
-    color: #2a3647;
-    letter-spacing: 1px;
-  }
-}
-
+// Header Actions (Sign Up Button)
 .header-actions {
+  position: fixed;
+  top: 40px;
+  right: 80px;
   display: flex;
   align-items: center;
   gap: 20px;
+  z-index: 20;
+
+  @media (max-width: 768px) {
+    top: 20px;
+    right: 30px;
+  }
 
   .not-user-text {
     font-size: 16px;
@@ -175,30 +146,6 @@
     &:hover {
       background-color: #2a3647;
       color: white;
-    }
-  }
-}
-
-// Footer
-.login-footer {
-  position: absolute;
-  bottom: 40px;
-  display: flex;
-  gap: 40px;
-
-  @media (max-width: 768px) {
-    bottom: 20px;
-    gap: 20px;
-  }
-
-  a {
-    color: #a8a8a8;
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.2s;
-
-    &:hover {
-      color: #29abe2;
     }
   }
 }

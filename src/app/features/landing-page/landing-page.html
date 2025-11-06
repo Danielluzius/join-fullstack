@@ -1,1 +1,17 @@
-<p>landing-page works!</p>
+<div class="landing-page">
+    <!-- Animiertes Logo -->
+    <div class="logo-container" [class.animate]="showAnimation" [class.final-position]="animationComplete">
+        <img src="assets/landingspage-logo.png" alt="Join Logo" class="logo" />
+    </div>
+
+    <!-- Login/SignUp Content -->
+    <div class="content-container" [class.visible]="animationComplete">
+        <router-outlet />
+    </div>
+
+    <!-- Footer Links -->
+    <footer class="landing-footer" [class.visible]="animationComplete">
+        <a routerLink="/privacy-policy">Privacy Policy</a>
+        <a routerLink="/legal-notice">Legal notice</a>
+    </footer>
+</div>

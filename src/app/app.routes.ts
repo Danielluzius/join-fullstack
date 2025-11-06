@@ -10,9 +10,15 @@ import { LogIn } from './features/landing-page/log-in/log-in';
 import { SignUp } from './features/landing-page/sign-up/sign-up';
 
 export const routes: Routes = [
-  { path: '', component: LandingPage },
-  { path: 'login', component: LogIn },
-  { path: 'signup', component: SignUp },
+  {
+    path: '',
+    component: LandingPage,
+    children: [
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
+      { path: 'login', component: LogIn },
+      { path: 'signup', component: SignUp },
+    ],
+  },
   { path: 'summary', component: Summary },
   { path: 'add-task', component: AddTask },
   { path: 'board', component: Board },

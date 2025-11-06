@@ -1,14 +1,9 @@
-<div class="login-page">
-    <!-- Header with Logo and Sign Up Button -->
-    <header class="login-header">
-        <div class="logo">
-            <img src="assets/header-join-icon.png" alt="Join Logo" class="logo-img" />
-        </div>
-        <div class="header-actions">
-            <span class="not-user-text">Not a Join user?</span>
-            <button type="button" class="signup-btn" (click)="navigateToSignUp()">Sign up</button>
-        </div>
-    </header>
+<div class="login-container">
+    <!-- Sign Up Button rechts oben -->
+    <div class="header-actions">
+        <span class="not-user-text">Not a Join user?</span>
+        <button type="button" class="signup-btn" (click)="navigateToSignUp()">Sign up</button>
+    </div>
 
     <!-- Login Card -->
     <div class="login-card">
@@ -40,10 +35,4 @@
             </div>
         </form>
     </div>
-
-    <!-- Footer Links -->
-    <footer class="login-footer">
-        <a routerLink="/privacy-policy">Privacy Policy</a>
-        <a routerLink="/legal-notice">Legal notice</a>
-    </footer>
 </div>
