@@ -1,14 +1,9 @@
 .privacy-container {
-  max-width: 800px;
-  margin: 0 40px;
-  padding: 40px 20px;
-
-  // ✅ Scrollbar hier
-  max-height: calc(100vh - 96px); // Abzüglich Header-Höhe
+  padding: 120px 96px 64px 96px;
+  max-width: 1700px;
+  height: calc(100vh - 96px);
   overflow-y: auto;
-  overflow-x: hidden;
 
-  // Optional: Custom Scrollbar Styling
   &::-webkit-scrollbar {
     width: 8px;
   }
@@ -26,172 +21,204 @@
       background: #2a3647;
     }
   }
+}
+
+.privacy-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
 
   h1 {
     font-family: 'Inter', sans-serif;
-    font-size: 48px;
+    font-size: 61px;
     font-weight: 700;
-    margin-bottom: 40px;
-    color: #2a3647;
-    line-height: 1.2;
+    line-height: 120%;
+    color: #000000;
+    margin: 0;
+  }
+}
+
+.back-btn {
+  width: 48px;
+  height: 48px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  padding: 0;
+
+  img {
+    width: 24px;
+    height: 24px;
   }
 
-  .privacy-content {
-    line-height: 1.8;
-    color: #2a3647;
+  &:hover {
+    transform: scale(1.1);
+  }
 
-    .privacy-section {
-      margin-bottom: 40px;
-      padding-bottom: 32px;
-      border-bottom: 1px solid #e0e0e0;
+  &:active {
+    transform: scale(0.95);
+  }
+}
 
-      &:last-child {
-        border-bottom: none;
-      }
+.privacy-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  max-width: 1014px;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 120%;
+  color: #000000;
 
-      h2 {
-        font-family: 'Inter', sans-serif;
-        font-size: 28px;
-        font-weight: 600;
-        margin-bottom: 24px;
-        color: #2a3647;
-      }
+  .privacy-section {
+    margin-bottom: 24px;
 
-      h3 {
-        font-family: 'Inter', sans-serif;
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 12px;
-        margin-top: 20px;
-        color: #29abe2;
-      }
+    h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: 27px;
+      font-weight: 700;
+      line-height: 120%;
+      color: #000000;
+      margin: 0 0 16px 0;
+    }
 
-      p {
+    h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 120%;
+      color: #000000;
+      margin: 16px 0 8px 0;
+    }
+
+    p {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 120%;
+      color: #000000;
+      margin: 0 0 12px 0;
+    }
+
+    ul {
+      margin: 12px 0 12px 24px;
+      padding: 0;
+
+      li {
         font-family: 'Inter', sans-serif;
         font-size: 16px;
         font-weight: 400;
-        margin-bottom: 16px;
-        color: #2a3647;
-        line-height: 1.8;
-      }
-
-      ul {
-        margin: 16px 0 16px 24px;
-        padding: 0;
-
-        li {
-          font-family: 'Inter', sans-serif;
-          font-size: 16px;
-          font-weight: 400;
-          color: #2a3647;
-          line-height: 1.8;
-          margin-bottom: 8px;
-
-          &:last-child {
-            margin-bottom: 0;
-          }
-        }
-      }
-
-      a {
-        color: #29abe2;
-        text-decoration: none;
-        transition: color 0.2s;
-        font-weight: 500;
-
-        &:hover {
-          color: #2a3647;
-          text-decoration: underline;
-        }
-      }
-
-      strong {
-        font-weight: 600;
-        color: #2a3647;
+        line-height: 120%;
+        color: #000000;
+        margin-bottom: 8px;
       }
     }
 
-    .subsection {
-      margin-bottom: 24px;
+    a {
+      color: #29abe2;
+      text-decoration: none;
 
-      &:last-child {
-        margin-bottom: 0;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    strong {
+      font-weight: 700;
+    }
+  }
+
+  .subsection {
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 1025px) {
+  .privacy-container {
+    padding: 96px 40px 32px 40px;
+    height: auto;
+    overflow-y: visible;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .privacy-header {
+    h1 {
+      font-size: 48px;
+    }
+  }
+
+  .back-btn {
+    width: 40px;
+    height: 40px;
+
+    img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .privacy-content {
+    max-width: 100%;
+
+    .privacy-section {
+      h2 {
+        font-size: 24px;
+      }
+
+      h3 {
+        font-size: 18px;
       }
     }
   }
 }
 
-// Mobile Responsive
 @media (max-width: 768px) {
   .privacy-container {
-    padding: 24px 16px;
+    padding: 96px 20px 20px 20px;
+  }
+
+  .privacy-header {
+    margin-bottom: 24px;
 
     h1 {
-      font-size: 32px;
-      margin-bottom: 24px;
-    }
-
-    .privacy-content {
-      .privacy-section {
-        margin-bottom: 32px;
-        padding-bottom: 24px;
-
-        h2 {
-          font-size: 22px;
-          margin-bottom: 16px;
-        }
-
-        h3 {
-          font-size: 16px;
-          margin-bottom: 10px;
-          margin-top: 16px;
-        }
-
-        p {
-          font-size: 14px;
-          margin-bottom: 12px;
-        }
-
-        ul {
-          margin: 12px 0 12px 20px;
-
-          li {
-            font-size: 14px;
-            margin-bottom: 6px;
-          }
-        }
-      }
-
-      .subsection {
-        margin-bottom: 20px;
-      }
+      font-size: 36px;
     }
   }
-}
 
-@media (max-width: 480px) {
-  .privacy-container {
-    h1 {
-      font-size: 28px;
+  .back-btn {
+    width: 36px;
+    height: 36px;
+
+    img {
+      width: 18px;
+      height: 18px;
     }
+  }
 
-    .privacy-content {
-      .privacy-section {
-        h2 {
-          font-size: 20px;
-        }
+  .privacy-content {
+    gap: 20px;
 
-        h3 {
-          font-size: 15px;
-        }
+    .privacy-section {
+      h2 {
+        font-size: 20px;
+      }
 
-        p {
-          font-size: 13px;
-        }
+      h3 {
+        font-size: 16px;
+      }
 
-        ul li {
-          font-size: 13px;
-        }
+      p,
+      li {
+        font-size: 14px;
       }
     }
   }

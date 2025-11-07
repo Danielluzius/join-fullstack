@@ -1,10 +1,8 @@
 .legal-container {
-  max-width: 800px;
-  margin: 0 40px;
-  padding: 40px 20px;
-  max-height: calc(100vh - 96px);
+  padding: 120px 96px 64px 96px;
+  max-width: 1700px;
+  height: calc(100vh - 96px);
   overflow-y: auto;
-  overflow-x: hidden;
 
   &::-webkit-scrollbar {
     width: 8px;
@@ -23,126 +21,147 @@
       background: #2a3647;
     }
   }
+}
+
+.legal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
 
   h1 {
     font-family: 'Inter', sans-serif;
-    font-size: 48px;
+    font-size: 61px;
     font-weight: 700;
-    margin-bottom: 40px;
-    color: #2a3647;
-    line-height: 1.2;
+    line-height: 120%;
+    color: #000000;
+    margin: 0;
+  }
+}
+
+.legal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  max-width: 1014px;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 120%;
+  color: #000000;
+
+  .legal-section {
+    margin-bottom: 24px;
+
+    h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: 27px;
+      font-weight: 700;
+      line-height: 120%;
+      color: #000000;
+      margin: 0 0 16px 0;
+    }
+
+    h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 120%;
+      color: #000000;
+      margin: 16px 0 8px 0;
+    }
+
+    p {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 120%;
+      color: #000000;
+      margin: 0 0 12px 0;
+    }
+
+    a {
+      color: #29abe2;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    strong {
+      font-weight: 700;
+    }
+  }
+
+  .info-block {
+    margin-bottom: 16px;
+  }
+
+  .disclaimer-block {
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 1025px) {
+  .legal-container {
+    padding: 96px 40px 32px 40px;
+    height: auto;
+    overflow-y: visible;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .legal-header {
+    h1 {
+      font-size: 48px;
+    }
   }
 
   .legal-content {
-    line-height: 1.8;
-    color: #2a3647;
+    max-width: 100%;
 
     .legal-section {
-      margin-bottom: 40px;
-      padding-bottom: 32px;
-      border-bottom: 1px solid #e0e0e0;
-
-      &:last-child {
-        border-bottom: none;
-      }
-
       h2 {
-        font-family: 'Inter', sans-serif;
-        font-size: 28px;
-        font-weight: 600;
-        margin-bottom: 24px;
-        color: #2a3647;
+        font-size: 24px;
       }
 
       h3 {
-        font-family: 'Inter', sans-serif;
         font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 12px;
-        margin-top: 20px;
-        color: #29abe2;
-      }
-
-      p {
-        font-family: 'Inter', sans-serif;
-        font-size: 16px;
-        font-weight: 400;
-        margin-bottom: 16px;
-        color: #2a3647;
-        line-height: 1.8;
-      }
-
-      a {
-        color: #29abe2;
-        text-decoration: none;
-        transition: color 0.2s;
-        font-weight: 500;
-
-        &:hover {
-          color: #2a3647;
-          text-decoration: underline;
-        }
-      }
-
-      strong {
-        font-weight: 600;
-        color: #2a3647;
-      }
-    }
-
-    .info-block {
-      margin-bottom: 24px;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-
-    .disclaimer-block {
-      margin-bottom: 28px;
-
-      &:last-child {
-        margin-bottom: 0;
       }
     }
   }
 }
 
-// Mobile Responsive
 @media (max-width: 768px) {
   .legal-container {
-    padding: 24px 16px;
+    padding: 96px 20px 20px 20px;
+  }
+
+  .legal-header {
+    margin-bottom: 24px;
 
     h1 {
-      font-size: 32px;
-      margin-bottom: 24px;
+      font-size: 36px;
     }
+  }
 
-    .legal-content {
-      .legal-section {
-        margin-bottom: 32px;
-        padding-bottom: 24px;
+  .legal-content {
+    gap: 20px;
 
-        h2 {
-          font-size: 22px;
-          margin-bottom: 16px;
-        }
-
-        h3 {
-          font-size: 16px;
-          margin-bottom: 10px;
-          margin-top: 16px;
-        }
-
-        p {
-          font-size: 14px;
-          margin-bottom: 12px;
-        }
+    .legal-section {
+      h2 {
+        font-size: 20px;
       }
 
-      .info-block,
-      .disclaimer-block {
-        margin-bottom: 20px;
+      h3 {
+        font-size: 16px;
+      }
+
+      p {
+        font-size: 14px;
       }
     }
   }
