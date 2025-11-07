@@ -1,7 +1,26 @@
 .help-container {
   padding: 120px 96px 64px 96px;
   max-width: 1700px;
-  min-height: 100vh;
+  height: calc(100vh - 96px);
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgb(168, 168, 168);
+    border-radius: 10px;
+
+    &:hover {
+      background: #2a3647;
+    }
+  }
 }
 
 .help-header {
@@ -177,6 +196,12 @@ h2 {
 @media (max-width: 1025px) {
   .help-container {
     padding: 96px 40px 32px 40px;
+    height: auto;
+    overflow-y: visible;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   .help-header {
