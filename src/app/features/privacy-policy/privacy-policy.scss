@@ -1,13 +1,13 @@
 .privacy-container {
   max-width: 800px;
-  margin: 0 auto;
+  margin: 0 40px;
   padding: 40px 20px;
-  
+
   // ✅ Scrollbar hier
   max-height: calc(100vh - 96px); // Abzüglich Header-Höhe
   overflow-y: auto;
   overflow-x: hidden;
-  
+
   // Optional: Custom Scrollbar Styling
   &::-webkit-scrollbar {
     width: 8px;
@@ -21,7 +21,7 @@
   &::-webkit-scrollbar-thumb {
     background: rgb(168, 168, 168);
     border-radius: 10px;
-    
+
     &:hover {
       background: #2a3647;
     }
@@ -86,7 +86,7 @@
           color: #2a3647;
           line-height: 1.8;
           margin-bottom: 8px;
-          
+
           &:last-child {
             margin-bottom: 0;
           }
