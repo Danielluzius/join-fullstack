@@ -10,69 +10,93 @@
   overflow: hidden;
 }
 
-// Animiertes Logo
-.logo-container {
+.animation-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #2a3647;
+  z-index: 9;
+  opacity: 0;
+  display: none;
+  pointer-events: none;
+
+  &.animate {
+    animation: backgroundStay 0.8s ease-in forwards, backgroundFadeOut 0.6s ease-out 0.8s forwards;
+    pointer-events: auto;
+  }
+
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+}
+
+@keyframes backgroundStay {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes backgroundFadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.logo-container-desktop {
   position: absolute;
   z-index: 10;
+  display: block;
 
-  // Startposition: zentriert in der Mitte
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: 0;
 
-  // Animation zur Endposition
   &.animate {
-    animation: logoFadeIn 0.5s ease-in forwards, logoMove 1.5s ease-in-out 0.5s forwards;
+    animation: logoFadeInDesktop 0.5s ease-in forwards,
+      logoMoveDesktop 1.5s ease-in-out 0.5s forwards;
 
     .logo {
-      animation: logoShrink 1.5s ease-in-out 0.5s forwards;
-    }
-
-    @media (max-width: 768px) {
-      animation: logoFadeIn 0.5s ease-in forwards, logoMoveMobile 1.5s ease-in-out 0.5s forwards;
-
-      .logo {
-        animation: logoShrinkMobile 1.5s ease-in-out 0.5s forwards;
-      }
+      animation: logoShrinkDesktop 1.5s ease-in-out 0.5s forwards;
     }
   }
 
-  // Endposition: oben links (ohne Animation)
   &.final-position {
     top: 40px;
-    left: 80px;
+    left: 60px;
     transform: translate(0, 0);
     opacity: 1;
-
-    @media (max-width: 768px) {
-      top: 20px;
-      left: 30px;
-    }
   }
 
   .logo {
     width: 274px;
     height: 334.07px;
-
-    @media (max-width: 768px) {
-      width: 137px;
-      height: 167.04px;
-    }
   }
 
   &.final-position .logo {
     width: 100.03px;
     height: 121.97px;
+  }
 
-    @media (max-width: 768px) {
-      width: 64px;
-      height: 78.03px;
-    }
+  @media (max-width: 768px) {
+    display: none;
   }
 }
 
-@keyframes logoMove {
+@keyframes logoMoveDesktop {
   0% {
     top: 50%;
     left: 50%;
@@ -80,8 +104,109 @@
   }
   100% {
     top: 40px;
-    left: 80px;
+    left: 60px;
     transform: translate(0, 0);
+  }
+}
+
+@keyframes logoShrinkDesktop {
+  0% {
+    width: 274px;
+    height: 334.07px;
+  }
+  100% {
+    width: 100.03px;
+    height: 121.97px;
+  }
+}
+
+@keyframes logoFadeInDesktop {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.logo-container-mobile {
+  position: absolute;
+  z-index: 10;
+  display: none;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+
+  &.animate {
+    animation: logoMoveMobile 1.5s ease-in-out 0.5s forwards;
+
+    .logo {
+      animation: logoShrinkMobile 1.5s ease-in-out 0.5s forwards,
+        logoTransformMobile 1.5s ease-in-out 0.5s forwards;
+    }
+
+    .logo-start {
+      animation: logoShrinkMobile 1.5s ease-in-out 0.5s forwards,
+        logoTransformMobile 1.5s ease-in-out 0.5s forwards,
+        logoFadeOutMobile 0.6s ease-in-out 0.8s forwards;
+    }
+
+    .logo-end {
+      animation: logoShrinkMobile 1.5s ease-in-out 0.5s forwards,
+        logoTransformMobile 1.5s ease-in-out 0.5s forwards,
+        logoFadeInEndMobile 0.6s ease-in-out 0.8s forwards;
+    }
+  }
+
+  &.final-position {
+    top: 20px;
+    left: 30px;
+    transform: translate(0, 0);
+    opacity: 1;
+
+    .logo-start {
+      opacity: 0;
+    }
+
+    .logo-end {
+      opacity: 1;
+    }
+
+    .logo {
+      top: 0;
+      left: 0;
+      transform: translate(0, 0);
+    }
+  }
+
+  .logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 137px;
+    height: 167.04px;
+  }
+
+  .logo-start {
+    opacity: 1;
+    z-index: 2;
+  }
+
+  .logo-end {
+    opacity: 0;
+    z-index: 1;
+  }
+
+  &.final-position .logo {
+    width: 64px;
+    height: 78.03px;
+  }
+
+  @media (max-width: 768px) {
+    display: block;
   }
 }
 
@@ -98,17 +223,6 @@
   }
 }
 
-@keyframes logoShrink {
-  0% {
-    width: 274px;
-    height: 334.07px;
-  }
-  100% {
-    width: 100.03px;
-    height: 121.97px;
-  }
-}
-
 @keyframes logoShrinkMobile {
   0% {
     width: 137px;
@@ -120,7 +234,7 @@
   }
 }
 
-@keyframes logoFadeIn {
+@keyframes logoFadeInMobile {
   0% {
     opacity: 0;
   }
@@ -129,7 +243,33 @@
   }
 }
 
-// Content Container für Login/SignUp
+@keyframes logoFadeOutMobile {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes logoFadeInEndMobile {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes logoTransformMobile {
+  0% {
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
 .content-container {
   opacity: 0;
   transition: opacity 0.5s ease-in;
@@ -145,7 +285,6 @@
   }
 }
 
-// Footer
 .landing-footer {
   position: absolute;
   bottom: 40px;
