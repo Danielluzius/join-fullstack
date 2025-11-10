@@ -13,7 +13,6 @@
   }
 }
 
-// Header Actions (Sign Up Button)
 .header-actions {
   position: fixed;
   top: 40px;
@@ -49,7 +48,6 @@
   }
 }
 
-// Mobile Header Actions (below card)
 .header-actions-mobile {
   display: none;
 
@@ -88,7 +86,6 @@
   }
 }
 
-// Login Card
 .login-card {
   background: #ffffff;
   border-radius: 30px;
@@ -108,7 +105,6 @@
     margin: 0 16px;
   }
 
-  // Reduzierte Abstände bei niedriger Bildschirmhöhe
   @media (max-height: 800px) {
     padding: 20px 40px;
     gap: 10px;
@@ -150,22 +146,21 @@
   }
 }
 
-// Form
 .login-form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
   width: 100%;
 
   @media (max-height: 800px) {
-    gap: 16px;
+    gap: 12px;
   }
 }
 
 .input-group {
   position: relative;
   width: 422px;
+  margin-bottom: 8px; 
 
   @media (max-width: 768px) {
     width: clamp(280px, 85vw, 364px);
@@ -196,16 +191,68 @@
     &:focus {
       border-color: #29abe2;
     }
+
+
+    &.error {
+      border-color: #ff3d00;
+      background-color: #fff5f5;
+    }
   }
 
   .input-icon {
     position: absolute;
     right: 21px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 12px; 
+    transform: translateY(0);
     width: 24px;
     height: 24px;
     pointer-events: none;
+  }
+
+  .error-message {
+    min-height: 20px;
+    margin-top: 4px;
+    padding-left: 4px;
+
+    span {
+      font-family: 'Inter';
+      font-size: 12px;
+      font-weight: 400;
+      color: #ff3d00;
+      display: block;
+      animation: fadeIn 0.2s ease-in;
+    }
+  }
+}
+
+.general-error {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #fff5f5;
+  border: 1px solid #ff3d00;
+  border-radius: 8px;
+  color: #ff3d00;
+  font-family: 'Inter';
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in;
+  margin-bottom: 16px;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -245,6 +292,11 @@
     align-items: center;
     justify-content: center;
 
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     @media (max-width: 768px) {
       width: 100%;
       height: clamp(44px, 12vw, 51px);
@@ -268,7 +320,7 @@
       width: 100%;
     }
 
-    &:hover {
+    &:hover:not(:disabled) {
       background-color: #29abe2;
     }
   }
@@ -283,7 +335,7 @@
       width: 100%;
     }
 
-    &:hover {
+    &:hover:not(:disabled) {
       background-color: #2a3647;
       color: white;
     }
