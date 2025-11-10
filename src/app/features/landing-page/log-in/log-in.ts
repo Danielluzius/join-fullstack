@@ -3,11 +3,12 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth-service';
-import { Header } from "../../../shared/components/header/header";
+import { Header } from '../../../shared/components/header/header';
+import { Navbar } from '../../../shared/components/navbar/navbar';
 
 @Component({
   selector: 'app-log-in',
-  imports: [CommonModule, FormsModule, RouterModule, Header],
+  imports: [CommonModule, FormsModule, RouterModule, Header, Navbar],
   templateUrl: './log-in.html',
   styleUrl: './log-in.scss',
   standalone: true,
@@ -23,14 +24,13 @@ export class LogIn {
   welcomeUserName = '';
   timeOfDay = 'morning';
   capsLockOn = false;
-
+  fadeOutWelcome = false;
 
   private router = inject(Router);
   private authService = inject(AuthService);
 
   validateEmail(): void {
     this.emailError = '';
-
 
     if (!this.email) {
       this.emailError = 'Email is required';
@@ -46,7 +46,6 @@ export class LogIn {
 
   validatePassword(): void {
     this.passwordError = '';
-
 
     if (!this.password) {
       this.passwordError = 'Password is required';
@@ -71,7 +70,6 @@ export class LogIn {
    */
   onPasswordBlur(): void {
     this.validatePassword();
-
   }
 
   async onLogin() {
@@ -138,12 +136,20 @@ export class LogIn {
 
     this.welcomeUserName = userName;
     this.showWelcome = true;
+    this.fadeOutWelcome = false;
+
+    // Nach 1.5 Sekunden Anzeige: Erst navigieren, dann ausblenden
     setTimeout(() => {
-      setTimeout(() => {
-        this.router.navigate(['/summary']);
-        this.showWelcome = false;
-      }, 500);
-    }, 2500);
+      // Sofort zur Summary navigieren (im Hintergrund)
+      this.router.navigate(['/summary']).then(() => {
+        // Nach erfolgreicher Navigation das Ausblenden starten
+        this.fadeOutWelcome = true;
+        // Nach der Fade-out Animation das Overlay entfernen
+        setTimeout(() => {
+          this.showWelcome = false;
+        }, 800);
+      });
+    }, 1500);
   }
 
   navigateToSignUp() {
