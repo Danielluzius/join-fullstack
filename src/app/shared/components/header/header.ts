@@ -91,6 +91,11 @@ export class Header implements OnInit {
    * Navigiert zur Help-Seite
    */
   navigateToHelp() {
+    this.showDropdown = false;
     this.router.navigate(['/help']);
+  }
+
+  navigateToLogout() {
+    this.logout();
   }
 }

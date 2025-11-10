@@ -239,3 +239,29 @@
     }
   }
 }
+
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 450px) {
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+
+  .help-btn.desktop-only {
+    display: none;
+  }
+
+  .dropdown-item.mobile-only {
+    display: block;
+  }
+}
