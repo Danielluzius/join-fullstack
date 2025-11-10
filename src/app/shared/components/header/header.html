@@ -3,11 +3,6 @@
         <img src="assets/header-join-icon.png" alt="Join" class="header-logo mobile-only" />
         <h1 class="header-title desktop-only">Kanban Project Management Tool</h1>
         <div class="header-actions">
-            <button class="help-btn desktop-only" aria-label="Help" (click)="navigateToHelp()">
-                <img src="assets/help-icon.png" alt="Help" class="help-icon">
-            </button>
-            
-            <!-- ✅ User Menu nur anzeigen wenn eingeloggt -->
             @if (isLoggedIn) {
             <div class="user-menu">
                 <div class="user-avatar" (click)="toggleDropdown()" [attr.aria-label]="userName">
