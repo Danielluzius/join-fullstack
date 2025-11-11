@@ -27,11 +27,12 @@ body {
   padding: clamp(20px, 4vw, 30px) clamp(20px, 6vw, 104px) 0;
   flex-shrink: 0;
 
-  h2 {
+  h1 {
     font-weight: 700;
     font-size: clamp(47px, 8vw, 61px);
     line-height: 120%;
     margin: 0;
+    color: black;
   }
 
   .divider {
@@ -64,7 +65,7 @@ body {
     p {
       order: 2;
     }
-    h2 {
+    h1 {
       order: 1;
     }
   }
@@ -78,7 +79,7 @@ body {
     height: 100px;
     padding-top: 5px;
 
-    h2 {
+    h1 {
       font-size: clamp(36px, 6vw, 47px);
     }
   }

@@ -8,13 +8,14 @@
   max-width: 1688px;
   padding: 30px 64px 0;
 
-  h2 {
+  h1 {
     font-family: Inter;
     font-weight: 700;
     font-size: 61px;
     line-height: 120%;
     letter-spacing: 0%;
     margin: 0;
+    color: black;
   }
 
   .board-header-actions {
@@ -68,7 +69,7 @@
     align-items: center;
     flex-wrap: wrap;
 
-    h2 {
+    h1 {
       font-size: 48px;
       flex-shrink: 0;
     }
@@ -84,20 +85,18 @@
       justify-content: flex-start;
 
       app-board-search {
-        width: 100%; 
+        width: 100%;
       }
 
       .desktop-add-button,
       app-board-add-button {
         display: none !important;
-
       }
     }
   }
 }
 
 @media (max-width: 768px) {
-
   .board-header {
     width: 100%;
   }
@@ -113,31 +112,20 @@
 }
 
 @media (max-width: 580px) {
-
   .mobile-add-task-btn {
     left: -62px;
-
   }
 }
 
 @media (max-width: 523px) {
-
   .mobile-add-task-btn {
     left: -12px;
-
   }
 }
-
-
-
 
 @media (max-width: 480px) {
   .board-header {
     // padding: 0 16px;
     gap: 0px;
-
-    h2 {
-      // font-size: 28px;
-    }
   }
 }
