@@ -127,62 +127,40 @@ export class SignUp {
   }
 
   onPasswordIconHover(isHovering: boolean): void {
-    console.log('Password Icon Hover:', isHovering);
-    console.log('showPassword:', this.showPassword);
-
-    if (!isHovering) {
-      this.passwordIconSrc = this.showPassword
-        ? 'assets/signup/eye.png'
-        : 'assets/signup/lock-signup.png';
-    } else {
-      this.passwordIconSrc = this.showPassword
-        ? 'assets/signup/eye-crossed-signup.png'
-        : 'assets/signup/eye.png';
-    }
-
-    console.log('New passwordIconSrc:', this.passwordIconSrc);
-  }
-
-  onConfirmPasswordIconHover(isHovering: boolean): void {
-    console.log('Confirm Password Icon Hover:', isHovering);
-    console.log('showConfirmPassword:', this.showConfirmPassword);
-
-    if (!isHovering) {
-      this.confirmPasswordIconSrc = this.showConfirmPassword
-        ? 'assets/signup/eye.png'
-        : 'assets/signup/lock-signup.png';
-    } else {
-      this.confirmPasswordIconSrc = this.showConfirmPassword
-        ? 'assets/signup/eye-crossed-signup.png'
-        : 'assets/signup/eye.png';
-    }
-
-    console.log('New confirmPasswordIconSrc:', this.confirmPasswordIconSrc);
-  }
-
-  togglePasswordVisibility(): void {
-    console.log('Toggle Password clicked');
-    console.log('Before toggle - showPassword:', this.showPassword);
-
-    this.showPassword = !this.showPassword;
-    this.passwordIconSrc = this.showPassword
-      ? 'assets/signup/eye.png'
+  if (!isHovering) {
+    this.passwordIconSrc = this.showPassword 
+      ? 'assets/signup/eye.png' 
       : 'assets/signup/lock-signup.png';
-
-    console.log('After toggle - showPassword:', this.showPassword);
-    console.log('New passwordIconSrc:', this.passwordIconSrc);
+  } else {
+    this.passwordIconSrc = this.showPassword 
+      ? 'assets/signup/eye-crossed-signup.png' 
+      : 'assets/signup/eye.png';
   }
+}
 
-  toggleConfirmPasswordVisibility(): void {
-    console.log('Toggle Confirm Password clicked');
-    console.log('Before toggle - showConfirmPassword:', this.showConfirmPassword);
-
-    this.showConfirmPassword = !this.showConfirmPassword;
-    this.confirmPasswordIconSrc = this.showConfirmPassword
-      ? 'assets/signup/eye.png'
+onConfirmPasswordIconHover(isHovering: boolean): void {
+  if (!isHovering) {
+    this.confirmPasswordIconSrc = this.showConfirmPassword 
+      ? 'assets/signup/eye.png' 
       : 'assets/signup/lock-signup.png';
-
-    console.log('After toggle - showConfirmPassword:', this.showConfirmPassword);
-    console.log('New confirmPasswordIconSrc:', this.confirmPasswordIconSrc);
+  } else {
+    this.confirmPasswordIconSrc = this.showConfirmPassword 
+      ? 'assets/signup/eye-crossed-signup.png' 
+      : 'assets/signup/eye.png';
   }
+}
+
+togglePasswordVisibility(): void {
+  this.showPassword = !this.showPassword;
+  this.passwordIconSrc = this.showPassword 
+    ? 'assets/signup/eye.png' 
+    : 'assets/signup/lock-signup.png';
+}
+
+toggleConfirmPasswordVisibility(): void {
+  this.showConfirmPassword = !this.showConfirmPassword;
+  this.confirmPasswordIconSrc = this.showConfirmPassword 
+    ? 'assets/signup/eye.png' 
+    : 'assets/signup/lock-signup.png';
+}
 }
