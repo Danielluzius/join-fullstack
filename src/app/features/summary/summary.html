@@ -1,4 +1,10 @@
 <div class="summary-page">
+    @if (showGreetingOverlay) {
+    <div class="greeting-content">
+        <h2 class="greeting-text">Good {{ greetingTimeOfDay }},</h2>
+        <h1 class="greeting-name">{{ username }}</h1>
+    </div>
+    } @else {
     <div class="header-container">
         <h1>Join 360</h1>
         <div class="divider"></div>
@@ -77,4 +83,5 @@
             <p class="username">{{ username }}</p>
         </div>
     </div>
+    }
 </div>

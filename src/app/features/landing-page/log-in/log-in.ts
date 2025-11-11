@@ -3,12 +3,10 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth-service';
-import { Header } from '../../../shared/components/header/header';
-import { Navbar } from '../../../shared/components/navbar/navbar';
 
 @Component({
   selector: 'app-log-in',
-  imports: [CommonModule, FormsModule, RouterModule, Header, Navbar],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './log-in.html',
   styleUrl: './log-in.scss',
   standalone: true,
@@ -20,11 +18,7 @@ export class LogIn {
   emailError = '';
   passwordError = '';
   isLoading = false;
-  showWelcome = false;
-  welcomeUserName = '';
-  timeOfDay = 'morning';
   capsLockOn = false;
-  fadeOutWelcome = false;
 
   private router = inject(Router);
   private authService = inject(AuthService);
@@ -87,11 +81,8 @@ export class LogIn {
     this.isLoading = false;
 
     if (result.success) {
-      if (window.innerWidth < 1250 && result.user?.name) {
-        this.showWelcomeAnimation(result.user.name);
-      } else {
-        this.router.navigate(['/summary']);
-      }
+      sessionStorage.setItem('justLoggedIn', 'true');
+      this.router.navigate(['/summary']);
     } else {
       this.errorMessage = result.message;
       if (result.message.includes('email')) {
@@ -116,40 +107,9 @@ export class LogIn {
     this.authService['currentUserSubject'].next(guestUser);
     setTimeout(() => {
       this.isLoading = false;
-      if (window.innerWidth < 1250) {
-        this.showWelcomeAnimation('Guest User');
-      } else {
-        this.router.navigate(['/summary']);
-      }
+      sessionStorage.setItem('justLoggedIn', 'true');
+      this.router.navigate(['/summary']);
     }, 300);
-  }
-
-  private showWelcomeAnimation(userName: string): void {
-    const hour = new Date().getHours();
-    if (hour < 12) {
-      this.timeOfDay = 'morning';
-    } else if (hour < 18) {
-      this.timeOfDay = 'afternoon';
-    } else {
-      this.timeOfDay = 'evening';
-    }
-
-    this.welcomeUserName = userName;
-    this.showWelcome = true;
-    this.fadeOutWelcome = false;
-
-    // Nach 1.5 Sekunden Anzeige: Erst navigieren, dann ausblenden
-    setTimeout(() => {
-      // Sofort zur Summary navigieren (im Hintergrund)
-      this.router.navigate(['/summary']).then(() => {
-        // Nach erfolgreicher Navigation das Ausblenden starten
-        this.fadeOutWelcome = true;
-        // Nach der Fade-out Animation das Overlay entfernen
-        setTimeout(() => {
-          this.showWelcome = false;
-        }, 800);
-      });
-    }, 1500);
   }
 
   navigateToSignUp() {

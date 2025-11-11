@@ -7,14 +7,12 @@ import { Subscription } from 'rxjs';
 import { Timestamp } from '@angular/fire/firestore';
 import { AuthService } from '../../core/services/auth-service';
 
-
 @Component({
   selector: 'app-summary',
   imports: [CommonModule],
   templateUrl: './summary.html',
-  styleUrl: './summary.scss'
+  styleUrl: './summary.scss',
 })
-
 export class Summary implements OnInit, OnDestroy {
   private boardTasksService = inject(BoardTasksService);
   private router = inject(Router);
@@ -35,10 +33,15 @@ export class Summary implements OnInit, OnDestroy {
   greeting = '';
   username = 'Guest';
 
+  // Greeting Overlay für Mobile
+  showGreetingOverlay = false;
+  greetingTimeOfDay = '';
+
   ngOnInit(): void {
     this.loadTaskStatistics();
     this.loadUserData();
     this.setGreeting();
+    this.checkAndShowWelcome();
   }
 
   ngOnDestroy(): void {
@@ -48,11 +51,9 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   private loadTaskStatistics(): void {
-    this.tasksSubscription = this.boardTasksService.getAllTasks().subscribe(
-      (tasks: Task[]) => {
-        this.calculateStatistics(tasks);
-      }
-    );
+    this.tasksSubscription = this.boardTasksService.getAllTasks().subscribe((tasks: Task[]) => {
+      this.calculateStatistics(tasks);
+    });
   }
 
   loadUserData() {
@@ -69,16 +70,34 @@ export class Summary implements OnInit, OnDestroy {
 
     if (hour >= 5 && hour < 12) {
       this.greeting = 'Good morning';
+      this.greetingTimeOfDay = 'morning';
     } else if (hour >= 12 && hour < 18) {
       this.greeting = 'Good afternoon';
+      this.greetingTimeOfDay = 'afternoon';
     } else if (hour >= 18 && hour < 22) {
       this.greeting = 'Good evening';
+      this.greetingTimeOfDay = 'evening';
     } else {
       this.greeting = 'Good night';
+      this.greetingTimeOfDay = 'night';
     }
   }
 
+  private checkAndShowWelcome(): void {
+    // Nur auf Mobile (<1250px) und nur wenn gerade eingeloggt
+    if (window.innerWidth < 1250) {
+      const justLoggedIn = sessionStorage.getItem('justLoggedIn');
+      if (justLoggedIn === 'true') {
+        sessionStorage.removeItem('justLoggedIn');
+        this.showGreetingOverlay = true;
 
+        // Nach 2 Sekunden: Content einblenden
+        setTimeout(() => {
+          this.showGreetingOverlay = false;
+        }, 2000);
+      }
+    }
+  }
 
   private parseDate(dateString: string): Date {
     const [day, month, year] = dateString.split('/').map((num) => parseInt(num, 10));
@@ -86,23 +105,25 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   private calculateStatistics(tasks: Task[]): void {
-    this.todoCount = tasks.filter(t => t.status === 'todo').length;
+    this.todoCount = tasks.filter((t) => t.status === 'todo').length;
 
-    this.doneCount = tasks.filter(t => t.status === 'done').length;
+    this.doneCount = tasks.filter((t) => t.status === 'done').length;
 
-    this.urgentCount = tasks.filter(t => t.priority === 'urgent').length;
+    this.urgentCount = tasks.filter((t) => t.priority === 'urgent').length;
 
     this.tasksInBoardCount = tasks.length;
 
-    this.tasksInProgressCount = tasks.filter(t => t.status === 'inprogress').length;
+    this.tasksInProgressCount = tasks.filter((t) => t.status === 'inprogress').length;
 
-    this.awaitingFeedbackCount = tasks.filter(t => t.status === 'awaitfeedback').length;
+    this.awaitingFeedbackCount = tasks.filter((t) => t.status === 'awaitfeedback').length;
 
     this.upcomingDeadline = this.calculateUpcomingDeadline(tasks);
   }
 
   private calculateUpcomingDeadline(tasks: Task[]): string {
-    const tasksWithDueDate = tasks.filter(t => t.dueDate && t.status !== 'done' && t.priority !== 'low' && t.priority !== 'medium');
+    const tasksWithDueDate = tasks.filter(
+      (t) => t.dueDate && t.status !== 'done' && t.priority !== 'low' && t.priority !== 'medium'
+    );
 
     if (tasksWithDueDate.length === 0) {
       return 'No deadline';
@@ -132,7 +153,7 @@ export class Summary implements OnInit, OnDestroy {
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     };
     return date.toLocaleDateString('en-US', options);
   }

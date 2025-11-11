@@ -16,7 +16,56 @@ body {
   max-height: 825px;
   max-width: 1688px;
   overflow: hidden;
-  animation: fadeInSummary 0.8s ease-in;
+  position: relative;
+}
+
+// Greeting Content für Mobile (statt normalem Content)
+.greeting-content {
+  display: none;
+
+  @media (max-width: 1250px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    gap: 8px;
+    animation: fadeIn 0.5s ease-in;
+  }
+}
+
+.greeting-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 48px;
+  font-weight: 500;
+  color: #2a3647;
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 36px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 32px;
+  }
+}
+
+.greeting-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 64px;
+  font-weight: 700;
+  color: #29abe2;
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 47px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 40px;
+  }
 }
 
 .header-container {
@@ -366,7 +415,8 @@ body {
   }
 }
 
-@keyframes fadeInSummary {
+// Animations
+@keyframes fadeIn {
   from {
     opacity: 0;
   }
