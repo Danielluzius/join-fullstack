@@ -13,7 +13,7 @@
             <!-- Name Input -->
             <div class="input-group" [class.has-error]="fieldErrors['name']">
                 <input type="text" [(ngModel)]="name" name="name" placeholder="Name" class="form-input"
-                    [attr.data-error]="fieldErrors['name']" />
+                    [attr.data-error]="fieldErrors['name']" (keyup)="validateField()" />
                 <img src="assets/person-icon.png" alt="Name" class="input-icon" />
                 <div class="error-text">{{ fieldErrors['name'] || '' }}</div>
             </div>
@@ -21,7 +21,7 @@
             <!-- Email Input -->
             <div class="input-group" [class.has-error]="fieldErrors['email']">
                 <input type="email" [(ngModel)]="email" name="email" placeholder="Email" class="form-input"
-                    [attr.data-error]="fieldErrors['email']" />
+                    [attr.data-error]="fieldErrors['email']" (keyup)="validateField()" />
                 <img src="assets/signup/mail-signup.png" alt="Email" class="input-icon" />
                 <div class="error-text">{{ fieldErrors['email'] || '' }}</div>
             </div>
@@ -29,7 +29,7 @@
             <!-- Password Input -->
             <div class="input-group" [class.has-error]="fieldErrors['password']">
                 <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password"
-                    placeholder="Password" class="form-input" [attr.data-error]="fieldErrors['password']" />
+                    placeholder="Password" class="form-input" [attr.data-error]="fieldErrors['password']" (keyup)="validateField()" />
                 <img [src]="passwordIconSrc" alt="Password" class="input-icon input-icon-clickable"
                     (mouseenter)="onPasswordIconHover(true)" (mouseleave)="onPasswordIconHover(false)"
                     (click)="togglePasswordVisibility()" />
@@ -40,7 +40,7 @@
             <div class="input-group" [class.has-error]="fieldErrors['confirmPassword']">
                 <input [type]="showConfirmPassword ? 'text' : 'password'" [(ngModel)]="confirmPassword"
                     name="confirmPassword" placeholder="Confirm Password" class="form-input"
-                    [attr.data-error]="fieldErrors['confirmPassword']" />
+                    [attr.data-error]="fieldErrors['confirmPassword']" (keyup)="validateField()" />
                 <img [src]="confirmPasswordIconSrc" alt="Confirm Password" class="input-icon input-icon-clickable"
                     (mouseenter)="onConfirmPasswordIconHover(true)" (mouseleave)="onConfirmPasswordIconHover(false)"
                     (click)="toggleConfirmPasswordVisibility()" />
@@ -52,7 +52,7 @@
                 <label class="checkbox-label" (mouseenter)="onCheckboxHover(true)"
                     (mouseleave)="onCheckboxHover(false)">
                     <input type="checkbox" [(ngModel)]="acceptPrivacyPolicy" name="acceptPrivacyPolicy"
-                        (change)="onCheckboxChange()" class="checkbox-input" />
+                        (change)="onCheckboxChange()" class="checkbox-input" (keyup)="validateField()" />
                     <span class="checkbox-custom">
                         <img [src]="checkboxImageSrc" alt="Checkbox" class="checkbox-icon" />
                     </span>

@@ -39,44 +39,48 @@ export class SignUp {
     return emailRegex.test(email);
   }
 
-  async onSignUp() {
+  private validateAllFields(): boolean {
     this.errorMessage = '';
     this.fieldErrors = {};
-    const fieldErrors: Record<string, string> = {};
 
     if (!this.name.trim()) {
-      fieldErrors['name'] = 'Name is required';
+      this.fieldErrors['name'] = 'Name is required';
     }
 
     if (!this.email.trim()) {
-      fieldErrors['email'] = 'Email is required';
+      this.fieldErrors['email'] = 'Email is required';
     } else if (!this.isValidEmail(this.email.trim())) {
-      fieldErrors['email'] = 'Please enter a valid email address';
-    }
-
-    if (this.password !== this.confirmPassword) {
-      this.errorMessage = 'Passwords do not match';
+      this.fieldErrors['email'] = 'Please enter a valid email address';
     }
 
     if (!this.password) {
-      fieldErrors['password'] = 'Password is required';
+      this.fieldErrors['password'] = 'Password is required';
     } else if (this.password.length < 6) {
-      fieldErrors['password'] = 'Password must be at least 6 characters';
+      this.fieldErrors['password'] = 'Password must be at least 6 characters';
     }
 
     if (!this.confirmPassword) {
-      fieldErrors['confirmPassword'] = 'Please confirm your password';
+      this.fieldErrors['confirmPassword'] = 'Please confirm your password';
     } else if (this.password !== this.confirmPassword) {
-      fieldErrors['confirmPassword'] = 'Passwords do not match';
+      this.fieldErrors['confirmPassword'] = 'Passwords do not match';
+      this.errorMessage = 'Passwords do not match';
     }
 
     if (!this.acceptPrivacyPolicy) {
       this.errorMessage = 'Please accept the privacy policy';
     }
 
-    this.fieldErrors = fieldErrors;
+    return Object.keys(this.fieldErrors).length === 0 && !this.errorMessage;
+  }
 
-    if (Object.keys(fieldErrors).length > 0 || this.errorMessage) {
+  validateField(): void {
+    this.validateAllFields();
+  }
+
+  async onSignUp() {
+    const isValid = this.validateAllFields();
+
+    if (!isValid) {
       return;
     }
 
