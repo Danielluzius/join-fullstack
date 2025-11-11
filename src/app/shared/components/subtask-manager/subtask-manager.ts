@@ -45,12 +45,12 @@ export class SubtaskManagerComponent {
     if (this.newSubtaskTitle.trim()) {
       const trimmedTitle = this.newSubtaskTitle.trim().substring(0, 20);
       const updatedSubtasks = [
-        ...this.subtasks,
         {
           id: Date.now().toString(),
           title: trimmedTitle,
           completed: false,
         },
+        ...this.subtasks,
       ];
       this.subtasks = updatedSubtasks;
       this.subtasksChange.emit(updatedSubtasks);

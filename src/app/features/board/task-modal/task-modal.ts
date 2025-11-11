@@ -177,7 +177,7 @@ export class TaskModal implements OnInit {
 
   addSubtask() {
     if (this.newSubtaskTitle.trim()) {
-      this.subtasks.push({
+      this.subtasks.unshift({
         id: Date.now().toString(),
         title: this.newSubtaskTitle.trim(),
         completed: false,
@@ -185,10 +185,10 @@ export class TaskModal implements OnInit {
       this.newSubtaskTitle = '';
       this.subtaskInputFocused = false;
 
-      // Scroll to bottom after adding
+      // Scroll to top after adding
       setTimeout(() => {
         if (this.subtasksList) {
-          this.subtasksList.nativeElement.scrollTop = this.subtasksList.nativeElement.scrollHeight;
+          this.subtasksList.nativeElement.scrollTop = 0;
         }
       }, 0);
     }

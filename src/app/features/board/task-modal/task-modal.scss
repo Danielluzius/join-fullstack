@@ -17,7 +17,7 @@
   border-radius: clamp(20px, 3vw, 30px);
   width: clamp(320px, 90vw, 1116px);
   max-width: 100%;
-  min-height: auto;
+  height: 870px;
   max-height: 90vh;
   overflow: hidden;
   padding: clamp(24px, 5vw, 64px) clamp(20px, 6vw, 74px);
@@ -67,10 +67,34 @@ form {
   flex-direction: column;
   gap: clamp(16px, 2vw, 24px);
   flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .form-content {
   position: relative;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+  min-height: 0;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c4c4c4;
+    border-radius: 10px;
+
+    &:hover {
+      background: #a8a8a8;
+    }
+  }
 }
 
 .form-columns-wrapper {
@@ -80,6 +104,7 @@ form {
   position: relative;
   gap: clamp(20px, 3vw, 40px);
   flex-wrap: wrap;
+  padding-right: 8px;
 
   &::after {
     content: '';
@@ -544,4 +569,85 @@ form {
   font-size: clamp(14px, 1.6vw, 16px);
   color: #999;
   text-align: center;
+}
+
+// Modal Footer
+.modal-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: clamp(12px, 1.5vw, 16px);
+  padding-top: clamp(16px, 2vw, 24px);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.required-hint {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(14px, 1.6vw, 16px);
+  font-weight: 400;
+  color: #2a3647;
+  margin: 0;
+
+  .required {
+    color: #e60026;
+  }
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: clamp(12px, 1.5vw, 16px);
+  margin-left: auto;
+}
+
+.btn-primary,
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(6px, 0.8vw, 8px);
+  padding: clamp(12px, 1.5vw, 16px) clamp(20px, 2.5vw, 24px);
+  border-radius: clamp(8px, 1vw, 10px);
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+
+  img,
+  svg {
+    width: clamp(18px, 2vw, 24px);
+    height: clamp(18px, 2vw, 24px);
+    flex-shrink: 0;
+  }
+}
+
+.btn-primary {
+  background: #2a3647;
+  color: #ffffff;
+
+  &:hover {
+    background: #29abe2;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #2a3647;
+  border: 1px solid #2a3647;
+
+  &:hover {
+    color: #29abe2;
+    border-color: #29abe2;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  svg path {
+    stroke: currentColor;
+  }
 }
