@@ -63,8 +63,8 @@
   }
 
   &:hover .help-icon {
-    filter: none;
-    content: url('/assets/help-icon-hovered.png');
+    // filter: none;
+    content: url('./../../../../../public/assets/help-icon-hovered.png');
   }
 }
 
