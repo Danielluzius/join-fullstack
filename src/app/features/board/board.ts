@@ -20,7 +20,6 @@ export class Board implements OnInit, OnDestroy {
   private tasksSubscription?: Subscription;
   private viewModeSubscription?: Subscription;
 
-
   currentViewMode: 'public' | 'private' = 'public';
 
   allTasks = {
@@ -50,9 +49,6 @@ export class Board implements OnInit, OnDestroy {
     this.subscribeToViewMode();
   }
 
-
-  
-
   ngOnDestroy() {
     if (this.tasksSubscription) {
       this.tasksSubscription.unsubscribe();
@@ -62,18 +58,12 @@ export class Board implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   *  Subscribt auf View Mode Änderungen
-   */
   subscribeToViewMode() {
-    this.viewModeSubscription = this.taskService.viewMode$.subscribe(mode => {
+    this.viewModeSubscription = this.taskService.viewMode$.subscribe((mode) => {
       this.currentViewMode = mode;
     });
   }
 
-  /**
-   *  Toggle zwischen Public/Private
-   */
   async toggleViewMode() {
     const newMode = this.currentViewMode === 'public' ? 'private' : 'public';
     await this.taskService.toggleViewMode(newMode);
@@ -83,18 +73,8 @@ export class Board implements OnInit, OnDestroy {
     this.isLoading = true;
     this.tasksSubscription = this.taskService.getTasksByStatus().subscribe({
       next: (tasks) => {
-        this.allTasks.todo = tasks.todo.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-        this.allTasks.inprogress = tasks.inprogress.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-        this.allTasks.awaitfeedback = tasks.awaitfeedback.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-        this.allTasks.done = tasks.done.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-        
-        if (this.showViewTaskModal && this.selectedTask && this.selectedTask.id) {
-          const updatedTask = this.findTaskById(this.selectedTask.id);
-          if (updatedTask) {
-            this.selectedTask = { ...updatedTask };
-          }
-        }
-        
+        this.sortAllTasks(tasks);
+        this.updateSelectedTaskIfNeeded();
         this.updateDisplayedTasks();
         this.isLoading = false;
       },
@@ -103,6 +83,29 @@ export class Board implements OnInit, OnDestroy {
         this.isLoading = false;
       },
     });
+  }
+
+  private sortAllTasks(tasks: {
+    todo: Task[];
+    inprogress: Task[];
+    awaitfeedback: Task[];
+    done: Task[];
+  }): void {
+    this.allTasks.todo = tasks.todo.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    this.allTasks.inprogress = tasks.inprogress.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    this.allTasks.awaitfeedback = tasks.awaitfeedback.sort(
+      (a, b) => (a.order ?? 0) - (b.order ?? 0)
+    );
+    this.allTasks.done = tasks.done.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  }
+
+  private updateSelectedTaskIfNeeded(): void {
+    if (this.showViewTaskModal && this.selectedTask && this.selectedTask.id) {
+      const updatedTask = this.findTaskById(this.selectedTask.id);
+      if (updatedTask) {
+        this.selectedTask = { ...updatedTask };
+      }
+    }
   }
 
   findTaskById(taskId: string): Task | null {
@@ -120,27 +123,42 @@ export class Board implements OnInit, OnDestroy {
 
   updateDisplayedTasks() {
     if (!this.searchQuery) {
-      this.columns[0].tasks = this.allTasks.todo;
-      this.columns[1].tasks = this.allTasks.inprogress;
-      this.columns[2].tasks = this.allTasks.awaitfeedback;
-      this.columns[3].tasks = this.allTasks.done;
+      this.assignAllTasks();
       this.searchError = '';
     } else {
-      this.columns[0].tasks = this.filterTasks(this.allTasks.todo);
-      this.columns[1].tasks = this.filterTasks(this.allTasks.inprogress);
-      this.columns[2].tasks = this.filterTasks(this.allTasks.awaitfeedback);
-      this.columns[3].tasks = this.filterTasks(this.allTasks.done);
-
-      const totalFound =
-        this.columns[0].tasks.length +
-        this.columns[1].tasks.length +
-        this.columns[2].tasks.length +
-        this.columns[3].tasks.length;
-
-      this.searchError = totalFound === 0 ? 'No tasks found' : '';
+      this.filterAndAssignTasks();
+      this.updateSearchError();
     }
-    
-    this.columns.forEach(col => {
+
+    this.sortColumnTasks();
+  }
+
+  private assignAllTasks(): void {
+    this.columns[0].tasks = this.allTasks.todo;
+    this.columns[1].tasks = this.allTasks.inprogress;
+    this.columns[2].tasks = this.allTasks.awaitfeedback;
+    this.columns[3].tasks = this.allTasks.done;
+  }
+
+  private filterAndAssignTasks(): void {
+    this.columns[0].tasks = this.filterTasks(this.allTasks.todo);
+    this.columns[1].tasks = this.filterTasks(this.allTasks.inprogress);
+    this.columns[2].tasks = this.filterTasks(this.allTasks.awaitfeedback);
+    this.columns[3].tasks = this.filterTasks(this.allTasks.done);
+  }
+
+  private updateSearchError(): void {
+    const totalFound =
+      this.columns[0].tasks.length +
+      this.columns[1].tasks.length +
+      this.columns[2].tasks.length +
+      this.columns[3].tasks.length;
+
+    this.searchError = totalFound === 0 ? 'No tasks found' : '';
+  }
+
+  private sortColumnTasks(): void {
+    this.columns.forEach((col) => {
       col.tasks.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
     });
   }
@@ -207,17 +225,27 @@ export class Board implements OnInit, OnDestroy {
   async onMoveTaskRequested(event: { task: Task; targetColumn: string }) {
     try {
       const { task, targetColumn } = event;
-      if (!task.id || !targetColumn) {
-        console.error('Invalid task or target column');
-        return;
-      }
-      const updatedTask = { 
-        ...task, 
-        status: targetColumn as 'todo' | 'inprogress' | 'awaitfeedback' | 'done' 
-      };
-      await this.taskService.updateTask(task.id, updatedTask);
+      if (!this.isValidMoveRequest(task, targetColumn)) return;
+
+      const updatedTask = this.createUpdatedTask(task, targetColumn);
+      await this.taskService.updateTask(task.id!, updatedTask);
     } catch (error) {
       console.error('Error moving task:', error);
     }
+  }
+
+  private isValidMoveRequest(task: Task, targetColumn: string): boolean {
+    if (!task.id || !targetColumn) {
+      console.error('Invalid task or target column');
+      return false;
+    }
+    return true;
+  }
+
+  private createUpdatedTask(task: Task, targetColumn: string): Task {
+    return {
+      ...task,
+      status: targetColumn as 'todo' | 'inprogress' | 'awaitfeedback' | 'done',
+    };
   }
 }

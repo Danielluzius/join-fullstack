@@ -1,53 +1,26 @@
 <div class="board-container">
 
-    
 
-    <app-board-header 
-        [searchError]="searchError" 
-        (addTaskClick)="openAddTaskModal('todo')"
+
+    <app-board-header [searchError]="searchError" (addTaskClick)="openAddTaskModal('todo')"
         (searchQuery)="onSearch($event)">
     </app-board-header>
 
-    <!-- <div class="view-mode-toggle">
-        <label class="toggle-label">
-            <span class="label-text" [class.active]="currentViewMode === 'public'">Public</span>
-            <input 
-                type="checkbox" 
-                class="toggle-input"
-                [checked]="currentViewMode === 'private'"
-                (change)="toggleViewMode()">
-            <span class="toggle-slider"></span>
-            <span class="label-text" [class.active]="currentViewMode === 'private'">Private</span>
-        </label>
-    </div> -->
-
     <div class="board-columns-wrapper">
         @for (column of columns; track column.id) {
-        <app-board-columns 
-            [title]="column.title" 
-            [tasks]="column.tasks" 
-            [columnId]="column.id"
-            [showAddButton]="column.id !== 'done'" 
-            (addTaskClicked)="openAddTaskModal($event)"
-            (taskClicked)="openViewTaskModal($event)"
-            (subtaskToggled)="onSubtaskToggled($event)"
+        <app-board-columns [title]="column.title" [tasks]="column.tasks" [columnId]="column.id"
+            [showAddButton]="column.id !== 'done'" (addTaskClicked)="openAddTaskModal($event)"
+            (taskClicked)="openViewTaskModal($event)" (subtaskToggled)="onSubtaskToggled($event)"
             (moveTaskRequested)="onMoveTaskRequested($event)">
         </app-board-columns>
         }
     </div>
 
-    <app-task-modal 
-        [showModal]="showAddTaskModal" 
-        [defaultStatus]="defaultStatus" 
-        (closeModal)="closeAddTaskModal()"
+    <app-task-modal [showModal]="showAddTaskModal" [defaultStatus]="defaultStatus" (closeModal)="closeAddTaskModal()"
         (taskCreated)="handleTaskCreated($event)">
     </app-task-modal>
 
-    <app-show-task-modal 
-        [showModal]="showViewTaskModal" 
-        [task]="selectedTask" 
-        (closeModal)="closeViewTaskModal()"
-        (editTask)="handleEditTask($event)" 
-        (deleteTask)="handleDeleteTask($event)">
+    <app-show-task-modal [showModal]="showViewTaskModal" [task]="selectedTask" (closeModal)="closeViewTaskModal()"
+        (editTask)="handleEditTask($event)" (deleteTask)="handleDeleteTask($event)">
     </app-show-task-modal>
 </div>

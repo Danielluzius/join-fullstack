@@ -27,6 +27,11 @@ export class ContactList implements OnChanges {
   }
 
   groupContactsByLetter(): { letter: string; contacts: Contact[] }[] {
+    const groups = this.createContactGroups();
+    return this.convertGroupsToArray(groups);
+  }
+
+  private createContactGroups(): { [key: string]: Contact[] } {
     const groups: { [key: string]: Contact[] } = {};
 
     this.contacts.forEach((contact) => {
@@ -37,6 +42,12 @@ export class ContactList implements OnChanges {
       groups[letter].push(contact);
     });
 
+    return groups;
+  }
+
+  private convertGroupsToArray(groups: {
+    [key: string]: Contact[];
+  }): { letter: string; contacts: Contact[] }[] {
     return Object.keys(groups)
       .sort()
       .map((letter) => ({
@@ -55,35 +66,39 @@ export class ContactList implements OnChanges {
 
   getInitials(contact: Contact): string {
     if (!contact || !contact.firstname) return '';
-    
+
     const nameParts = contact.firstname.trim().split(' ');
-    
+
     if (nameParts.length === 1) {
       return nameParts[0].charAt(0).toUpperCase();
     }
-    
+
+    return this.getFirstAndLastInitial(nameParts);
+  }
+
+  private getFirstAndLastInitial(nameParts: string[]): string {
     const firstInitial = nameParts[0].charAt(0);
     const lastInitial = nameParts[nameParts.length - 1].charAt(0);
     return (firstInitial + lastInitial).toUpperCase();
   }
 
   colorPalette = [
-    '#FF7A00', // Orange
-    '#9327FF', // Purple
-    '#6E52FF', // Blue
-    '#FC71FF', // Pink
-    '#FFBB2B', // Yellow
-    '#1FD7C1', // Teal
-    '#462F8A', // Dark Purple
-    '#FF4646', // Red
-    '#00BEE8', // Light Blue
-    '#FF5EB3', // Light Pink
-    '#FF745E', // Coral
-    '#FFA35E', // Light Orange
-    '#FFC701', // Bright Yellow
-    '#0038FF', // Vivid Blue
-    '#C3FF2B', // Lime Green
-    '#FFE62B', // Bright Yellow
+    '#FF7A00',
+    '#9327FF',
+    '#6E52FF',
+    '#FC71FF',
+    '#FFBB2B',
+    '#1FD7C1',
+    '#462F8A',
+    '#FF4646',
+    '#00BEE8',
+    '#FF5EB3',
+    '#FF745E',
+    '#FFA35E',
+    '#FFC701',
+    '#0038FF',
+    '#C3FF2B',
+    '#FFE62B',
   ];
 
   getAvatarColor(contact: Contact): string {

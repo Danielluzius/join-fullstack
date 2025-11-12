@@ -66,34 +66,39 @@ export class Summary implements OnInit, OnDestroy {
 
   setGreeting() {
     const hour = new Date().getHours();
+    const greetingData = this.getGreetingByHour(hour);
+    this.greeting = greetingData.greeting;
+    this.greetingTimeOfDay = greetingData.timeOfDay;
+  }
 
+  private getGreetingByHour(hour: number): { greeting: string; timeOfDay: string } {
     if (hour >= 5 && hour < 12) {
-      this.greeting = 'Good morning';
-      this.greetingTimeOfDay = 'morning';
+      return { greeting: 'Good morning', timeOfDay: 'morning' };
     } else if (hour >= 12 && hour < 18) {
-      this.greeting = 'Good afternoon';
-      this.greetingTimeOfDay = 'afternoon';
+      return { greeting: 'Good afternoon', timeOfDay: 'afternoon' };
     } else if (hour >= 18 && hour < 22) {
-      this.greeting = 'Good evening';
-      this.greetingTimeOfDay = 'evening';
+      return { greeting: 'Good evening', timeOfDay: 'evening' };
     } else {
-      this.greeting = 'Good night';
-      this.greetingTimeOfDay = 'night';
+      return { greeting: 'Good night', timeOfDay: 'night' };
     }
   }
 
   private checkAndShowWelcome(): void {
-    if (window.innerWidth < 1250) {
-      const justLoggedIn = sessionStorage.getItem('justLoggedIn');
-      if (justLoggedIn === 'true') {
-        sessionStorage.removeItem('justLoggedIn');
-        this.showGreetingOverlay = true;
+    if (window.innerWidth >= 1250) return;
 
-        setTimeout(() => {
-          this.showGreetingOverlay = false;
-        }, 2000);
-      }
+    const justLoggedIn = sessionStorage.getItem('justLoggedIn');
+    if (justLoggedIn === 'true') {
+      this.displayWelcomeOverlay();
     }
+  }
+
+  private displayWelcomeOverlay(): void {
+    sessionStorage.removeItem('justLoggedIn');
+    this.showGreetingOverlay = true;
+
+    setTimeout(() => {
+      this.showGreetingOverlay = false;
+    }, 2000);
   }
 
   private parseDate(dateString: string): Date {
@@ -112,22 +117,28 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   private calculateUpcomingDeadline(tasks: Task[]): string {
-    const tasksWithDueDate = tasks.filter(
-      (t) => t.dueDate && t.status !== 'done' && t.priority !== 'low' && t.priority !== 'medium'
-    );
+    const tasksWithDueDate = this.filterTasksWithUrgentDeadline(tasks);
 
     if (tasksWithDueDate.length === 0) {
       return 'No deadline';
     }
 
-    const sortedTasks = tasksWithDueDate.sort((a, b) => {
+    const earliestTask = this.findEarliestTask(tasksWithDueDate);
+    return this.formatDeadline(earliestTask.dueDate!);
+  }
+
+  private filterTasksWithUrgentDeadline(tasks: Task[]): Task[] {
+    return tasks.filter(
+      (t) => t.dueDate && t.status !== 'done' && t.priority !== 'low' && t.priority !== 'medium'
+    );
+  }
+
+  private findEarliestTask(tasks: Task[]): Task {
+    return tasks.sort((a, b) => {
       const dateA = this.getDateFromDueDate(a.dueDate!);
       const dateB = this.getDateFromDueDate(b.dueDate!);
       return dateA.getTime() - dateB.getTime();
-    });
-
-    const earliestTask = sortedTasks[0];
-    return this.formatDeadline(earliestTask.dueDate!);
+    })[0];
   }
 
   private getDateFromDueDate(dueDate: string | Timestamp): Date {

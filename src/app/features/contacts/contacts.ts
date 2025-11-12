@@ -85,22 +85,29 @@ export class Contacts implements OnInit {
   }
 
   async handleSaveContact(contactData: Partial<Contact>) {
+    if (!contactData.id) return;
 
-    if (contactData.id) {
-      const contactRef = doc(this.firestore, 'contacts', contactData.id);
-      await updateDoc(contactRef, {
-        firstname: contactData.firstname,
-        email: contactData.email,
-        phone: contactData.phone,
-        lastname: contactData.lastname ?? '',
-      });
-      const idx = this.contacts.findIndex((c) => c.id === contactData.id);
-      if (idx > -1) {
-        this.contacts[idx] = { ...contactData } as Contact;
-        this.selectedContact = this.contacts[idx];
-      }
-      await this.reloadContacts();
-      this.closeAddModal();
+    await this.updateContactInFirestore(contactData);
+    this.updateLocalContact(contactData);
+    await this.reloadContacts();
+    this.closeAddModal();
+  }
+
+  private async updateContactInFirestore(contactData: Partial<Contact>): Promise<void> {
+    const contactRef = doc(this.firestore, 'contacts', contactData.id!);
+    await updateDoc(contactRef, {
+      firstname: contactData.firstname,
+      email: contactData.email,
+      phone: contactData.phone,
+      lastname: contactData.lastname ?? '',
+    });
+  }
+
+  private updateLocalContact(contactData: Partial<Contact>): void {
+    const idx = this.contacts.findIndex((c) => c.id === contactData.id);
+    if (idx > -1) {
+      this.contacts[idx] = { ...contactData } as Contact;
+      this.selectedContact = this.contacts[idx];
     }
   }
 
