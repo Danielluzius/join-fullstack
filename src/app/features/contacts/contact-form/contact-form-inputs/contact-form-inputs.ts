@@ -88,11 +88,10 @@ export class ContactFormInputs implements ControlValueAccessor {
     } else {
       this.phoneError = '';
     }
-    
+
     this.updateFormData();
   }
 
-  // Methode zum Validieren aller Felder (wird von außen aufgerufen)
   validateAll(): boolean {
     let isValid = true;
 
@@ -101,11 +100,7 @@ export class ContactFormInputs implements ControlValueAccessor {
       isValid = false;
     }
 
-    if (!this.formData.email || !this.formData.email.trim()) {
-      this.emailError = 'Email is required';
-      isValid = false;
-    } else if (!this.validateEmail(this.formData.email)) {
-      this.emailError = 'Please enter a valid email (e.g., user@example.com)';
+    if (!this.validateEmailField()) {
       isValid = false;
     }
 
@@ -115,5 +110,16 @@ export class ContactFormInputs implements ControlValueAccessor {
     }
 
     return isValid;
+  }
+
+  private validateEmailField(): boolean {
+    if (!this.formData.email || !this.formData.email.trim()) {
+      this.emailError = 'Email is required';
+      return false;
+    } else if (!this.validateEmail(this.formData.email)) {
+      this.emailError = 'Please enter a valid email (e.g., user@example.com)';
+      return false;
+    }
+    return true;
   }
 }

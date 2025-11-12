@@ -15,7 +15,6 @@
     width: clamp(320px, 35vw, 456px);
   }
 
-  // Custom Scrollbar (Figma Design)
   &::-webkit-scrollbar {
     width: 24px;
   }
@@ -34,7 +33,6 @@
     }
   }
 
-  // Firefox Scrollbar
   scrollbar-width: thin;
   scrollbar-color: #a8a8a8 transparent;
 }
@@ -318,11 +316,11 @@
     &:hover,
     &:active {
       transform: scale(1.05);
-      
+
       .btn-hovered {
         opacity: 1;
       }
-      
+
       .btn-normal {
         opacity: 0;
       }
