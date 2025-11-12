@@ -1,7 +1,5 @@
 <div class="signup-container">
-    <!-- Sign Up Card -->
     <div class="signup-card">
-        <!-- Back Button -->
         <button type="button" class="back-btn" (click)="goBackToLogin()">
             <img src="assets/responsive-back-button.png" alt="Back" class="back-icon" />
         </button>
@@ -10,50 +8,45 @@
         <div class="underline"></div>
 
         <form class="signup-form">
-            <!-- Name Input -->
-            <div class="input-group" [class.has-error]="fieldErrors['name']">
+            <div class="input-group" [class.has-error]="nameError">
                 <input type="text" [(ngModel)]="name" name="name" placeholder="Name" class="form-input"
-                    [attr.data-error]="fieldErrors['name']" (keyup)="validateField()" />
+                    [attr.data-error]="nameError" (input)="onNameInput()" />
                 <img src="assets/person-icon.png" alt="Name" class="input-icon" />
-                <div class="error-text">{{ fieldErrors['name'] || '' }}</div>
+                <div class="error-text">{{ nameError || '' }}</div>
             </div>
 
-            <!-- Email Input -->
-            <div class="input-group" [class.has-error]="fieldErrors['email']">
+            <div class="input-group" [class.has-error]="emailError">
                 <input type="email" [(ngModel)]="email" name="email" placeholder="Email" class="form-input"
-                    [attr.data-error]="fieldErrors['email']" (keyup)="validateField()" />
+                    [attr.data-error]="emailError" (input)="onEmailInput()" />
                 <img src="assets/signup/mail-signup.png" alt="Email" class="input-icon" />
-                <div class="error-text">{{ fieldErrors['email'] || '' }}</div>
+                <div class="error-text">{{ emailError || '' }}</div>
             </div>
 
-            <!-- Password Input -->
-            <div class="input-group" [class.has-error]="fieldErrors['password']">
+            <div class="input-group" [class.has-error]="passwordError">
                 <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password"
-                    placeholder="Password" class="form-input" [attr.data-error]="fieldErrors['password']"
-                    (keyup)="validateField()" />
+                    placeholder="Password" class="form-input" [attr.data-error]="passwordError"
+                    (input)="onPasswordInput()" />
                 <img [src]="passwordIconSrc" alt="Password" class="input-icon input-icon-clickable"
                     (mouseenter)="onPasswordIconHover(true)" (mouseleave)="onPasswordIconHover(false)"
                     (click)="togglePasswordVisibility()" />
-                <div class="error-text">{{ fieldErrors['password'] || '' }}</div>
+                <div class="error-text">{{ passwordError || '' }}</div>
             </div>
 
-            <!-- Confirm Password Input -->
-            <div class="input-group" [class.has-error]="fieldErrors['confirmPassword']">
+            <div class="input-group" [class.has-error]="confirmPasswordError">
                 <input [type]="showConfirmPassword ? 'text' : 'password'" [(ngModel)]="confirmPassword"
                     name="confirmPassword" placeholder="Confirm Password" class="form-input"
-                    [attr.data-error]="fieldErrors['confirmPassword']" (keyup)="validateField()" />
+                    [attr.data-error]="confirmPasswordError" (input)="onConfirmPasswordInput()" />
                 <img [src]="confirmPasswordIconSrc" alt="Confirm Password" class="input-icon input-icon-clickable"
                     (mouseenter)="onConfirmPasswordIconHover(true)" (mouseleave)="onConfirmPasswordIconHover(false)"
                     (click)="toggleConfirmPasswordVisibility()" />
-                <div class="error-text">{{ fieldErrors['confirmPassword'] || '' }}</div>
+                <div class="error-text">{{ confirmPasswordError || '' }}</div>
             </div>
 
-            <!-- Privacy Policy Checkbox -->
-            <div class="checkbox-group">
+            <div class="checkbox-group" [class.has-error]="privacyPolicyError">
                 <label class="checkbox-label" (mouseenter)="onCheckboxHover(true)"
                     (mouseleave)="onCheckboxHover(false)">
                     <input type="checkbox" [(ngModel)]="acceptPrivacyPolicy" name="acceptPrivacyPolicy"
-                        (change)="onCheckboxChange()" class="checkbox-input" (keyup)="validateField()" />
+                        (change)="onCheckboxChange()" class="checkbox-input" />
                     <span class="checkbox-custom">
                         <img [src]="checkboxImageSrc" alt="Checkbox" class="checkbox-icon" />
                     </span>
@@ -61,14 +54,10 @@
                         I accept the <a routerLink="/privacy-policy" class="privacy-link">Privacy policy</a>
                     </span>
                 </label>
-
-                <div class="error-message" [class.visible]="errorMessage">
-                    {{ errorMessage }}
-                </div>
+                <div class="error-text">{{ privacyPolicyError || '' }}</div>
             </div>
 
 
-            <!-- Sign Up Button -->
             <button type="button" class="btn-primary" (click)="onSignUp()" [disabled]="isLoading">
                 <span *ngIf="!isLoading">Sign up</span>
                 <span *ngIf="isLoading">Loading...</span>

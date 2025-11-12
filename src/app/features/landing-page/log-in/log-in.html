@@ -1,22 +1,19 @@
-<!-- Sign Up Button rechts oben (Desktop/Tablet) -->
 <div class="login-wrapper">
     <div class="header-actions">
-    <span class="not-user-text">Not a Join user?</span>
-    <button type="button" class="signup-btn" (click)="navigateToSignUp()">Sign up</button>
+        <span class="not-user-text">Not a Join user?</span>
+        <button type="button" class="signup-btn" (click)="navigateToSignUp()">Sign up</button>
     </div>
 
     <div class="login-container">
-    <!-- Login Card -->
         <div class="login-card">
             <h1>Log in</h1>
             <div class="underline"></div>
 
             <form class="login-form" #loginForm="ngForm">
-            <!-- Email Input -->
                 <div class="input-group">
                     <input type="email" [(ngModel)]="email" name="email" placeholder="Email" class="form-input"
-                    [class.error]="emailError" #emailInput="ngModel" required email (blur)="validateEmail()"
-                    (input)="onEmailInput()" />
+                        [class.error]="emailError" #emailInput="ngModel" required email (blur)="validateEmail()"
+                        (input)="onEmailInput()" />
                     <img src="assets/signup/mail-signup.png" alt="Email" class="input-icon" />
 
 
@@ -28,10 +25,12 @@
                 </div>
 
                 <div class="input-group">
-                    <input type="password" [(ngModel)]="password" name="password" placeholder="Password" class="form-input"
-                    [class.error]="passwordError" required (keydown)="onPasswordKeydown($event)"
-                    (blur)="onPasswordBlur()" (input)="onPasswordInput()" />
-                    <img src="assets/signup/lock-signup.png" alt="Password" class="input-icon" />
+                    <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password"
+                        placeholder="Password" class="form-input" [class.error]="passwordError" required
+                        (keydown)="onPasswordKeydown($event)" (input)="onPasswordInput()" />
+                    <img [src]="passwordIconSrc" alt="Password" class="input-icon input-icon-clickable"
+                        (mouseenter)="onPasswordIconHover(true)" (mouseleave)="onPasswordIconHover(false)"
+                        (click)="togglePasswordVisibility()" />
 
 
                     <div class="error-message">
@@ -53,7 +52,6 @@
                 </div>
                 }
 
-                <!-- Buttons -->
                 <div class="button-group">
                     <button type="button" class="btn-primary" (click)="onLogin()" [disabled]="isLoading">
                         @if (isLoading) {
@@ -63,14 +61,13 @@
                         }
                     </button>
                     <button type="button" class="btn-secondary" (click)="onGuestLogin()" [disabled]="isLoading">
-                    Guest Log in
+                        Guest Log in
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Sign Up Button unter der Card (Mobile) -->
     <div class="header-actions-mobile">
         <span class="not-user-text">Not a Join user?</span>
         <button type="button" class="signup-btn" (click)="navigateToSignUp()">Sign up</button>

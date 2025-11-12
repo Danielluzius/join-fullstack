@@ -20,6 +20,10 @@ export class LogIn {
   isLoading = false;
   capsLockOn = false;
 
+  showPassword = false;
+  passwordIconSrc = 'assets/signup/lock-signup.png';
+  passwordTouched = false;
+
   private router = inject(Router);
   private authService = inject(AuthService);
 
@@ -39,6 +43,8 @@ export class LogIn {
   }
 
   validatePassword(): void {
+    if (!this.passwordTouched) return;
+
     this.passwordError = '';
 
     if (!this.password) {
@@ -52,21 +58,17 @@ export class LogIn {
     }
   }
 
-  /**
-   *  Caps Lock Detection
-   */
   onPasswordKeydown(event: KeyboardEvent): void {
     this.capsLockOn = event.getModifierState('CapsLock');
   }
 
-  /**
-   *  Caps Lock bei Blur zurücksetzen
-   */
   onPasswordBlur(): void {
     this.validatePassword();
   }
 
   async onLogin() {
+    this.passwordTouched = true;
+
     this.validateEmail();
     this.validatePassword();
     if (this.emailError || this.passwordError) {
@@ -126,11 +128,44 @@ export class LogIn {
   }
 
   onPasswordInput(): void {
+    this.passwordTouched = true;
     if (this.passwordError) {
       this.passwordError = '';
     }
     if (this.errorMessage) {
       this.errorMessage = '';
     }
+    this.updatePasswordIcon();
+  }
+
+  updatePasswordIcon(): void {
+    if (this.password.length === 0) {
+      this.passwordIconSrc = 'assets/signup/lock-signup.png';
+    } else {
+      this.passwordIconSrc = this.showPassword
+        ? 'assets/signup/eye.png'
+        : 'assets/signup/eye-crossed-signup.png';
+    }
+  }
+
+  onPasswordIconHover(isHovering: boolean): void {
+    if (this.password.length === 0) return;
+
+    if (isHovering) {
+      this.passwordIconSrc = this.showPassword
+        ? 'assets/signup/eye-crossed-signup.png'
+        : 'assets/signup/eye.png';
+    } else {
+      this.passwordIconSrc = this.showPassword
+        ? 'assets/signup/eye.png'
+        : 'assets/signup/eye-crossed-signup.png';
+    }
+  }
+
+  togglePasswordVisibility(): void {
+    if (this.password.length === 0) return;
+
+    this.showPassword = !this.showPassword;
+    this.updatePasswordIcon();
   }
 }

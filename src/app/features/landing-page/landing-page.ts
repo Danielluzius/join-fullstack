@@ -18,12 +18,10 @@ export class LandingPage implements OnInit {
     this.showAnimation = this.animationStateService.shouldPlayAnimation();
 
     if (this.showAnimation) {
-      // Animation dauert 2 Sekunden, dann ist sie komplett
       setTimeout(() => {
         this.animationComplete = true;
       }, 2000);
     } else {
-      // Keine Animation, Logo direkt an Endposition
       this.animationComplete = true;
     }
   }
