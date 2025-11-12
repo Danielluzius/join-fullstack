@@ -84,14 +84,18 @@ export class ContactAssignmentDropdownComponent implements OnInit {
     const index = this.selectedContactIds.indexOf(contactId);
     const updatedIds = [...this.selectedContactIds];
 
+    this.updateContactSelection(index, updatedIds, contactId);
+
+    this.selectedContactIds = updatedIds;
+    this.selectedContactIdsChange.emit(updatedIds);
+  }
+
+  private updateContactSelection(index: number, updatedIds: string[], contactId: string): void {
     if (index > -1) {
       updatedIds.splice(index, 1);
     } else {
       updatedIds.push(contactId);
     }
-
-    this.selectedContactIds = updatedIds;
-    this.selectedContactIdsChange.emit(updatedIds);
   }
 
   isContactSelected(contactId: string): boolean {
@@ -108,6 +112,10 @@ export class ContactAssignmentDropdownComponent implements OnInit {
     if (nameParts.length === 1) {
       return nameParts[0].charAt(0).toUpperCase();
     }
+    return this.getFirstAndLastInitial(nameParts);
+  }
+
+  private getFirstAndLastInitial(nameParts: string[]): string {
     const firstInitial = nameParts[0].charAt(0);
     const lastInitial = nameParts[nameParts.length - 1].charAt(0);
     return (firstInitial + lastInitial).toUpperCase();

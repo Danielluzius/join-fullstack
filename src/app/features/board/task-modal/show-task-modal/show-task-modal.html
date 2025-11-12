@@ -33,7 +33,7 @@
         <div class="assigned-list">
           @for (contact of assignedContacts; track contact.id) {
           <div class="assigned-contact">
-            <div style="display: flex; align-items: center; gap: 16px;">
+            <div class="contact-info">
               <div class="avatar" [style.background-color]="getAvatarColor(contact)">
                 {{ getInitials(contact) }}
               </div>

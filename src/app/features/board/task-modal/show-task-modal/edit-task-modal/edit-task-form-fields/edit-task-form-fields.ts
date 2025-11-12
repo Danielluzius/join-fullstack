@@ -47,12 +47,7 @@ export class EditTaskFormFieldsComponent {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/\D/g, '');
 
-    if (value.length >= 2) {
-      value = value.substring(0, 2) + '/' + value.substring(2);
-    }
-    if (value.length >= 5) {
-      value = value.substring(0, 5) + '/' + value.substring(5, 9);
-    }
+    value = this.addDateSlashes(value);
 
     this.dueDate = value;
     this.dueDateChange.emit(value);
@@ -62,29 +57,52 @@ export class EditTaskFormFieldsComponent {
     }
   }
 
+  private addDateSlashes(value: string): string {
+    if (value.length >= 2) {
+      value = value.substring(0, 2) + '/' + value.substring(2);
+    }
+    if (value.length >= 5) {
+      value = value.substring(0, 5) + '/' + value.substring(5, 9);
+    }
+    return value;
+  }
+
   validateDate(dateString: string) {
     const [day, month, year] = dateString.split('/');
 
-    if (day && month && year && day.length === 2 && month.length === 2 && year.length === 4) {
-      const selectedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      if (selectedDate < today) {
-        this.dueDateError = true;
-        this.dueDateErrorMessage = 'Date cannot be in the past';
-        this.dueDateErrorChange.emit(true);
-        this.dueDateErrorMessageChange.emit(this.dueDateErrorMessage);
-      } else {
-        this.dueDateError = false;
-        this.dueDateErrorChange.emit(false);
-      }
+    if (this.isValidDateFormat(day, month, year)) {
+      this.checkDateValidity(day, month, year);
     } else {
-      this.dueDateError = true;
-      this.dueDateErrorMessage = 'Invalid date format';
-      this.dueDateErrorChange.emit(true);
-      this.dueDateErrorMessageChange.emit(this.dueDateErrorMessage);
+      this.setDateError('Invalid date format');
     }
+  }
+
+  private isValidDateFormat(day: string, month: string, year: string): boolean {
+    return !!(day && month && year && day.length === 2 && month.length === 2 && year.length === 4);
+  }
+
+  private checkDateValidity(day: string, month: string, year: string): void {
+    const selectedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      this.setDateError('Date cannot be in the past');
+    } else {
+      this.clearDateError();
+    }
+  }
+
+  private setDateError(message: string): void {
+    this.dueDateError = true;
+    this.dueDateErrorMessage = message;
+    this.dueDateErrorChange.emit(true);
+    this.dueDateErrorMessageChange.emit(message);
+  }
+
+  private clearDateError(): void {
+    this.dueDateError = false;
+    this.dueDateErrorChange.emit(false);
   }
 
   openDatePicker() {
@@ -96,16 +114,23 @@ export class EditTaskFormFieldsComponent {
     const dateValue = input.value;
 
     if (dateValue) {
-      const [year, month, day] = dateValue.split('-');
-      this.dueDate = `${day}/${month}/${year}`;
-      this.dueDateChange.emit(this.dueDate);
-      this.hiddenDateValue = dateValue;
-      this.hiddenDateValueChange.emit(dateValue);
+      this.updateDateFromPicker(dateValue);
+      this.clearDateErrorIfNeeded();
+    }
+  }
 
-      if (this.dueDateError) {
-        this.dueDateError = false;
-        this.dueDateErrorChange.emit(false);
-      }
+  private updateDateFromPicker(dateValue: string): void {
+    const [year, month, day] = dateValue.split('-');
+    this.dueDate = `${day}/${month}/${year}`;
+    this.dueDateChange.emit(this.dueDate);
+    this.hiddenDateValue = dateValue;
+    this.hiddenDateValueChange.emit(dateValue);
+  }
+
+  private clearDateErrorIfNeeded(): void {
+    if (this.dueDateError) {
+      this.dueDateError = false;
+      this.dueDateErrorChange.emit(false);
     }
   }
 }
