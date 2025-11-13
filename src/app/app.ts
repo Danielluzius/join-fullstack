@@ -5,8 +5,11 @@ import { Header } from './shared/components/header/header';
 import { Navbar } from './shared/components/navbar/navbar';
 import { ContactService } from './core/services/db-contact-service';
 import { ContactHelper, Contact } from './core/interfaces/db-contact-interface';
+import { BoardTasksService } from './core/services/board-tasks-service';
+import { Task } from './core/interfaces/board-tasks-interface';
 import { filter } from 'rxjs/operators';
 import { Subscription, timer } from 'rxjs';
+
 
 /**
  * Root component of the application.
@@ -21,11 +24,13 @@ import { Subscription, timer } from 'rxjs';
 export class App implements OnInit {
   /** Array of all contacts loaded from the database */
   contacts: Contact[] = [];
+  tasks: Task[] = [];
 
   /** Controls visibility of header and navigation components */
   showNavigation = false;
 
   private contactService = inject(ContactService);
+  private boardTasksService = inject(BoardTasksService);
   private router = inject(Router);
   private firebaseTimeout: Subscription | null = null;
 
@@ -39,18 +44,34 @@ export class App implements OnInit {
     this.contactService.getAllContacts()
       .then((contacts) => {
         this.contacts = contacts;
-        this.stopFirebaseTimeout();
+        this.stopFirebaseTimeoutIfDataLoaded();
       })
       .catch((error) => {
-        // Wenn ein Fehler auftritt (z.B. Firestore offline), Seite neu laden
         console.error('Error loading contacts:', error);
         window.location.reload();
       });
+    this.boardTasksService.getAllTasks().subscribe({
+      next: (tasks) => {
+        this.tasks = tasks;
+        this.stopFirebaseTimeoutIfDataLoaded();
+      },
+      error: (error) => {
+        console.error('Error loading tasks:', error);
+        window.location.reload();
+      }
+    });
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: any) => {
         this.checkRoute(event.url);
       });
+  }
+
+  /** Stops the timeout only if at least one array (contacts or tasks) is loaded */
+  private stopFirebaseTimeoutIfDataLoaded() {
+    if ((this.contacts && this.contacts.length > 0) || (this.tasks && this.tasks.length > 0)) {
+      this.stopFirebaseTimeout();
+    }
   }
 
   /**
