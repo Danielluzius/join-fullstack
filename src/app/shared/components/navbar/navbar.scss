@@ -161,16 +161,14 @@
     padding: 8px 12px;
     gap: 4px;
     font-size: 12px;
-    height: auto;
-    flex: 1;
+    height: 73px;
+    width: 73px;
+    flex-shrink: 0;
     justify-content: center;
     text-align: center;
 
     &.active {
-      padding: 15px 12px;
       border-radius: 8px;
-      height: 73px;
-      width: 73px;
     }
 
     &:hover:not(.active) {
