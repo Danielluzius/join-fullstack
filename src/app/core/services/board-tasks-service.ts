@@ -112,7 +112,7 @@ export class BoardTasksService {
   getAllTasks(): Observable<Task[]> {
     return combineLatest([
       this.viewMode$,
-      this.authService.currentUser$.pipe(filter(user => !!user))
+      this.authService.currentUser$
     ]).pipe(
       switchMap(([viewMode, user]) => this.resolveTasks(viewMode, user))
     );
