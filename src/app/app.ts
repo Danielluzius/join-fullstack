@@ -33,25 +33,25 @@ export class App implements OnInit {
    * Lifecycle hook that runs on component initialization.
    * Checks the current route, loads contacts, and subscribes to route changes.
    */
-   async ngOnInit() {
-  this.checkRoute(this.router.url);
-  this.startFirebaseTimeout();
-  this.contactService.getAllContacts()
-    .then((contacts) => {
-      this.contacts = contacts;
-      this.stopFirebaseTimeout();
-    })
-    .catch((error) => {
-      // Wenn ein Fehler auftritt (z.B. Firestore offline), Seite neu laden
-      console.error('Error loading contacts:', error);
-      window.location.reload();
-    });
-  this.router.events
-    .pipe(filter((event) => event instanceof NavigationEnd))
-    .subscribe((event: any) => {
-      this.checkRoute(event.url);
-    });
-}
+  async ngOnInit() {
+    this.checkRoute(this.router.url);
+    this.startFirebaseTimeout();
+    this.contactService.getAllContacts()
+      .then((contacts) => {
+        this.contacts = contacts;
+        this.stopFirebaseTimeout();
+      })
+      .catch((error) => {
+        // Wenn ein Fehler auftritt (z.B. Firestore offline), Seite neu laden
+        console.error('Error loading contacts:', error);
+        window.location.reload();
+      });
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        this.checkRoute(event.url);
+      });
+  }
 
   /**
    * Checks if the current route requires navigation components.
