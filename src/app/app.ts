@@ -6,6 +6,7 @@ import { Navbar } from './shared/components/navbar/navbar';
 import { ContactService } from './core/services/db-contact-service';
 import { ContactHelper, Contact } from './core/interfaces/db-contact-interface';
 import { filter } from 'rxjs/operators';
+import { Subscription, timer } from 'rxjs';
 
 /**
  * Root component of the application.
@@ -26,16 +27,22 @@ export class App implements OnInit {
 
   private contactService = inject(ContactService);
   private router = inject(Router);
+  private firebaseTimeout: Subscription | null = null;
 
   /**
    * Lifecycle hook that runs on component initialization.
    * Checks the current route, loads contacts, and subscribes to route changes.
    */
-  async ngOnInit() {
+   async ngOnInit() {
     this.checkRoute(this.router.url);
+
+    // Starte Timeout: Wenn nach 8 Sekunden keine Kontakte geladen wurden, Seite neu laden
+    this.startFirebaseTimeout();
 
     this.contactService.getAllContacts().then((contacts) => {
       this.contacts = contacts;
+      // Stoppe Timeout, wenn Kontakte erfolgreich geladen wurden
+      this.stopFirebaseTimeout();
     });
 
     this.router.events
@@ -54,5 +61,23 @@ export class App implements OnInit {
   private checkRoute(url: string) {
     const authRoutes = ['/', '/login', '/signup'];
     this.showNavigation = !authRoutes.includes(url);
+  }
+
+  /** Starts a timeout that reloads the page if no contacts are loaded within 8 seconds */
+  private startFirebaseTimeout() {
+    this.firebaseTimeout = timer(4000).subscribe(() => {
+      if (!this.contacts || this.contacts.length === 0) {
+        console.warn('No data from Firebase, reloading page...');
+        window.location.reload();
+      }
+    });
+  }
+
+  /** Stops the Firebase data loading timeout */
+  private stopFirebaseTimeout() {
+    if (this.firebaseTimeout) {
+      this.firebaseTimeout.unsubscribe();
+      this.firebaseTimeout = null;
+    }
   }
 }
