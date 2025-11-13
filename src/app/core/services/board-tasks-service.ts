@@ -230,4 +230,19 @@ export class BoardTasksService {
     const taskDoc = doc(this.firestore, 'tasks', taskId);
     await updateDoc(taskDoc, { status: newStatus });
   }
+  /**
+ * Checks if Firebase is reachable by fetching the health check document.
+ * 
+ * @returns A promise that resolves to true if Firebase is reachable, false otherwise.
+ */
+async checkFirebaseConnection(): Promise<boolean> {
+  try {
+    const healthCheckRef = doc(this.firestore, 'healthCheck', 'c5IEqL4zOI6XELqM9iBd');
+    const snapshot = await getDoc(healthCheckRef);
+    return snapshot.exists() && snapshot.data()?.['ping'] === 'ok';
+  } catch (error) {
+    console.error('Firebase connection check failed:', error);
+    return false;
+  }
+}
 }
