@@ -8,13 +8,19 @@ from django.contrib.auth.models import User
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 
 
+def create_auth_response(user):
+    """Create authentication response with user data and token"""
+    token, created = Token.objects.get_or_create(user=user)
+    return Response({
+        'user': UserSerializer(user).data,
+        'token': token.key
+    })
+
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register(request):
-    """
-    Register a new user and return token
-    POST /api/auth/register/
-    """
+    """Register a new user and return token"""
     serializer = RegisterSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
@@ -29,38 +35,31 @@ def register(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login(request):
-    """
-    Login user and return token
-    POST /api/auth/login/
-    Body: {"username": "...", "password": "..."}
-    """
+    """Login user and return token"""
     serializer = LoginSerializer(data=request.data)
-    if serializer.is_valid():
-        username = serializer.validated_data['username']
-        password = serializer.validated_data['password']
-        
-        user = authenticate(username=username, password=password)
-        
-        if user:
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({
-                'user': UserSerializer(user).data,
-                'token': token.key
-            })
+    if not serializer.is_valid():
         return Response(
-            {'error': 'Invalid credentials'}, 
-            status=status.HTTP_401_UNAUTHORIZED
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
         )
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    username = serializer.validated_data['username']
+    password = serializer.validated_data['password']
+    user = authenticate(username=username, password=password)
+    
+    if user:
+        return create_auth_response(user)
+    
+    return Response(
+        {'error': 'Invalid credentials'},
+        status=status.HTTP_401_UNAUTHORIZED
+    )
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout(request):
-    """
-    Logout user by deleting token
-    POST /api/auth/logout/
-    """
+    """Logout user by deleting token"""
     request.user.auth_token.delete()
     return Response({'message': 'Successfully logged out'})
 
@@ -68,9 +67,6 @@ def logout(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def current_user(request):
-    """
-    Get current user info
-    GET /api/auth/me/
-    """
+    """Get current user info"""
     serializer = UserSerializer(request.user)
     return Response(serializer.data)

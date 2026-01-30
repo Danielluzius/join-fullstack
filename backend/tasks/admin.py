@@ -9,7 +9,9 @@ class SubtaskInline(admin.TabularInline):
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ['title', 'status', 'priority', 'owner', 'due_date', 'created_at']
+    list_display = [
+        'title', 'status', 'priority', 'owner', 'due_date', 'created_at'
+    ]
     list_filter = ['status', 'priority', 'is_private', 'created_at']
     search_fields = ['title', 'description']
     filter_horizontal = ['assigned_to']

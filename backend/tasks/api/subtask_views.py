@@ -6,22 +6,30 @@ from tasks.models import Task, Subtask
 from .serializers import SubtaskSerializer
 
 
+def check_task_permission(task, user):
+    """Check if user has permission to access task"""
+    if task.is_private and task.owner != user:
+        return False
+    return True
+
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_subtask(request, task_id):
-    """
-    Create a subtask for a specific task
-    POST /api/tasks/{task_id}/subtasks/
-    Body: {"title": "Subtask title"}
-    """
+    """Create a subtask for a specific task"""
     try:
         task = Task.objects.get(id=task_id)
     except Task.DoesNotExist:
-        return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {'error': 'Task not found'},
+            status=status.HTTP_404_NOT_FOUND
+        )
     
-    # Check if user has access to this task
-    if task.is_private and task.owner != request.user:
-        return Response({'error': 'Permission denied'}, status=status.HTTP_403_FORBIDDEN)
+    if not check_task_permission(task, request.user):
+        return Response(
+            {'error': 'Permission denied'},
+            status=status.HTTP_403_FORBIDDEN
+        )
     
     serializer = SubtaskSerializer(data=request.data)
     if serializer.is_valid():
@@ -33,20 +41,21 @@ def create_subtask(request, task_id):
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def update_subtask(request, task_id, subtask_id):
-    """
-    Update a subtask (toggle completed or change title)
-    PATCH /api/tasks/{task_id}/subtasks/{subtask_id}/
-    Body: {"completed": true} or {"title": "New title"}
-    """
+    """Update a subtask (toggle completed or change title)"""
     try:
         task = Task.objects.get(id=task_id)
         subtask = task.subtasks.get(id=subtask_id)
     except (Task.DoesNotExist, Subtask.DoesNotExist):
-        return Response({'error': 'Task or Subtask not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {'error': 'Task or Subtask not found'},
+            status=status.HTTP_404_NOT_FOUND
+        )
     
-    # Check permissions
-    if task.is_private and task.owner != request.user:
-        return Response({'error': 'Permission denied'}, status=status.HTTP_403_FORBIDDEN)
+    if not check_task_permission(task, request.user):
+        return Response(
+            {'error': 'Permission denied'},
+            status=status.HTTP_403_FORBIDDEN
+        )
     
     serializer = SubtaskSerializer(subtask, data=request.data, partial=True)
     if serializer.is_valid():
@@ -58,19 +67,24 @@ def update_subtask(request, task_id, subtask_id):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_subtask(request, task_id, subtask_id):
-    """
-    Delete a subtask
-    DELETE /api/tasks/{task_id}/subtasks/{subtask_id}/
-    """
+    """Delete a subtask"""
     try:
         task = Task.objects.get(id=task_id)
         subtask = task.subtasks.get(id=subtask_id)
     except (Task.DoesNotExist, Subtask.DoesNotExist):
-        return Response({'error': 'Task or Subtask not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {'error': 'Task or Subtask not found'},
+            status=status.HTTP_404_NOT_FOUND
+        )
     
-    # Check permissions
-    if task.is_private and task.owner != request.user:
-        return Response({'error': 'Permission denied'}, status=status.HTTP_403_FORBIDDEN)
+    if not check_task_permission(task, request.user):
+        return Response(
+            {'error': 'Permission denied'},
+            status=status.HTTP_403_FORBIDDEN
+        )
     
     subtask.delete()
-    return Response({'message': 'Subtask deleted'}, status=status.HTTP_204_NO_CONTENT)
+    return Response(
+        {'message': 'Subtask deleted'},
+        status=status.HTTP_204_NO_CONTENT
+    )
