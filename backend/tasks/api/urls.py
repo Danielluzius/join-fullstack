@@ -9,7 +9,19 @@ router.register(r'subtasks', SubtaskViewSet, basename='subtask')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('tasks/<int:task_id>/subtasks/', create_subtask, name='create-subtask'),
-    path('tasks/<int:task_id>/subtasks/<int:subtask_id>/', update_subtask, name='update-subtask'),
-    path('tasks/<int:task_id>/subtasks/<int:subtask_id>/delete/', delete_subtask, name='delete-subtask'),
+    path(
+        'tasks/<int:task_id>/subtasks/',
+        create_subtask,
+        name='create-subtask'
+    ),
+    path(
+        'tasks/<int:task_id>/subtasks/<int:subtask_id>/',
+        update_subtask,
+        name='update-subtask'
+    ),
+    path(
+        'tasks/<int:task_id>/subtasks/<int:subtask_id>/delete/',
+        delete_subtask,
+        name='delete-subtask'
+    ),
 ]
