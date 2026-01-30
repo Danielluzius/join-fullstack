@@ -1,0 +1,91 @@
+# Environment Variables - NIEMALS COMMITTEN!
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env
+
+# Python
+backend/venv/
+backend/env/
+backend/**/*.pyc
+backend/**/*.pyo
+backend/**/__pycache__/
+backend/**/*.py[cod]
+backend/**/*$py.class
+backend/**/*.so
+
+# Django
+backend/db.sqlite3
+backend/db.sqlite3-journal
+backend/**/*.log
+backend/local_settings.py
+backend/media/
+backend/staticfiles/
+backend/static_root/
+
+# Django Testing & Coverage
+backend/htmlcov/
+backend/.tox/
+backend/.coverage
+backend/.coverage.*
+backend/.cache
+backend/nosetests.xml
+backend/coverage.xml
+backend/**/*.cover
+backend/.pytest_cache/
+
+# Django Migrations (optional)
+# backend/*/migrations/*.py
+# !backend/*/migrations/__init__.py
+
+# Python Backup & Compiled
+backend/**/*.bak
+backend/**/*.mo
+backend/**/*.pot
+
+# Node / Angular
+frontend/node_modules/
+frontend/dist/
+frontend/tmp/
+frontend/out-tsc/
+frontend/bazel-out/
+frontend/.angular/
+frontend/.angular/cache
+frontend/.sass-cache/
+frontend/npm-debug.log
+frontend/yarn-error.log
+frontend/connect.lock
+frontend/coverage/
+frontend/libpeerconnection.log
+frontend/testem.log
+frontend/typings/
+
+# Firebase
+frontend/.firebase
+frontend/*-debug.log
+frontend/.runtimeconfig.json
+
+# IDE
+.vscode/
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+*.swp
+*.swo
+*~
+.pydevproject
+.history/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
