@@ -1,177 +1,426 @@
-# 📋 JOIN — Kanban Project Management Tool
+# JOIN Frontend — Angular Kanban Board
 
-A modern, collaborative task management application built with **Angular 19** and **Firebase**.
+Modern, responsive frontend for the JOIN Kanban Board application built with **Angular 19**.
 
 <p align="center">
-  <img alt="Angular" src="https://img.shields.io/badge/Angular-20-DD0031?style=for-the-badge&logo=angular&logoColor=white" />
-  <img alt="Firebase" src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" />
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img alt="Angular" src="https://img.shields.io/badge/Angular-19-DD0031?style=for-the-badge&logo=angular&logoColor=white" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.5-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
   <img alt="SCSS" src="https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white" />
-  <img alt="License" src="https://img.shields.io/badge/License-MIT-000000?style=for-the-badge" />
-  <img alt="Build" src="https://img.shields.io/github/actions/workflow/status/yourusername/join/ci.yml?style=for-the-badge&logo=github&label=Build&color=0A0A0A" />
-</p>
-
-<p align="center">
-  <a href="#about">About</a> • 
-  <a href="#features">Features</a> • 
-  <a href="#tech-stack">Tech Stack</a> • 
-  <a href="#installation">Installation</a> • 
-  <a href="#architecture">Architecture</a> • 
-  <a href="#security-features">Security</a> • 
-  <a href="#usage">Usage</a> • 
-  <a href="#contributing">Contributing</a> • 
-  <a href="#license">License</a>
+  <img alt="RxJS" src="https://img.shields.io/badge/RxJS-7.8-B7178C?style=for-the-badge&logo=reactivex&logoColor=white" />
 </p>
 
 ---
 
-## 🎯 About
+## About
 
-**JOIN** is a feature-rich **Kanban board** that helps teams organize and manage projects efficiently.  
-It delivers a smooth experience with **real-time updates**, **drag & drop**, and **secure Firebase authentication**.
+**JOIN Frontend** is a modern Single-Page Application (SPA) that communicates with the Django REST Framework backend.  
+The application provides an intuitive user interface for task management with **Drag & Drop**, **real-time updates**, and **responsive design**.
 
 ---
 
-## 🌟 Highlights
+## Highlights
 
-| Feature | Description |
-|:--|:--|
-| 🔐 **Security** | Multi-layer authentication & session sync |
-| 🎨 **UI/UX** | Modern, responsive layout with smooth animations |
-| ⚡ **Real-Time** | Live updates across all devices & tabs |
-| 🌓 **Dual Mode** | Public / Private board modes |
-| ♿ **Accessibility** | WCAG-compliant & keyboard navigation |
+| Feature              | Description                                              |
+| :------------------- | :------------------------------------------------------- |
+| 🔐 **Security**      | Token-basierte Authentifizierung mit HTTP Interceptors   |
+| 🎨 **UI/UX**         | Modern, responsive Layout mit Animationen                |
+| ⚡ **Performance**   | Lazy Loading, OnPush Change Detection, Optimized Queries |
+| 🧩 **Modular**       | Standalone Components, Feature-Module Struktur           |
+| ♿ **Accessibility** | Keyboard Navigation, ARIA-Labels                         |
 
 ---
 
 ## ✨ Features
 
-### 🎯 Core Functionality
-- Kanban Board: **To Do**, **In Progress**, **Await Feedback**, **Done**
-- Drag & Drop (Angular CDK)
-- Smart search, filtering, and tagging
-- Priority levels with colored indicators
-- Detailed modal for each task
+### 🎯 Kanban Board
 
-### 📝 Advanced Task Management
-- Subtasks with progress tracking  
-- Assign team members, set categories  
-- Real-time Firestore synchronization  
+- **4 Spalten:** To Do, In Progress, Await Feedback, Done
+- **Drag & Drop** mit Angular CDK
+- Visuelle Feedback-Animationen
+- Task-Filter und Suche
+- Priority Indicators mit Farben
 
-### 👥 Contacts & Dashboard
-- Contact CRUD with avatar generation  
-- Dashboard overview: task stats, deadlines, and urgent tasks  
+### 📝 Task Management
 
----
+- Create, Read, Update, Delete (CRUD)
+- Subtasks mit Progress Tracking
+- Team-Mitglieder zuweisen
+- Kategorien und Prioritäten
+- Modal für detaillierte Ansicht
 
-## 🔐 Security Features
+### 👥 Contacts Dashboard
 
-### 🔄 Multi-Tab Session Sync
-Real-time logout/login detection using `localStorage` events.  
-Guards prevent unauthorized route access.
+- Kontakt-Verwaltung (CRUD)
+- Avatar-Generierung aus Initialen
+- Sortierung und Filterung
+- Schnelle Zuweisung zu Tasks
 
-### 🔑 Authentication
-- SHA-256 client-side password hashing  
-- Firebase Authentication  
-- Session persistence and cleanup on logout  
+### 🔐 Authentication
 
-### 🧱 Firestore Rules
-- Read: Authenticated users  
-- Write: Document owners only  
-- Public/Private separation for data visibility  
+- Registrierung mit Validierung
+- Login mit Token-Persistence
+- Auto-Logout bei ungültigem Token
+- Auth Guards für geschützte Routen
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
-**Frontend**
+**Core**
+
 - Angular 19 (Standalone Components, Signals API)
 - TypeScript 5.5
-- SCSS
-- RxJS
-- Angular CDK (DnD)
+- RxJS 7.8
+- Angular Router
 
-**Backend**
-- Firebase Firestore (Realtime DB)
-- Firebase Auth
-- Firestore Security Rules
+**UI/UX**
 
----
+- SCSS (Custom Variables, Mixins)
+- Angular Animations
+- Angular CDK (Drag & Drop)
+- Responsive Design (Mobile-First)
 
-## 📸 Screenshots
+**State Management**
 
-> All screenshots are stored in [`assets/screenshots/`](./assets/screenshots/)  
-> Replace placeholders with your actual images.
+- Services with BehaviorSubject
+- Signals API for reactive states
+- HTTP Client with Interceptors
 
-| View | Screenshot |
+**Backend Integration**
 
-
-
-## 👤 Authors
-
-**Daniel Luzius**  
-📧 [daniel.luzius@example.com](mailto:daniel.luzius@example.com)  
-🌐 [daniel-luzius.dev](https://daniel-luzius.dev)  
-🐙 GitHub: [@daniel-luzius](https://github.com/daniel-luzius)  
-💼 LinkedIn: [Daniel Luzius](https://linkedin.com/in/daniel-luzius)
-
-**Kajanan Yoganathan**  
-📧 [kajanan.yoganathan@example.com](mailto:kajanan.yoganathan@example.com)  
-🌐 [kajanan.dev](https://kajanan.dev)  
-🐙 GitHub: [@kajanan-yoganathan](https://github.com/kajanan-yoganathan)  
-💼 LinkedIn: [Kajanan Yoganathan](https://linkedin.com/in/kajanan-yoganathan)
-
-**Patrick Schmidt**  
-📧 [kontakt@patrick-schmidt.info](mailto:kontakt@patrick-schmidt.info)  
-🌐 [patrick-schmidt.info](https://patrick-schmidt.info)  
-🐙 GitHub: [@yourhandle](https://github.com/yourhandle)  
-💼 LinkedIn: [Your LinkedIn Profile](https://linkedin.com/in/yourprofile)
+- REST API Communication
+- Token-based authentication
+- Error handling & retry logic
+- Type-safe API responses
 
 ---
 
-## 🙏 Acknowledgments
+## Installation
 
-- [Angular Team](https://angular.io)
-- [Firebase](https://firebase.google.com)
-- [Developer Akademie](https://www.developer-akademie.de)
-- Open Source Community
+### Prerequisites
 
----
+- **Node.js** ≥ 18.x
+- **npm** ≥ 9.x
+- **Angular CLI** ≥ 19.x
 
-> ⭐ **If you find this project helpful, give it a star!**  
-> Made with ❤️ and ☕ in Germany
-
----
-
-## 🚀 Installation
-
-### 📦 Prerequisites
-- Node.js ≥ 18.x  
-- npm ≥ 9.x  
-- Angular CLI ≥ 19.x  
-
-### ⚙️ Setup
+### Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/join.git
-cd join
+# Navigate to frontend directory
+cd frontend
 
 # Install dependencies
 npm install
 
-# Run dev server
+# Start development server
 ng serve
+
 # Open http://localhost:4200
+```
 
-Config Firebase
-// src/app/app.config.ts
-export const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+### Environment Configuration
+
+The API URL is configured in the environment files:
+
+**Development** (`src/environments/environment.ts`):
+
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:8000/api',
 };
+```
 
+**Production** (`src/environments/environment.prod.ts`):
+
+```typescript
+export const environment = {
+  production: true,
+  apiUrl: 'https://your-api-domain.com/api',
+};
+```
+
+---
+
+## Architecture
+
+### Project Structure
+
+```
+frontend/src/app/
+├── core/                          # Singleton Services & Guards
+│   ├── guards/
+│   │   ├── auth-guard.ts         # Protects authenticated routes
+│   │   └── logged-in-guard.ts    # Prevents double login
+│   ├── interceptors/
+│   │   └── auth.interceptor.ts   # Adds token to requests
+│   ├── interfaces/
+│   │   ├── board-tasks-interface.ts
+│   │   ├── db-contact-interface.ts
+│   │   └── users-interface.ts
+│   └── services/
+│       ├── auth-service.ts       # Authentication & user management
+│       ├── board-tasks-service.ts # Task CRUD & state
+│       ├── db-contact-service.ts  # Contact CRUD & state
+│       └── animation-state.service.ts
+│
+├── features/                      # Feature modules
+│   ├── board/                    # Kanban board
+│   │   ├── board.ts              # Main board component
+│   │   ├── board-header/         # Header with search & add
+│   │   ├── board-columns/        # Columns with drag & drop
+│   │   ├── task-card/            # Task card component
+│   │   │   ├── task-card-modal/  # Detail modal
+│   │   │   └── task-card-edit/   # Edit form
+│   │   └── add-task-modal/       # Create new task
+│   │
+│   ├── contacts/                 # Contact management
+│   ├── summary/                  # Dashboard
+│   ├── add-task/                 # Task creation (standalone)
+│   ├── landing-page/             # Login/Register
+│   ├── help/                     # Help page
+│   ├── legal-notice/             # Legal notice
+│   └── privacy-policy/           # Privacy policy
+│
+├── shared/                        # Reusable components
+│   └── components/
+│       └── priority-icon/        # Priority indicator
+│
+├── app.config.ts                 # App configuration
+├── app.routes.ts                 # Routing configuration
+└── app.ts                        # Root component
+```
+
+### Design Patterns
+
+#### Service Layer Pattern
+
+```typescript
+@Injectable({ providedIn: 'root' })
+export class BoardTasksService {
+  private tasksSubject = new BehaviorSubject<Task[]>([]);
+  public tasks$ = this.tasksSubject.asObservable();
+
+  async updateTask(taskId: string, updates: Partial<Task>) {
+    await this.http.put(`${this.apiUrl}${taskId}/`, updates).toPromise();
+    await this.loadTasks(); // Refresh state
+  }
+}
+```
+
+#### Smart vs. Dumb Components
+
+- **Smart Components:** board.ts, contacts.ts (manage state)
+- **Dumb Components:** task-card, priority-icon (presentation only)
+
+#### Reactive Programming
+
+```typescript
+this.taskService.tasks$.subscribe((tasks) => {
+  this.filteredTasks = this.filterTasks(tasks);
+});
+```
+
+---
+
+## Authentication
+
+### Auth Flow
+
+1. **Login:** User sends credentials → receives token
+2. **Token Storage:** Token is stored in `localStorage`
+3. **Auto-Include:** Interceptor adds token to all API requests
+4. **Route Guards:** Protect private routes
+5. **Auto-Logout:** Automatically log out on 401 error
+
+### Auth Interceptor
+
+```typescript
+intercept(req: HttpRequest<any>, next: HttpHandler) {
+  const token = this.authService.getToken();
+  if (token) {
+    req = req.clone({
+      setHeaders: { Authorization: `Token ${token}` }
+    });
+  }
+  return next.handle(req);
+}
+```
+
+### Route Guards
+
+```typescript
+// auth-guard.ts - Protects Board, Contacts, etc.
+canActivate() {
+  return this.authService.isAuthenticated();
+}
+
+// logged-in-guard.ts - Prevents login page when logged in
+canActivate() {
+  return !this.authService.isAuthenticated();
+}
+```
+
+---
+
+## Styling
+
+### SCSS Architecture
+
+```scss
+// Global variables
+$primary-color: #2a3647;
+$accent-color: #29abe2;
+$urgent-color: #ff3d00;
+$medium-color: #ffa800;
+$low-color: #7ae229;
+
+// Mixins for responsive design
+@mixin mobile {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: 769px) and (max-width: 1024px) {
+    @content;
+  }
+}
+```
+
+### Component-Scoped Styles
+
+Each component has its own `.scss` file with specific styles.
+
+---
+
+## API Integration
+
+### Backend Communication
+
+All services use `HttpClient` for backend communication:
+
+```typescript
+// Create task
+async createTask(task: Omit<Task, 'id' | 'createdAt'>) {
+  const apiTask = this.convertFrontendTaskToApi(task);
+  const response = await this.http.post<TaskApiResponse>(
+    this.apiUrl,
+    apiTask
+  ).toPromise();
+  await this.loadTasks();
+  return response.id;
+}
+```
+
+### Format Conversion
+
+Frontend ↔ Backend format conversion:
+
+```typescript
+// Frontend: dueDate (Timestamp) → Backend: due_date (ISO String)
+// Frontend: assignedTo (string[]) → Backend: assigned_to (number[])
+// Frontend: subtasks → Backend: subtasks with order
+```
+
+---
+
+## Development
+
+### Dev Server
+
+```bash
+ng serve
+# Runs on http://localhost:4200
+# Live reload on file changes
+```
+
+### Build
+
+```bash
+# Development build
+ng build
+
+# Production build
+ng build --configuration production
+```
+
+### Code Quality
+
+```bash
+# Linting
+ng lint
+
+# Type checking
+tsc --noEmit
+```
+
+---
+
+## Production Build & Deployment
+
+### Optimized Build
+
+```bash
+ng build --configuration production --aot --build-optimizer
+```
+
+**Optimizations:**
+
+- Ahead-of-Time (AOT) Compilation
+- Tree Shaking
+- Minification & Uglification
+- Source Maps (optionally disable)
+- Lazy Loading
+
+### Deployment Options
+
+#### 1. Vercel (Recommended)
+
+```bash
+npm install -g vercel
+vercel login
+vercel --prod
+```
+
+#### 2. Netlify
+
+- Push to GitHub
+- Connect Netlify to repository
+- Build Command: `ng build --configuration production`
+- Publish Directory: `dist/frontend/browser`
+
+#### 3. Nginx (Custom Server)
+
+```nginx
+server {
+  listen 80;
+  server_name your-domain.com;
+  root /var/www/join/dist/frontend;
+
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+}
+```
+
+---
+
+## Author
+
+**Daniel Luzius**  
+[danielluzius.de](https://danielluzius.de)
+
+---
+
+## Acknowledgments
+
+- [Angular Team](https://angular.io)
+- [Django Software Foundation](https://www.djangoproject.com)
+- [Django REST Framework](https://www.django-rest-framework.org)
+- [Developer Akademie](https://www.developer-akademie.de)
+
+---
+
+> Built with Angular 19
