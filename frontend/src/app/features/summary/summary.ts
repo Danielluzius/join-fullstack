@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { BoardTasksService } from '../../core/services/board-tasks-service';
 import { Task } from '../../core/interfaces/board-tasks-interface';
 import { Subscription } from 'rxjs';
-import { Timestamp } from '@angular/fire/firestore';
 import { AuthService } from '../../core/services/auth-service';
 
 @Component({
@@ -50,8 +49,8 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   /**
- * Loads and subscribes to all tasks, then calculates statistics.
- */
+   * Loads and subscribes to all tasks, then calculates statistics.
+   */
   private loadTaskStatistics(): void {
     this.tasksSubscription = this.boardTasksService.getAllTasks().subscribe((tasks: Task[]) => {
       this.calculateStatistics(tasks);
@@ -59,8 +58,8 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   /**
- * Loads the current user's data and sets the username.
- */
+   * Loads the current user's data and sets the username.
+   */
   loadUserData() {
     const currentUser = this.authService.getCurrentUser();
     if (currentUser) {
@@ -71,8 +70,8 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   /**
- * Sets the greeting message and time of day based on the current hour.
- */
+   * Sets the greeting message and time of day based on the current hour.
+   */
   setGreeting() {
     const hour = new Date().getHours();
     const greetingData = this.getGreetingByHour(hour);
@@ -81,11 +80,11 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   /**
- * Returns the appropriate greeting and time of day for a given hour.
- *
- * @param hour - The current hour (0-23).
- * @returns An object with greeting and timeOfDay.
- */
+   * Returns the appropriate greeting and time of day for a given hour.
+   *
+   * @param hour - The current hour (0-23).
+   * @returns An object with greeting and timeOfDay.
+   */
   private getGreetingByHour(hour: number): { greeting: string; timeOfDay: string } {
     if (hour >= 5 && hour < 12) {
       return { greeting: 'Good morning', timeOfDay: 'morning' };
@@ -99,8 +98,8 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   /**
- * Checks if the welcome overlay should be shown after login (on small screens).
- */
+   * Checks if the welcome overlay should be shown after login (on small screens).
+   */
   private checkAndShowWelcome(): void {
     if (window.innerWidth >= 1250) return;
     const justLoggedIn = sessionStorage.getItem('justLoggedIn');
@@ -110,8 +109,8 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   /**
- * Displays the welcome overlay and hides it after a timeout.
- */
+   * Displays the welcome overlay and hides it after a timeout.
+   */
   private displayWelcomeOverlay(): void {
     sessionStorage.removeItem('justLoggedIn');
     this.showGreetingOverlay = true;
@@ -121,10 +120,10 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   /**
- * Calculates and updates all task-related statistics and the upcoming deadline.
- *
- * @param tasks - The array of tasks to analyze.
- */
+   * Calculates and updates all task-related statistics and the upcoming deadline.
+   *
+   * @param tasks - The array of tasks to analyze.
+   */
   private calculateStatistics(tasks: Task[]): void {
     this.todoCount = tasks.filter((t) => t.status === 'todo').length;
     this.doneCount = tasks.filter((t) => t.status === 'done').length;
@@ -136,11 +135,11 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   /**
- * Calculates the upcoming deadline based on the highest-priority tasks.
- *
- * @param tasks - The array of tasks to analyze.
- * @returns The formatted upcoming deadline or 'No deadline'.
- */
+   * Calculates the upcoming deadline based on the highest-priority tasks.
+   *
+   * @param tasks - The array of tasks to analyze.
+   * @returns The formatted upcoming deadline or 'No deadline'.
+   */
   private calculateUpcomingDeadline(tasks: Task[]): string {
     const tasksWithDueDate = this.filterTasksWithUrgentDeadline(tasks);
     if (tasksWithDueDate.length === 0) {
@@ -151,23 +150,23 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   /**
- * Filters tasks to only include those with a due date, not done, and with 'urgent' priority.
- *
- * @param tasks - The array of tasks to filter.
- * @returns An array of filtered tasks.
- */
+   * Filters tasks to only include those with a due date, not done, and with 'urgent' priority.
+   *
+   * @param tasks - The array of tasks to filter.
+   * @returns An array of filtered tasks.
+   */
   private filterTasksWithUrgentDeadline(tasks: Task[]): Task[] {
     return tasks.filter(
-      (t) => t.dueDate && t.status !== 'done' && t.priority !== 'low' && t.priority !== 'medium'
+      (t) => t.dueDate && t.status !== 'done' && t.priority !== 'low' && t.priority !== 'medium',
     );
   }
 
   /**
- * Finds the task with the earliest due date from a list of tasks.
- *
- * @param tasks - The array of tasks to search.
- * @returns The task with the earliest due date.
- */
+   * Finds the task with the earliest due date from a list of tasks.
+   *
+   * @param tasks - The array of tasks to search.
+   * @returns The task with the earliest due date.
+   */
   private findEarliestTask(tasks: Task[]): Task {
     return tasks.sort((a, b) => {
       const dateA = this.getDateFromDueDate(a.dueDate!);
@@ -177,27 +176,27 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   /**
- * Converts a due date (string or Timestamp) to a Date object.
- *
- * @param dueDate - The due date as a string or Firestore Timestamp.
- * @returns The corresponding Date object.
- */
-  private getDateFromDueDate(dueDate: string | Timestamp): Date {
+   * Converts a due date (string or number) to a Date object.
+   *
+   * @param dueDate - The due date as a string or Unix timestamp.
+   * @returns The corresponding Date object.
+   */
+  private getDateFromDueDate(dueDate: string | number): Date {
     if (typeof dueDate === 'string') {
       const [day, month, year] = dueDate.split('/').map(Number);
       return new Date(year, month - 1, day);
     } else {
-      return dueDate.toDate();
+      return new Date(dueDate);
     }
   }
 
   /**
- * Formats a due date (string or Timestamp) as a human-readable string.
- *
- * @param dueDate - The due date to format.
- * @returns The formatted date string.
- */
-  private formatDeadline(dueDate: string | Timestamp): string {
+   * Formats a due date (string or number) as a human-readable string.
+   *
+   * @param dueDate - The due date to format.
+   * @returns The formatted date string.
+   */
+  private formatDeadline(dueDate: string | number): string {
     const date = this.getDateFromDueDate(dueDate);
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
@@ -208,10 +207,10 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   /**
- * Handles hover state for the todo icon and updates its source accordingly.
- *
- * @param isHovering - Whether the icon is being hovered.
- */
+   * Handles hover state for the todo icon and updates its source accordingly.
+   *
+   * @param isHovering - Whether the icon is being hovered.
+   */
   onTodoHover(isHovering: boolean): void {
     if (isHovering) {
       this.todoIconSrc = 'assets/summary/edit-black-signup.png';
@@ -221,10 +220,10 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   /**
- * Handles hover state for the done icon and updates its source accordingly.
- *
- * @param isHovering - Whether the icon is being hovered.
- */
+   * Handles hover state for the done icon and updates its source accordingly.
+   *
+   * @param isHovering - Whether the icon is being hovered.
+   */
   onDoneHover(isHovering: boolean): void {
     if (isHovering) {
       this.doneIconSrc = 'assets/summary/done-checkmark-hover.png';
@@ -234,10 +233,10 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   /**
- * Navigates to the board page, optionally with a filter query parameter.
- *
- * @param filter - (Optional) The filter to apply on the board.
- */
+   * Navigates to the board page, optionally with a filter query parameter.
+   *
+   * @param filter - (Optional) The filter to apply on the board.
+   */
   navigateToBoard(filter?: string): void {
     if (filter) {
       this.router.navigate(['/board'], { queryParams: { filter } });

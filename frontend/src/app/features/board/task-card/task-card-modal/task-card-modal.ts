@@ -256,14 +256,14 @@ export class TaskCardModal implements OnInit, OnChanges {
   }
 
   /**
-   * Formats a Firestore timestamp to a readable date string.
+   * Formats a timestamp to a readable date string.
    *
-   * @param timestamp - Firestore timestamp to format
+   * @param timestamp - Unix timestamp to format
    * @returns Formatted date string in MM/DD/YYYY format
    */
   formatDate(timestamp: any): string {
     if (!timestamp) return '';
-    const date = timestamp.toDate();
+    const date = new Date(timestamp);
     return date.toLocaleDateString('en-US', {
       month: '2-digit',
       day: '2-digit',

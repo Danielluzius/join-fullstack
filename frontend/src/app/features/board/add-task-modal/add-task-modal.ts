@@ -13,7 +13,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Task, Subtask } from '../../../core/interfaces/board-tasks-interface';
 import { ContactService } from '../../../core/services/db-contact-service';
-import { Timestamp } from '@angular/fire/firestore';
 import { AddTaskModalFormFields } from './add-task-modal-form-fields/add-task-modal-form-fields';
 
 /**
@@ -211,23 +210,23 @@ export class AddTaskModal implements OnInit {
   }
 
   /**
-   * Converts the due date string to a Firestore Timestamp.
+   * Converts the due date string to a timestamp.
    *
-   * @returns The Firestore Timestamp for the due date
+   * @returns The Unix timestamp for the due date
    */
-  private convertDueDateToTimestamp(): Timestamp {
+  private convertDueDateToTimestamp(): number {
     const [day, month, year] = this.dueDate.split('/');
     const dateObject = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-    return Timestamp.fromDate(dateObject);
+    return dateObject.getTime();
   }
 
   /**
    * Creates the task object with all form data.
    *
-   * @param dueDateTimestamp - The due date as a Firestore Timestamp
+   * @param dueDateTimestamp - The due date as a Unix timestamp
    * @returns The task object ready for creation
    */
-  private createTaskObject(dueDateTimestamp: Timestamp): Omit<Task, 'id' | 'createdAt'> {
+  private createTaskObject(dueDateTimestamp: number): Omit<Task, 'id' | 'createdAt'> {
     return {
       title: this.title.trim(),
       description: this.description.trim(),

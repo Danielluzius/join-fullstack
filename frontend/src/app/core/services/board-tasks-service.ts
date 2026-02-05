@@ -1,6 +1,5 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Timestamp } from '@angular/fire/firestore';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Task, Subtask } from '../interfaces/board-tasks-interface';
@@ -62,7 +61,7 @@ export class BoardTasksService {
    */
   private async fetchTasksFromApi(): Promise<Task[]> {
     const response = await this.http.get<TaskApiResponse[]>(this.apiUrl).toPromise();
-    return (response || []).map(task => this.convertApiTaskToFrontend(task));
+    return (response || []).map((task) => this.convertApiTaskToFrontend(task));
   }
 
   /**
@@ -73,19 +72,19 @@ export class BoardTasksService {
       id: apiTask.id,
       title: apiTask.title,
       description: apiTask.description,
-      dueDate: Timestamp.fromDate(new Date(apiTask.due_date)),
+      dueDate: new Date(apiTask.due_date).getTime(),
       priority: apiTask.priority,
       category: apiTask.category,
       status: apiTask.status,
       assignedTo: apiTask.assigned_to,
-      subtasks: apiTask.subtasks.map(st => ({
+      subtasks: apiTask.subtasks.map((st) => ({
         id: st.id,
         title: st.title,
-        completed: st.completed
+        completed: st.completed,
       })),
       order: apiTask.order,
-      createdAt: Timestamp.fromDate(new Date(apiTask.created_at)),
-      updatedAt: apiTask.updated_at ? Timestamp.fromDate(new Date(apiTask.updated_at)) : undefined
+      createdAt: new Date(apiTask.created_at).getTime(),
+      updatedAt: apiTask.updated_at ? new Date(apiTask.updated_at).getTime() : undefined,
     };
   }
 
@@ -94,33 +93,33 @@ export class BoardTasksService {
    */
   private convertFrontendTaskToApi(task: Partial<Task>): any {
     const apiTask: any = { ...task };
-    
-    // Convert Timestamp to ISO string
+
+    // Convert timestamp to ISO string
     if (task.dueDate) {
-      apiTask.due_date = task.dueDate.toDate().toISOString();
+      apiTask.due_date = new Date(task.dueDate).toISOString();
       delete apiTask.dueDate;
     }
-    
+
     // Rename fields for backend and convert string IDs to integers
     if (task.assignedTo !== undefined) {
-      apiTask.assigned_to = task.assignedTo.map(id => parseInt(id, 10));
+      apiTask.assigned_to = task.assignedTo.map((id) => parseInt(id, 10));
       delete apiTask.assignedTo;
     }
-    
+
     // Convert subtasks and add order field
     if (task.subtasks !== undefined) {
       apiTask.subtasks = task.subtasks.map((subtask, index) => ({
         title: subtask.title,
         completed: subtask.completed,
-        order: index
+        order: index,
         // Don't send 'id' for new subtasks - backend will generate them
       }));
     }
-    
+
     // Remove frontend-only fields
     delete apiTask.createdAt;
     delete apiTask.updatedAt;
-    
+
     return apiTask;
   }
 
@@ -146,7 +145,7 @@ export class BoardTasksService {
         inprogress: tasks.filter((t) => t.status === 'inprogress'),
         awaitfeedback: tasks.filter((t) => t.status === 'awaitfeedback'),
         done: tasks.filter((t) => t.status === 'done'),
-      }))
+      })),
     );
   }
 
@@ -157,7 +156,7 @@ export class BoardTasksService {
     try {
       const apiTask = this.convertFrontendTaskToApi(task);
       const response = await this.http.post<TaskApiResponse>(this.apiUrl, apiTask).toPromise();
-      
+
       if (response) {
         await this.loadTasks(); // Refresh tasks
         return response.id;
@@ -188,10 +187,12 @@ export class BoardTasksService {
    */
   async updateTaskStatus(
     taskId: string,
-    newStatus: 'todo' | 'inprogress' | 'awaitfeedback' | 'done'
+    newStatus: 'todo' | 'inprogress' | 'awaitfeedback' | 'done',
   ): Promise<void> {
     try {
-      await this.http.patch(`${this.apiUrl}${taskId}/update_status/`, { status: newStatus }).toPromise();
+      await this.http
+        .patch(`${this.apiUrl}${taskId}/update_status/`, { status: newStatus })
+        .toPromise();
       await this.loadTasks(); // Refresh tasks
     } catch (error) {
       console.error('Error updating task status:', error);
@@ -217,7 +218,7 @@ export class BoardTasksService {
    */
   async moveTask(
     taskId: string,
-    newStatus: 'todo' | 'inprogress' | 'awaitfeedback' | 'done'
+    newStatus: 'todo' | 'inprogress' | 'awaitfeedback' | 'done',
   ): Promise<void> {
     await this.updateTaskStatus(taskId, newStatus);
   }
@@ -227,9 +228,11 @@ export class BoardTasksService {
    */
   async toggleSubtask(taskId: string, subtaskId: string): Promise<void> {
     try {
-      await this.http.patch(`${this.apiUrl}${taskId}/toggle_subtask/`, { 
-        subtask_id: parseInt(subtaskId, 10) 
-      }).toPromise();
+      await this.http
+        .patch(`${this.apiUrl}${taskId}/toggle_subtask/`, {
+          subtask_id: parseInt(subtaskId, 10),
+        })
+        .toPromise();
       await this.loadTasks();
     } catch (error) {
       console.error('Error toggling subtask:', error);

@@ -14,7 +14,6 @@ import { Task, Subtask } from '../../../../core/interfaces/board-tasks-interface
 import { Contact } from '../../../../core/interfaces/db-contact-interface';
 import { ContactService } from '../../../../core/services/db-contact-service';
 import { BoardTasksService } from '../../../../core/services/board-tasks-service';
-import { Timestamp } from '@angular/fire/firestore';
 import { PrioritySelectorComponent } from '../../../../shared/components/priority-selector/priority-selector';
 import { SubtaskManagerComponent } from '../../../../shared/components/subtask-manager/subtask-manager';
 import { TaskCardEditFormFields } from './task-card-edit-form-fields/task-card-edit-form-fields';
@@ -144,12 +143,12 @@ export class TaskCardEdit implements OnInit, OnChanges {
   }
 
   /**
-   * Populates the due date fields from the task's Firestore timestamp.
+   * Populates the due date fields from the task's timestamp.
    * Converts timestamp to DD/MM/YYYY format for display and YYYY-MM-DD for input.
    */
   private populateDueDate() {
     if (!this.task?.dueDate) return;
-    const date = this.task.dueDate.toDate();
+    const date = new Date(this.task.dueDate);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -275,7 +274,7 @@ export class TaskCardEdit implements OnInit, OnChanges {
     return {
       title: this.title.trim(),
       description: this.description.trim(),
-      dueDate: Timestamp.fromDate(new Date(parseInt(year), parseInt(month) - 1, parseInt(day))),
+      dueDate: new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).getTime(),
       priority: this.priority,
       category: this.task!.category, // Keep existing category
       assignedTo: [...this.selectedContactIds],
