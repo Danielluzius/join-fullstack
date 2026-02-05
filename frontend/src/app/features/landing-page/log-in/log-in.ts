@@ -52,8 +52,8 @@ export class LogIn {
       return;
     }
 
-    if (this.password.length < 6) {
-      this.passwordError = 'Password must be at least 6 characters';
+    if (this.password.length < 8) {
+      this.passwordError = 'Password must be at least 8 characters';
       return;
     }
   }
