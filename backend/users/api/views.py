@@ -13,6 +13,25 @@ from contacts.models import Contact
 User = get_user_model()
 
 
+def _create_contact_from_user(user):
+    """Create a contact entry for a newly registered user."""
+    name_parts = user.name.split(' ', 1) if user.name else ['', '']
+    firstname = name_parts[0]
+    lastname = name_parts[1] if len(name_parts) > 1 else ''
+    
+    Contact.objects.get_or_create(
+        email=user.email,
+        defaults={'firstname': firstname, 'lastname': lastname, 'phone': ''}
+    )
+
+
+def _prepare_user_response(user, token):
+    """Prepare user data with token for response."""
+    user_data = UserSerializer(user).data
+    user_data['createdAt'] = user.date_joined
+    return {'user': user_data, 'token': token.key}
+
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_view(request):
@@ -29,30 +48,25 @@ def register_view(request):
     }
     """
     serializer = RegisterSerializer(data=request.data)
-    if serializer.is_valid():
-        user = serializer.save()
-        token, _ = Token.objects.get_or_create(user=user)
-        
-        name_parts = user.name.split(' ', 1) if user.name else ['', '']
-        firstname = name_parts[0]
-        lastname = name_parts[1] if len(name_parts) > 1 else ''
-        
-        Contact.objects.get_or_create(
-            email=user.email,
-            defaults={
-                'firstname': firstname,
-                'lastname': lastname,
-                'phone': ''
-            }
-        )
-        
-        user_data = UserSerializer(user).data
-        user_data['createdAt'] = user.date_joined
-        return Response({
-            'user': user_data,
-            'token': token.key
-        }, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    user = serializer.save()
+    token, _ = Token.objects.get_or_create(user=user)
+    _create_contact_from_user(user)
+    
+    response_data = _prepare_user_response(user, token)
+    return Response(response_data, status=status.HTTP_201_CREATED)
+
+
+def _authenticate_user(request, email, password):
+    """Authenticate user and return token with user data."""
+    user = authenticate(request, username=email, password=password)
+    if not user:
+        return None
+    
+    token, _ = Token.objects.get_or_create(user=user)
+    return _prepare_user_response(user, token)
 
 
 @api_view(['POST'])
@@ -68,24 +82,19 @@ def login_view(request):
     }
     """
     serializer = LoginSerializer(data=request.data)
-    if serializer.is_valid():
-        email = serializer.validated_data['email']
-        password = serializer.validated_data['password']
-        
-        user = authenticate(request, username=email, password=password)
-        
-        if user:
-            token, _ = Token.objects.get_or_create(user=user)
-            user_data = UserSerializer(user).data
-            user_data['createdAt'] = user.date_joined
-            return Response({
-                'user': user_data,
-                'token': token.key
-            })
-        return Response({
-            'error': 'Invalid credentials'
-        }, status=status.HTTP_401_UNAUTHORIZED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    email = serializer.validated_data['email']
+    password = serializer.validated_data['password']
+    response_data = _authenticate_user(request, email, password)
+    
+    if response_data:
+        return Response(response_data)
+    return Response(
+        {'error': 'Invalid credentials'},
+        status=status.HTTP_401_UNAUTHORIZED
+    )
 
 
 @api_view(['POST'])

@@ -35,6 +35,14 @@ class TaskViewSet(viewsets.ModelViewSet):
         """
         return Task.objects.prefetch_related('subtasks', 'assigned_to').all()
     
+    def _validate_and_update_status(self, task, new_status):
+        """Validate and update task status."""
+        if new_status not in dict(Task.STATUS_CHOICES):
+            return None
+        task.status = new_status
+        task.save()
+        return task
+    
     @action(detail=True, methods=['patch'])
     def update_status(self, request, pk=None):
         """
@@ -47,17 +55,23 @@ class TaskViewSet(viewsets.ModelViewSet):
         """
         task = self.get_object()
         new_status = request.data.get('status')
+        updated_task = self._validate_and_update_status(task, new_status)
         
-        if new_status not in dict(Task.STATUS_CHOICES):
-            return Response(
-                {'error': 'Invalid status'},
-                status=400
-            )
+        if not updated_task:
+            return Response({'error': 'Invalid status'}, status=400)
         
-        task.status = new_status
-        task.save()
-        serializer = self.get_serializer(task)
+        serializer = self.get_serializer(updated_task)
         return Response(serializer.data)
+    
+    def _toggle_subtask_completion(self, task, subtask_id):
+        """Toggle subtask completion status."""
+        try:
+            subtask = task.subtasks.get(id=subtask_id)
+            subtask.completed = not subtask.completed
+            subtask.save()
+            return task
+        except Subtask.DoesNotExist:
+            return None
     
     @action(detail=True, methods=['patch'])
     def toggle_subtask(self, request, pk=None):
@@ -71,15 +85,10 @@ class TaskViewSet(viewsets.ModelViewSet):
         """
         task = self.get_object()
         subtask_id = request.data.get('subtask_id')
+        updated_task = self._toggle_subtask_completion(task, subtask_id)
         
-        try:
-            subtask = task.subtasks.get(id=subtask_id)
-            subtask.completed = not subtask.completed
-            subtask.save()
-            serializer = self.get_serializer(task)
-            return Response(serializer.data)
-        except Subtask.DoesNotExist:
-            return Response(
-                {'error': 'Subtask not found'},
-                status=404
-            )
+        if not updated_task:
+            return Response({'error': 'Subtask not found'}, status=404)
+        
+        serializer = self.get_serializer(updated_task)
+        return Response(serializer.data)

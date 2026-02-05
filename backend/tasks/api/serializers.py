@@ -52,7 +52,6 @@ class TaskSerializer(serializers.ModelSerializer):
         """
         data = super().to_representation(instance)
         data['id'] = str(data['id'])
-        # Convert assigned_to Contact objects to list of string IDs
         data['assigned_to'] = [str(contact.id) for contact in instance.assigned_to.all()]
         return data
     
@@ -66,34 +65,34 @@ class TaskSerializer(serializers.ModelSerializer):
         task = Task.objects.create(**validated_data)
         task.assigned_to.set(assigned_to_data)
         
-        # Create subtasks
         for subtask_data in subtasks_data:
             Subtask.objects.create(task=task, **subtask_data)
         
         return task
     
-    def update(self, instance, validated_data):
-        """
-        Update task and handle nested subtasks.
-        """
-        subtasks_data = validated_data.pop('subtasks', None)
-        assigned_to_data = validated_data.pop('assigned_to', None)
-        
-        # Update task fields
+    def _update_task_fields(self, instance, validated_data):
+        """Update task fields."""
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
+    
+    def _update_task_subtasks(self, instance, subtasks_data):
+        """Replace existing subtasks with new ones."""
+        instance.subtasks.all().delete()
+        for subtask_data in subtasks_data:
+            Subtask.objects.create(task=instance, **subtask_data)
+    
+    def update(self, instance, validated_data):
+        """Update task and handle nested subtasks."""
+        subtasks_data = validated_data.pop('subtasks', None)
+        assigned_to_data = validated_data.pop('assigned_to', None)
         
-        # Update assigned contacts
+        self._update_task_fields(instance, validated_data)
+        
         if assigned_to_data is not None:
             instance.assigned_to.set(assigned_to_data)
         
-        # Update subtasks if provided
         if subtasks_data is not None:
-            # Delete existing subtasks
-            instance.subtasks.all().delete()
-            # Create new subtasks
-            for subtask_data in subtasks_data:
-                Subtask.objects.create(task=instance, **subtask_data)
+            self._update_task_subtasks(instance, subtasks_data)
         
         return instance

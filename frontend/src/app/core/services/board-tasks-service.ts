@@ -223,6 +223,21 @@ export class BoardTasksService {
   }
 
   /**
+   * Toggles a subtask's completion status via the backend API.
+   */
+  async toggleSubtask(taskId: string, subtaskId: string): Promise<void> {
+    try {
+      await this.http.patch(`${this.apiUrl}${taskId}/toggle_subtask/`, { 
+        subtask_id: parseInt(subtaskId, 10) 
+      }).toPromise();
+      await this.loadTasks();
+    } catch (error) {
+      console.error('Error toggling subtask:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Manually refresh tasks from backend.
    */
   async refreshTasks(): Promise<void> {

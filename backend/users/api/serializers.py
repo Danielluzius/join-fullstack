@@ -36,21 +36,23 @@ class RegisterSerializer(serializers.ModelSerializer):
         
         return data
     
+    def _generate_unique_username(self, email):
+        """Generate a unique username from email."""
+        username = email.split('@')[0]
+        base_username = username
+        counter = 1
+        while User.objects.filter(username=username).exists():
+            username = f"{base_username}{counter}"
+            counter += 1
+        return username
+    
     def create(self, validated_data):
         """Create a new user with encrypted password."""
         validated_data.pop('confirm_password')
         validated_data.pop('accept_privacy_policy')
         
         email = validated_data['email']
-        username = email.split('@')[0]
-        
-        base_username = username
-        counter = 1
-        while User.objects.filter(username=username).exists():
-            username = f"{base_username}{counter}"
-            counter += 1
-        
-        validated_data['username'] = username
+        validated_data['username'] = self._generate_unique_username(email)
         user = User.objects.create_user(**validated_data)
         return user
 

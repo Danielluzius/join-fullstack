@@ -68,25 +68,28 @@ export class TaskCardModal implements OnInit, OnChanges {
       this.unsubscribeFromTaskUpdates();
     }
   }
-/**
+  /**
    * Subscribes to live updates for the current task from Firestore.
    */
   private subscribeToTaskUpdates() {
     if (!this.task?.id) return;
     this.unsubscribeFromTaskUpdates();
-    this.taskSubscription = this.taskService.getAllTasks().pipe(
-      map(tasks => tasks.find(t => t.id === this.task?.id)),
-      filter(task => !!task)
-    ).subscribe(async (updatedTask) => {
-      this.task = updatedTask as Task;
-      await this.loadAssignedContacts();
-    });
+    this.taskSubscription = this.taskService
+      .getAllTasks()
+      .pipe(
+        map((tasks) => tasks.find((t) => t.id === this.task?.id)),
+        filter((task) => !!task),
+      )
+      .subscribe(async (updatedTask) => {
+        this.task = updatedTask as Task;
+        await this.loadAssignedContacts();
+      });
   }
 
   /**
- * Unsubscribes from task update subscriptions to prevent memory leaks.
- * Cleans up the subscription if it exists and resets the subscription reference.
- */
+   * Unsubscribes from task update subscriptions to prevent memory leaks.
+   * Cleans up the subscription if it exists and resets the subscription reference.
+   */
   private unsubscribeFromTaskUpdates() {
     if (this.taskSubscription) {
       this.taskSubscription.unsubscribe();
@@ -95,13 +98,13 @@ export class TaskCardModal implements OnInit, OnChanges {
   }
 
   /**
- * Lifecycle hook that runs when the component is destroyed.
- * Ensures proper cleanup by unsubscribing from all task updates.
- */
+   * Lifecycle hook that runs when the component is destroyed.
+   * Ensures proper cleanup by unsubscribing from all task updates.
+   */
   ngOnDestroy() {
     this.unsubscribeFromTaskUpdates();
   }
-  
+
   /**
    * Loads all contacts from the database.
    */
@@ -130,8 +133,8 @@ export class TaskCardModal implements OnInit, OnChanges {
 
   /**
    * Toggles the completion status of a subtask.
-   * Updates the task in Firestore with the new subtask state.
-   * 
+   * Updates the entire task via backend.
+   *
    * @param subtaskId - The ID of the subtask to toggle
    */
   async toggleSubtask(subtaskId: string) {
@@ -142,15 +145,18 @@ export class TaskCardModal implements OnInit, OnChanges {
 
     subtask.completed = !subtask.completed;
 
-    await this.taskService.updateTask(this.task.id, {
-      subtasks: this.task.subtasks,
-    });
+    try {
+      await this.taskService.updateTask(this.task.id, this.task);
+    } catch (error) {
+      subtask.completed = !subtask.completed;
+      console.error('Error toggling subtask:', error);
+    }
   }
 
   /**
    * Generates initials from a contact's firstname.
    * Returns first letter for single names, or first and last initial for multiple names.
-   * 
+   *
    * @param contact - The contact to generate initials for
    * @returns Uppercase initials (1-2 characters), or empty string if no firstname
    */
@@ -187,7 +193,7 @@ export class TaskCardModal implements OnInit, OnChanges {
   /**
    * Generates a consistent avatar color for a contact based on their ID.
    * Uses a hash function to map the ID to a color from the palette.
-   * 
+   *
    * @param contact - The contact to generate a color for
    * @returns Hex color code from the color palette
    */
@@ -203,7 +209,7 @@ export class TaskCardModal implements OnInit, OnChanges {
 
   /**
    * Gets the priority icon symbol for the current task.
-   * 
+   *
    * @returns Symbol representing priority (↑ for urgent, = for medium, ↓ for low)
    */
   getPriorityIcon(): string {
@@ -222,7 +228,7 @@ export class TaskCardModal implements OnInit, OnChanges {
 
   /**
    * Gets the priority color for the current task.
-   * 
+   *
    * @returns Hex color code based on task priority
    */
   getPriorityColor(): string {
@@ -241,7 +247,7 @@ export class TaskCardModal implements OnInit, OnChanges {
 
   /**
    * Gets the formatted priority text for the current task.
-   * 
+   *
    * @returns Capitalized priority text (e.g., "Urgent", "Medium", "Low")
    */
   getPriorityText(): string {
@@ -251,7 +257,7 @@ export class TaskCardModal implements OnInit, OnChanges {
 
   /**
    * Formats a Firestore timestamp to a readable date string.
-   * 
+   *
    * @param timestamp - Firestore timestamp to format
    * @returns Formatted date string in MM/DD/YYYY format
    */
@@ -284,7 +290,7 @@ export class TaskCardModal implements OnInit, OnChanges {
   /**
    * Handles task update from the edit modal.
    * Updates local task data, reloads assigned contacts, and emits the updated task.
-   * 
+   *
    * @param updatedTask - The updated task data
    */
   async handleTaskUpdated(updatedTask: Task) {
@@ -320,7 +326,7 @@ export class TaskCardModal implements OnInit, OnChanges {
   /**
    * Handles clicks inside the modal content.
    * Closes dropdowns when clicking outside of them and prevents event propagation.
-   * 
+   *
    * @param event - The mouse event
    */
   onModalClick(event: MouseEvent) {
@@ -335,7 +341,7 @@ export class TaskCardModal implements OnInit, OnChanges {
 
   /**
    * Changes close button image on hover.
-   * 
+   *
    * @param imgElement - The close button image element
    */
   onCloseHover(imgElement: HTMLImageElement) {
@@ -344,7 +350,7 @@ export class TaskCardModal implements OnInit, OnChanges {
 
   /**
    * Restores close button image when hover ends.
-   * 
+   *
    * @param imgElement - The close button image element
    */
   onCloseLeave(imgElement: HTMLImageElement) {
