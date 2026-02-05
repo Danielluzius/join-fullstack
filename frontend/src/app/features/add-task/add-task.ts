@@ -67,7 +67,7 @@ export class AddTask {
       dueDate: dueDateTimestamp,
       priority: this.formFields.priority,
       category: this.formFields.category,
-      status: 'todo',
+      status: 'todo' as const,
       assignedTo: [...this.formFields.selectedContactIds],
       subtasks: this.formFields.subtasks,
     };

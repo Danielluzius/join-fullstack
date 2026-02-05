@@ -22,9 +22,6 @@ import { BoardHeader } from './board-header/board-header';
 export class Board implements OnInit, OnDestroy {
   private taskService = inject(BoardTasksService);
   private tasksSubscription?: Subscription;
-  private viewModeSubscription?: Subscription;
-
-  currentViewMode: 'public' | 'private' = 'public';
 
   allTasks = {
     todo: [] as Task[],
@@ -50,11 +47,10 @@ export class Board implements OnInit, OnDestroy {
 
   /**
    * Lifecycle hook that runs on component initialization.
-   * Loads tasks and subscribes to view mode changes.
+   * Loads tasks from backend API.
    */
   ngOnInit() {
     this.loadTasks();
-    this.subscribeToViewMode();
   }
 
   /**
@@ -65,31 +61,10 @@ export class Board implements OnInit, OnDestroy {
     if (this.tasksSubscription) {
       this.tasksSubscription.unsubscribe();
     }
-    if (this.viewModeSubscription) {
-      this.viewModeSubscription.unsubscribe();
-    }
   }
 
   /**
-   * Subscribes to view mode changes from the task service.
-   * Updates the current view mode when it changes.
-   */
-  subscribeToViewMode() {
-    this.viewModeSubscription = this.taskService.viewMode$.subscribe((mode) => {
-      this.currentViewMode = mode;
-    });
-  }
-
-  /**
-   * Toggles between public and private view modes.
-   */
-  async toggleViewMode() {
-    const newMode = this.currentViewMode === 'public' ? 'private' : 'public';
-    await this.taskService.toggleViewMode(newMode);
-  }
-
-  /**
-   * Loads tasks from Firestore and subscribes to real-time updates.
+   * Loads tasks from backend API and subscribes to updates.
    * Sorts tasks by order and updates the display.
    */
   loadTasks() {
@@ -110,7 +85,7 @@ export class Board implements OnInit, OnDestroy {
 
   /**
    * Sorts all tasks by their order property within each status category.
-   * 
+   *
    * @param tasks - Object containing task arrays grouped by status
    */
   private sortAllTasks(tasks: {
@@ -122,7 +97,7 @@ export class Board implements OnInit, OnDestroy {
     this.allTasks.todo = tasks.todo.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
     this.allTasks.inprogress = tasks.inprogress.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
     this.allTasks.awaitfeedback = tasks.awaitfeedback.sort(
-      (a, b) => (a.order ?? 0) - (b.order ?? 0)
+      (a, b) => (a.order ?? 0) - (b.order ?? 0),
     );
     this.allTasks.done = tasks.done.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
   }
@@ -142,7 +117,7 @@ export class Board implements OnInit, OnDestroy {
 
   /**
    * Finds a task by its ID across all columns.
-   * 
+   *
    * @param taskId - The ID of the task to find
    * @returns The task if found, null otherwise
    */
@@ -156,7 +131,7 @@ export class Board implements OnInit, OnDestroy {
 
   /**
    * Handles search query changes and updates displayed tasks.
-   * 
+   *
    * @param query - The search query string
    */
   onSearch(query: string) {
@@ -225,7 +200,7 @@ export class Board implements OnInit, OnDestroy {
   /**
    * Filters tasks based on search query.
    * Searches in both title and description fields.
-   * 
+   *
    * @param tasks - Array of tasks to filter
    * @returns Filtered array of tasks matching the search query
    */
@@ -240,7 +215,7 @@ export class Board implements OnInit, OnDestroy {
 
   /**
    * Opens the add task modal with a specific default status.
-   * 
+   *
    * @param status - The default status for the new task
    */
   openAddTaskModal(status: string) {
@@ -257,7 +232,7 @@ export class Board implements OnInit, OnDestroy {
 
   /**
    * Opens the view task modal with the selected task.
-   * 
+   *
    * @param task - The task to display in the modal
    */
   openViewTaskModal(task: Task) {
@@ -276,7 +251,7 @@ export class Board implements OnInit, OnDestroy {
   /**
    * Handles task creation by saving to Firestore.
    * Closes the add task modal on success.
-   * 
+   *
    * @param task - The task data to create (without id and createdAt)
    */
   async handleTaskCreated(task: Omit<Task, 'id' | 'createdAt'>) {
@@ -290,7 +265,7 @@ export class Board implements OnInit, OnDestroy {
 
   /**
    * Handles task edit request by updating the selected task.
-   * 
+   *
    * @param task - The updated task data
    */
   handleEditTask(task: Task) {
@@ -300,7 +275,7 @@ export class Board implements OnInit, OnDestroy {
   /**
    * Handles task deletion by removing from Firestore.
    * Closes the view modal on success.
-   * 
+   *
    * @param taskId - The ID of the task to delete
    */
   async handleDeleteTask(taskId: string) {
@@ -315,7 +290,7 @@ export class Board implements OnInit, OnDestroy {
   /**
    * Handles subtask toggle by updating the task in Firestore.
    * Reverts the toggle on error.
-   * 
+   *
    * @param event - Object containing the task and toggled subtask
    */
   async onSubtaskToggled(event: { task: Task; subtask: any }) {
@@ -330,7 +305,7 @@ export class Board implements OnInit, OnDestroy {
   /**
    * Handles task move request between columns.
    * Updates the task status in Firestore.
-   * 
+   *
    * @param event - Object containing the task and target column
    */
   async onMoveTaskRequested(event: { task: Task; targetColumn: string }) {
@@ -347,7 +322,7 @@ export class Board implements OnInit, OnDestroy {
 
   /**
    * Validates if a task move request is valid.
-   * 
+   *
    * @param task - The task to move
    * @param targetColumn - The target column ID
    * @returns True if the move request is valid, false otherwise
@@ -362,7 +337,7 @@ export class Board implements OnInit, OnDestroy {
 
   /**
    * Creates an updated task object with new status.
-   * 
+   *
    * @param task - The original task
    * @param targetColumn - The target column/status
    * @returns Updated task object with new status

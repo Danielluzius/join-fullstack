@@ -10,29 +10,25 @@ import { Timestamp } from '@angular/fire/firestore';
  * @property priority - The priority level: 'urgent', 'medium', or 'low'.
  * @property category - The category this task belongs to.
  * @property status - The current status: 'todo', 'inprogress', 'awaitfeedback', or 'done'.
- * @property assignedTo - Array of user IDs assigned to this task.
+ * @property assignedTo - Array of contact IDs assigned to this task.
  * @property subtasks - Array of subtasks belonging to this task.
  * @property createdAt - Timestamp when the task was created.
  * @property updatedAt - (Optional) Timestamp of the last update.
  * @property order - (Optional) Order index for sorting.
- * @property isPrivate - (Optional) Whether the task is private.
- * @property ownerId - (Optional) The user ID of the task owner.
  */
 export interface Task {
-  id?: string; 
+  id?: string;
   title: string;
   description: string;
   dueDate: Timestamp;
   priority: 'urgent' | 'medium' | 'low';
   category: string;
   status: 'todo' | 'inprogress' | 'awaitfeedback' | 'done';
-  assignedTo: string[]; 
+  assignedTo: string[];
   subtasks: Subtask[];
   createdAt: Timestamp;
   updatedAt?: Timestamp;
   order?: number;
-  isPrivate?: boolean;  
-  ownerId?: string;   
 }
 
 /**
@@ -46,17 +42,4 @@ export interface Subtask {
   id: string;
   title: string;
   completed: boolean;
-}
-
-/**
- * Represents board settings for a user.
- *
- * @property userId - The user ID the settings belong to.
- * @property viewMode - The board view mode: 'public' or 'private'.
- * @property lastChanged - (Optional) Timestamp or value indicating when the settings were last changed.
- */
-export interface BoardSettings {
-  userId: string;
-  viewMode: 'public' | 'private';
-  lastChanged?: any;
 }

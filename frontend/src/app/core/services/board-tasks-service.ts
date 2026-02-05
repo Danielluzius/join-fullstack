@@ -1,248 +1,231 @@
 import { Injectable, inject } from '@angular/core';
-import {
-  Firestore,
-  collection,
-  collectionData,
-  addDoc,
-  doc,
-  updateDoc,
-  deleteDoc,
-  Timestamp,
-  query,
-  where,
-  setDoc,
-  getDoc,
-} from '@angular/fire/firestore';
-import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { map, switchMap, filter } from 'rxjs/operators';
-import { Task, Subtask, BoardSettings } from '../interfaces/board-tasks-interface';
-import { AuthService } from './auth-service';
+import { HttpClient } from '@angular/common/http';
+import { Timestamp } from '@angular/fire/firestore';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Task, Subtask } from '../interfaces/board-tasks-interface';
+import { environment } from '../../../environments/environment';
+
+/**
+ * Backend API response interface for tasks
+ */
+interface TaskApiResponse {
+  id: string;
+  title: string;
+  description: string;
+  due_date: string; // ISO string from backend
+  priority: 'urgent' | 'medium' | 'low';
+  category: string;
+  status: 'todo' | 'inprogress' | 'awaitfeedback' | 'done';
+  assigned_to: string[];
+  subtasks: SubtaskApiResponse[];
+  order?: number;
+  created_at: string;
+  updated_at: string;
+}
+
+interface SubtaskApiResponse {
+  id: string;
+  title: string;
+  completed: boolean;
+  order: number;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class BoardTasksService {
-  private firestore = inject(Firestore);
-  private authService = inject(AuthService);
-  private tasksCollection = collection(this.firestore, 'tasks');
-  private settingsCollection = collection(this.firestore, 'boardSettings');
-  private viewModeSubject = new BehaviorSubject<'public' | 'private'>('public');
-  public viewMode$ = this.viewModeSubject.asObservable();
+  private http = inject(HttpClient);
+  private apiUrl = `${environment.apiUrl}/tasks/`;
+  private tasksSubject = new BehaviorSubject<Task[]>([]);
+  public tasks$ = this.tasksSubject.asObservable();
 
   constructor() {
-    this.loadUserSettings();
+    this.loadTasks();
   }
 
   /**
-  * Loads the saved view mode setting for the current user from Firestore and updates the view mode subject. (currently deaktivated)
-  */
-  private async loadUserSettings() {
-    const user = this.authService.getCurrentUser();
-    if (!user?.id) return;
-    const settingsDoc = doc(this.firestore, `boardSettings/${user.id}`);
-    const snapshot = await getDoc(settingsDoc);
-    if (snapshot.exists()) {
-      const data = snapshot.data() as BoardSettings;
-      this.viewModeSubject.next(data.viewMode);
-    }
-  }
-
-  /**
- * Switches between public and private view modes for the current user and updates the setting in Firestore. (currently deaktivated)
- */
-  async toggleViewMode(mode: 'public' | 'private'): Promise<void> {
-    const user = this.authService.getCurrentUser();
-    if (!user?.id) return;
-    const settingsDoc = doc(this.firestore, `boardSettings/${user.id}`);
-    await setDoc(settingsDoc, {
-      userId: user.id,
-      viewMode: mode,
-      lastChanged: Timestamp.now()
-    });
-    this.viewModeSubject.next(mode);
-  }
-
-  /**
- * Retrieves all private tasks for a given user from Firestore.   (currently deaktivated)
- *
- * @param userId - The ID of the user whose private tasks should be fetched.
- * @returns An observable of the user's private tasks.
- */
-  private getPrivateTasks(userId: string): Observable<Task[]> {
-    const privateQuery = query(
-      this.tasksCollection,
-      where('isPrivate', '==', true),
-      where('ownerId', '==', userId)
-    );
-    return collectionData(privateQuery, { idField: 'id' }) as Observable<Task[]>;
-  }
-
-  /**
- * Retrieves all public tasks from Firestore (tasks that are not marked as private).
- *
- * @returns An observable of all public tasks.
- */
-  private getPublicTasks(): Observable<Task[]> {
-    return (collectionData(this.tasksCollection, { idField: 'id' }) as Observable<Task[]>)
-      .pipe(
-        map(tasks => tasks.filter(task => task.isPrivate !== true))
-      );
-  }
-
-  /**
-   * Resolves which tasks to fetch based on the current view mode and user.
-   *
-   * @param viewMode - The current board view mode ('public' or 'private').
-   * @param user - The current user object.
-   * @returns An observable of the appropriate tasks.
+   * Loads all tasks from the backend API.
    */
-  private resolveTasks(viewMode: 'public' | 'private', user: any): Observable<Task[]> {
-    if (viewMode === 'private' && user?.id) {
-      return this.getPrivateTasks(user.id);
-    } else {
-      return this.getPublicTasks();
+  private async loadTasks(): Promise<void> {
+    try {
+      const tasks = await this.fetchTasksFromApi();
+      this.tasksSubject.next(tasks);
+    } catch (error) {
+      console.error('Error loading tasks:', error);
+      this.tasksSubject.next([]);
     }
   }
 
   /**
- * Returns all tasks for the current view mode and user as an observable.
- *
- * @returns An observable of all relevant tasks.
- */
-  getAllTasks(): Observable<Task[]> {
-    return combineLatest([
-      this.viewMode$,
-      this.authService.currentUser$
-    ]).pipe(
-      switchMap(([viewMode, user]) => this.resolveTasks(viewMode, user))
-    );
+   * Fetches tasks from API and converts to frontend format.
+   */
+  private async fetchTasksFromApi(): Promise<Task[]> {
+    const response = await this.http.get<TaskApiResponse[]>(this.apiUrl).toPromise();
+    return (response || []).map(task => this.convertApiTaskToFrontend(task));
   }
 
   /**
- * Returns all tasks grouped by their status as an observable.
- *
- * @returns An observable with tasks grouped into 'todo', 'inprogress', 'awaitfeedback', and 'done'.
- */
+   * Converts backend task format to frontend Task interface.
+   */
+  private convertApiTaskToFrontend(apiTask: TaskApiResponse): Task {
+    return {
+      id: apiTask.id,
+      title: apiTask.title,
+      description: apiTask.description,
+      dueDate: Timestamp.fromDate(new Date(apiTask.due_date)),
+      priority: apiTask.priority,
+      category: apiTask.category,
+      status: apiTask.status,
+      assignedTo: apiTask.assigned_to,
+      subtasks: apiTask.subtasks.map(st => ({
+        id: st.id,
+        title: st.title,
+        completed: st.completed
+      })),
+      order: apiTask.order,
+      createdAt: Timestamp.fromDate(new Date(apiTask.created_at)),
+      updatedAt: apiTask.updated_at ? Timestamp.fromDate(new Date(apiTask.updated_at)) : undefined
+    };
+  }
+
+  /**
+   * Converts frontend Task to backend format.
+   */
+  private convertFrontendTaskToApi(task: Partial<Task>): any {
+    const apiTask: any = { ...task };
+    
+    // Convert Timestamp to ISO string
+    if (task.dueDate) {
+      apiTask.due_date = task.dueDate.toDate().toISOString();
+      delete apiTask.dueDate;
+    }
+    
+    // Rename fields for backend
+    if (task.assignedTo !== undefined) {
+      apiTask.assigned_to = task.assignedTo;
+      delete apiTask.assignedTo;
+    }
+    
+    // Convert subtasks and add order field
+    if (task.subtasks !== undefined) {
+      apiTask.subtasks = task.subtasks.map((subtask, index) => ({
+        title: subtask.title,
+        completed: subtask.completed,
+        order: index
+        // Don't send 'id' for new subtasks - backend will generate them
+      }));
+    }
+    
+    // Remove frontend-only fields
+    delete apiTask.createdAt;
+    delete apiTask.updatedAt;
+    
+    return apiTask;
+  }
+
+  /**
+   * Returns all tasks as an observable.
+   */
+  getAllTasks(): Observable<Task[]> {
+    return this.tasks$;
+  }
+
+  /**
+   * Returns all tasks grouped by their status as an observable.
+   */
   getTasksByStatus(): Observable<{
     todo: Task[];
     inprogress: Task[];
     awaitfeedback: Task[];
     done: Task[];
   }> {
-    return this.getAllTasks().pipe(
+    return this.tasks$.pipe(
       map((tasks) => ({
         todo: tasks.filter((t) => t.status === 'todo'),
         inprogress: tasks.filter((t) => t.status === 'inprogress'),
         awaitfeedback: tasks.filter((t) => t.status === 'awaitfeedback'),
         done: tasks.filter((t) => t.status === 'done'),
-      })));
+      }))
+    );
   }
 
   /**
-   * Creates a new task in Firestore for the current user and view mode.
-   *
-   * @param task - The task data (without id and createdAt).
-   * @returns A promise that resolves to the new task's ID.
+   * Creates a new task via the backend API.
    */
   async createTask(task: Omit<Task, 'id' | 'createdAt'>): Promise<string> {
-    const user = this.authService.getCurrentUser();
-    const currentViewMode = this.viewModeSubject.value;
-    const taskData = {
-      ...task,
-      isPrivate: currentViewMode === 'private',
-      ownerId: user?.id || 'guest',
-      createdAt: Timestamp.now(),
-    };
-    const docRef = await addDoc(this.tasksCollection, taskData);
-    return docRef.id;
-  }
-
-  /**
- * Returns the current view mode ('public' or 'private').
- *
- * @returns The current view mode.
- */
-  getCurrentViewMode(): 'public' | 'private' {
-    return this.viewModeSubject.value;
-  }
-
-  /**
- * Updates an existing task in Firestore with the provided updates.
- *
- * @param taskId - The ID of the task to update.
- * @param updates - The fields to update on the task.
- * @returns A promise that resolves when the update is complete.
- */
-  async updateTask(taskId: string, updates: Partial<Task>): Promise<void> {
-    const taskDoc = doc(this.firestore, `tasks/${taskId}`);
-    const updateData: any = { ...updates };
-    if (updates.assignedTo !== undefined) {
-      updateData.assignedTo = updates.assignedTo;
-    }
     try {
-      await updateDoc(taskDoc, updateData);
+      const apiTask = this.convertFrontendTaskToApi(task);
+      const response = await this.http.post<TaskApiResponse>(this.apiUrl, apiTask).toPromise();
+      
+      if (response) {
+        await this.loadTasks(); // Refresh tasks
+        return response.id;
+      }
+      throw new Error('Failed to create task');
     } catch (error) {
-      console.error('Firestore update failed:', error);
+      console.error('Error creating task:', error);
       throw error;
     }
   }
 
   /**
- * Updates the status of a task in Firestore and sets the updatedAt timestamp.
- *
- * @param taskId - The ID of the task to update.
- * @param newStatus - The new status for the task.
- * @returns A promise that resolves when the status is updated.
- */
+   * Updates an existing task via the backend API.
+   */
+  async updateTask(taskId: string, updates: Partial<Task>): Promise<void> {
+    try {
+      const apiUpdates = this.convertFrontendTaskToApi(updates);
+      await this.http.put(`${this.apiUrl}${taskId}/`, apiUpdates).toPromise();
+      await this.loadTasks(); // Refresh tasks
+    } catch (error) {
+      console.error('Backend update failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Updates the status of a task via the backend API.
+   */
   async updateTaskStatus(
     taskId: string,
     newStatus: 'todo' | 'inprogress' | 'awaitfeedback' | 'done'
   ): Promise<void> {
-    const taskDoc = doc(this.firestore, `tasks/${taskId}`);
-    await updateDoc(taskDoc, {
-      status: newStatus,
-      updatedAt: Timestamp.now()
-    });
+    try {
+      await this.http.patch(`${this.apiUrl}${taskId}/update_status/`, { status: newStatus }).toPromise();
+      await this.loadTasks(); // Refresh tasks
+    } catch (error) {
+      console.error('Error updating task status:', error);
+      throw error;
+    }
   }
 
   /**
- * Deletes a task from Firestore.
- *
- * @param taskId - The ID of the task to delete.
- * @returns A promise that resolves when the task is deleted.
- */
+   * Deletes a task via the backend API.
+   */
   async deleteTask(taskId: string): Promise<void> {
-    const taskDoc = doc(this.firestore, 'tasks', taskId);
-    await deleteDoc(taskDoc);
+    try {
+      await this.http.delete(`${this.apiUrl}${taskId}/`).toPromise();
+      await this.loadTasks(); // Refresh tasks
+    } catch (error) {
+      console.error('Error deleting task:', error);
+      throw error;
+    }
   }
 
   /**
- * Moves a task to a new status (column) in Firestore (used for drag & drop).
- *
- * @param taskId - The ID of the task to move.
- * @param newStatus - The new status for the task.
- * @returns A promise that resolves when the task is moved.
- */
+   * Moves a task to a new status (used for drag & drop).
+   */
   async moveTask(
     taskId: string,
     newStatus: 'todo' | 'inprogress' | 'awaitfeedback' | 'done'
   ): Promise<void> {
-    const taskDoc = doc(this.firestore, 'tasks', taskId);
-    await updateDoc(taskDoc, { status: newStatus });
+    await this.updateTaskStatus(taskId, newStatus);
   }
+
   /**
- * Checks if Firebase is reachable by fetching the health check document.
- * 
- * @returns A promise that resolves to true if Firebase is reachable, false otherwise.
- */
-async checkFirebaseConnection(): Promise<boolean> {
-  try {
-    const healthCheckRef = doc(this.firestore, 'healthCheck', 'c5IEqL4zOI6XELqM9iBd');
-    const snapshot = await getDoc(healthCheckRef);
-    return snapshot.exists() && snapshot.data()?.['ping'] === 'ok';
-  } catch (error) {
-    console.error('Firebase connection check failed:', error);
-    return false;
+   * Manually refresh tasks from backend.
+   */
+  async refreshTasks(): Promise<void> {
+    await this.loadTasks();
   }
-}
 }
