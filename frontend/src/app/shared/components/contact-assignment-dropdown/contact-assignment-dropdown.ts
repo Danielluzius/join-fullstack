@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Contact } from '../../../core/interfaces/db-contact-interface';
@@ -14,7 +22,7 @@ import { Contact } from '../../../core/interfaces/db-contact-interface';
   styleUrl: './contact-assignment-dropdown.scss',
   standalone: true,
 })
-export class ContactAssignmentDropdownComponent implements OnInit {
+export class ContactAssignmentDropdownComponent implements OnInit, OnChanges {
   @Input() contacts: Contact[] = [];
   @Input() selectedContactIds: string[] = [];
   @Output() selectedContactIdsChange = new EventEmitter<string[]>();
@@ -48,6 +56,16 @@ export class ContactAssignmentDropdownComponent implements OnInit {
    */
   ngOnInit() {
     this.filteredContacts = [...this.contacts];
+  }
+
+  /**
+   * Lifecycle hook that runs when input properties change.
+   * Updates filtered contacts when the contacts list changes.
+   */
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['contacts'] && changes['contacts'].currentValue) {
+      this.filteredContacts = [...this.contacts];
+    }
   }
 
   /**
@@ -96,7 +114,7 @@ export class ContactAssignmentDropdownComponent implements OnInit {
       this.filteredContacts = [...this.contacts];
     } else {
       this.filteredContacts = this.contacts.filter((contact) =>
-        contact.firstname.toLowerCase().includes(searchTerm)
+        contact.firstname.toLowerCase().includes(searchTerm),
       );
     }
   }
