@@ -41,11 +41,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         validated_data.pop('confirm_password')
         validated_data.pop('accept_privacy_policy')
         
-        # Generate username from email if not provided
         email = validated_data['email']
         username = email.split('@')[0]
         
-        # Ensure unique username
         base_username = username
         counter = 1
         while User.objects.filter(username=username).exists():

@@ -13,7 +13,6 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255, blank=True)
     
-    # Make email required and username optional
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
     

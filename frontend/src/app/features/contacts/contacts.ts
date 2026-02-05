@@ -1,7 +1,6 @@
 import { Component, OnInit, inject, HostListener } from '@angular/core';
 import { ContactService } from '../../core/services/db-contact-service';
 import { ContactHelper, Contact } from '../../core/interfaces/db-contact-interface';
-import { Firestore, collection, addDoc, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 import { ContactList } from './contact-list/contact-list';
 import { ContactDetails } from './contact-details/contact-details';
@@ -35,7 +34,6 @@ export class Contacts implements OnInit {
   isLoading = true;
 
   private contactService = inject(ContactService);
-  private firestore = inject(Firestore);
 
   /** Indicates whether the form is in edit mode (true) or create mode (false) */
   editMode = false;
@@ -55,6 +53,8 @@ export class Contacts implements OnInit {
     this.isLoading = true;
     try {
       this.contacts = await this.contactService.getAllContacts();
+    } catch (error) {
+      console.error('Error in loadContacts():', error);
     } finally {
       this.isLoading = false;
     }
@@ -62,7 +62,7 @@ export class Contacts implements OnInit {
 
   /**
    * Sets the selected contact for detail view.
-   * 
+   *
    * @param contact - The contact to select
    */
   selectContact(contact: Contact) {
@@ -79,7 +79,7 @@ export class Contacts implements OnInit {
   /**
    * Opens the add/edit contact modal.
    * If a contact is provided, opens in edit mode; otherwise opens in create mode.
-   * 
+   *
    * @param editContact - Optional contact to edit. If omitted, opens create form.
    */
   openAddModal(editContact?: Contact) {
@@ -113,59 +113,42 @@ export class Contacts implements OnInit {
   }
 
   /**
-   * Creates a new contact in Firestore and updates local state.
-   * 
+   * Creates a new contact via Django API and updates local state.
+   *
    * @param contactData - The contact data to create
    */
   async handleCreateContact(contactData: Partial<Contact>) {
-    const contactsRef = collection(this.firestore, 'contacts');
-    const docRef = await addDoc(contactsRef, contactData);
-    const contact: Contact = { id: docRef.id, ...(contactData as Contact) };
-    this.contacts.push(contact);
-    this.selectedContact = contact;
-    await this.reloadContacts();
+    const newContact = await this.contactService.createContact(
+      contactData as Omit<Contact, 'id' | 'created_at' | 'updated_at'>,
+    );
+    this.contacts.push(newContact);
+    this.selectedContact = newContact;
     this.closeAddModal();
     this.showSuccessAnimation();
   }
 
   /**
-   * Updates an existing contact in Firestore and local state.
-   * 
+   * Updates an existing contact via Django API and local state.
+   *
    * @param contactData - The contact data to update (must include id)
    */
   async handleSaveContact(contactData: Partial<Contact>) {
     if (!contactData.id) return;
 
-    await this.updateContactInFirestore(contactData);
-    this.updateLocalContact(contactData);
-    await this.reloadContacts();
+    const updatedContact = await this.contactService.updateContact(contactData.id, contactData);
+    this.updateLocalContact(updatedContact);
     this.closeAddModal();
   }
 
   /**
-   * Updates a contact in Firestore.
-   * 
-   * @param contactData - The contact data to update in Firestore
-   */
-  private async updateContactInFirestore(contactData: Partial<Contact>): Promise<void> {
-    const contactRef = doc(this.firestore, 'contacts', contactData.id!);
-    await updateDoc(contactRef, {
-      firstname: contactData.firstname,
-      email: contactData.email,
-      phone: contactData.phone,
-      lastname: contactData.lastname ?? '',
-    });
-  }
-
-  /**
    * Updates a contact in the local contacts array and selection.
-   * 
+   *
    * @param contactData - The contact data to update locally
    */
-  private updateLocalContact(contactData: Partial<Contact>): void {
+  private updateLocalContact(contactData: Contact): void {
     const idx = this.contacts.findIndex((c) => c.id === contactData.id);
     if (idx > -1) {
-      this.contacts[idx] = { ...contactData } as Contact;
+      this.contacts[idx] = contactData;
       this.selectedContact = this.contacts[idx];
     }
   }
@@ -195,16 +178,14 @@ export class Contacts implements OnInit {
   }
 
   /**
-   * Deletes a contact from Firestore and updates local state.
+   * Deletes a contact via Django API and updates local state.
    * Deselects the contact if it was currently selected.
-   * 
+   *
    * @param contact - The contact to delete
    */
   async deleteContact(contact: Contact) {
     if (!contact.id) return;
-    const contactRef = doc(this.firestore, 'contacts', contact.id);
-    await deleteDoc(contactRef);
-    await this.reloadContacts();
+    await this.contactService.deleteContact(contact.id);
     this.contacts = this.contacts.filter((c) => c.id !== contact.id);
     if (this.selectedContact?.id === contact.id) {
       this.selectedContact = null;
@@ -212,7 +193,7 @@ export class Contacts implements OnInit {
   }
 
   /**
-   * Reloads all contacts from the database.
+   * Reloads all contacts from the API.
    */
   async reloadContacts() {
     this.contacts = await this.contactService.getAllContacts();
@@ -239,7 +220,7 @@ export class Contacts implements OnInit {
 
   /**
    * Handles clicks on the delete modal overlay to close it.
-   * 
+   *
    * @param event - The mouse event from the overlay click
    */
   onDeleteOverlayClick(event: MouseEvent) {
@@ -249,7 +230,7 @@ export class Contacts implements OnInit {
   /**
    * Prevents click propagation on the delete modal content.
    * Ensures clicking inside the modal doesn't close it.
-   * 
+   *
    * @param event - The mouse event to stop propagation on
    */
   onDeleteModalClick(event: MouseEvent) {

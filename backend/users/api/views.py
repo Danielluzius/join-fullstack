@@ -8,6 +8,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate, get_user_model
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
+from contacts.models import Contact
 
 User = get_user_model()
 
@@ -16,7 +17,7 @@ User = get_user_model()
 @permission_classes([AllowAny])
 def register_view(request):
     """
-    Register a new user.
+    Register a new user and create a contact entry.
     
     POST /api/auth/register/
     {
@@ -31,6 +32,20 @@ def register_view(request):
     if serializer.is_valid():
         user = serializer.save()
         token, _ = Token.objects.get_or_create(user=user)
+        
+        name_parts = user.name.split(' ', 1) if user.name else ['', '']
+        firstname = name_parts[0]
+        lastname = name_parts[1] if len(name_parts) > 1 else ''
+        
+        Contact.objects.get_or_create(
+            email=user.email,
+            defaults={
+                'firstname': firstname,
+                'lastname': lastname,
+                'phone': ''
+            }
+        )
+        
         user_data = UserSerializer(user).data
         user_data['createdAt'] = user.date_joined
         return Response({
@@ -57,7 +72,6 @@ def login_view(request):
         email = serializer.validated_data['email']
         password = serializer.validated_data['password']
         
-        # Authenticate using email (USERNAME_FIELD)
         user = authenticate(request, username=email, password=password)
         
         if user:

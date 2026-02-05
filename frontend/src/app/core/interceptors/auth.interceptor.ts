@@ -16,5 +16,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(clonedRequest);
   }
 
+  // For non-API requests or when no token, proceed without modification
   return next(req);
 };

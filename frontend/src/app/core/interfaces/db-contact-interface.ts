@@ -1,11 +1,13 @@
 /**
  * Represents a contact entry.
  *
- * @property id - (Optional) Unique identifier for the contact.
+ * @property id - (Optional) Unique identifier for the contact (number from Django API).
  * @property email - The contact's email address.
  * @property firstname - The contact's first name.
  * @property lastname - (Optional) The contact's last name.
  * @property phone - The contact's phone number.
+ * @property created_at - (Optional) Timestamp when contact was created.
+ * @property updated_at - (Optional) Timestamp when contact was last updated.
  */
 
 export interface Contact {
@@ -14,6 +16,8 @@ export interface Contact {
   firstname: string;
   lastname?: string;
   phone: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 /**

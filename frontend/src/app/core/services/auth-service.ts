@@ -208,21 +208,6 @@ export class AuthService {
   }
 
   /**
-   * Logs in as a guest user and updates localStorage and the current user subject.
-   */
-  loginAsGuest(): void {
-    const guestUser: User = {
-      id: 'guest',
-      email: 'guest@join.com',
-      name: 'Guest User',
-      password: '',
-      createdAt: new Date(),
-    };
-    localStorage.setItem('currentUser', JSON.stringify(guestUser));
-    this.currentUserSubject.next(guestUser);
-  }
-
-  /**
    * Logs out the current user by clearing localStorage, calling backend logout, and clearing the current user subject.
    */
   async logout(): Promise<void> {
@@ -247,15 +232,6 @@ export class AuthService {
 
     // Navigate to login page
     this.router.navigate(['/login']);
-  }
-
-  /**
-   * Gets the stored authentication token.
-   *
-   * @returns The auth token or null if not found.
-   */
-  getAuthToken(): string | null {
-    return localStorage.getItem('authToken');
   }
 
   /**

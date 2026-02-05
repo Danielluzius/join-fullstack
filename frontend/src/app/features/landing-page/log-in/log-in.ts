@@ -110,34 +110,24 @@ export class LogIn {
     }
   }
 
-  onGuestLogin() {
+  async onGuestLogin() {
     this.isLoading = true;
-    const guestUser = this.createGuestUser();
-    this.storeGuestUser(guestUser);
-    this.navigateToSummaryWithDelay();
-  }
+    this.errorMessage = '';
 
-  private createGuestUser() {
-    return {
-      id: 'guest',
+    const result = await this.authService.login({
       email: 'guest@join.com',
-      name: 'Guest User',
-      password: '',
-      createdAt: new Date(),
-    };
-  }
+      password: 'guest123',
+    });
 
-  private storeGuestUser(guestUser: any): void {
-    localStorage.setItem('currentUser', JSON.stringify(guestUser));
-    this.authService['currentUserSubject'].next(guestUser);
-  }
+    this.isLoading = false;
 
-  private navigateToSummaryWithDelay(): void {
-    setTimeout(() => {
-      this.isLoading = false;
+    if (result.success) {
       sessionStorage.setItem('justLoggedIn', 'true');
       this.router.navigate(['/summary']);
-    }, 300);
+    } else {
+      this.errorMessage = 'Guest login failed. Please try again.';
+      console.error('Guest login error:', result.message);
+    }
   }
 
   navigateToSignUp() {
