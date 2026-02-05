@@ -101,9 +101,9 @@ export class BoardTasksService {
       delete apiTask.dueDate;
     }
     
-    // Rename fields for backend
+    // Rename fields for backend and convert string IDs to integers
     if (task.assignedTo !== undefined) {
-      apiTask.assigned_to = task.assignedTo;
+      apiTask.assigned_to = task.assignedTo.map(id => parseInt(id, 10));
       delete apiTask.assignedTo;
     }
     

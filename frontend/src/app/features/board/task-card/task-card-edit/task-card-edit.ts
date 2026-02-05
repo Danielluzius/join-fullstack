@@ -277,9 +277,9 @@ export class TaskCardEdit implements OnInit, OnChanges {
       description: this.description.trim(),
       dueDate: Timestamp.fromDate(new Date(parseInt(year), parseInt(month) - 1, parseInt(day))),
       priority: this.priority,
+      category: this.task!.category, // Keep existing category
       assignedTo: [...this.selectedContactIds],
       subtasks: [...this.subtasks],
-      updatedAt: Timestamp.now(),
     };
   }
 
