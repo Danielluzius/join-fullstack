@@ -72,7 +72,7 @@ export class BoardTasksService {
       id: apiTask.id,
       title: apiTask.title,
       description: apiTask.description,
-      dueDate: new Date(apiTask.due_date).getTime(),
+      dueDate: apiTask.due_date,
       priority: apiTask.priority,
       category: apiTask.category,
       status: apiTask.status,
@@ -83,8 +83,8 @@ export class BoardTasksService {
         completed: st.completed,
       })),
       order: apiTask.order,
-      createdAt: new Date(apiTask.created_at).getTime(),
-      updatedAt: apiTask.updated_at ? new Date(apiTask.updated_at).getTime() : undefined,
+      createdAt: apiTask.created_at,
+      updatedAt: apiTask.updated_at,
     };
   }
 
@@ -94,9 +94,9 @@ export class BoardTasksService {
   private convertFrontendTaskToApi(task: Partial<Task>): any {
     const apiTask: any = { ...task };
 
-    // Convert timestamp to ISO string
+    // Rename dueDate to due_date for backend
     if (task.dueDate) {
-      apiTask.due_date = new Date(task.dueDate).toISOString();
+      apiTask.due_date = task.dueDate;
       delete apiTask.dueDate;
     }
 

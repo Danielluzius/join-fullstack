@@ -33,37 +33,37 @@ export class AddTask {
       return;
     }
 
-    const dueDateTimestamp = this.convertDueDateToTimestamp();
-    const newTask = this.createTaskObject(dueDateTimestamp);
+    const dueDateISO = this.convertDueDateToISO();
+    const newTask = this.createTaskObject(dueDateISO);
 
     await this.taskService.createTask(newTask);
     this.displaySuccessAndNavigate();
   }
 
   /**
-   * Converts the due date string to a timestamp.
-   * Parses DD/MM/YYYY format and creates a timestamp.
+   * Converts the due date string to an ISO 8601 string.
+   * Parses DD/MM/YYYY format and creates an ISO string.
    *
-   * @returns Unix timestamp in milliseconds
+   * @returns ISO 8601 date string
    */
-  private convertDueDateToTimestamp(): number {
+  private convertDueDateToISO(): string {
     const [day, month, year] = this.formFields.dueDate.split('/');
     const dateObject = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-    return dateObject.getTime();
+    return dateObject.toISOString();
   }
 
   /**
    * Creates a task object from form field values.
    * Trims text fields and spreads array values for immutability.
    *
-   * @param dueDateTimestamp - The converted due date as Unix timestamp
+   * @param dueDateISO - The converted due date as ISO string
    * @returns Task object without id and createdAt fields
    */
-  private createTaskObject(dueDateTimestamp: number): Omit<Task, 'id' | 'createdAt'> {
+  private createTaskObject(dueDateISO: string): Omit<Task, 'id' | 'createdAt'> {
     return {
       title: this.formFields.title.trim(),
       description: this.formFields.description.trim(),
-      dueDate: dueDateTimestamp,
+      dueDate: dueDateISO,
       priority: this.formFields.priority,
       category: this.formFields.category,
       status: 'todo' as const,

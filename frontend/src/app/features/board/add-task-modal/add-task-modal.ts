@@ -202,35 +202,35 @@ export class AddTaskModal implements OnInit {
       return;
     }
 
-    const dueDateTimestamp = this.convertDueDateToTimestamp();
-    const newTask = this.createTaskObject(dueDateTimestamp);
+    const dueDateISO = this.convertDueDateToISO();
+    const newTask = this.createTaskObject(dueDateISO);
 
     this.taskCreated.emit(newTask);
     this.displaySuccessAndClose();
   }
 
   /**
-   * Converts the due date string to a timestamp.
+   * Converts the due date string to an ISO 8601 string.
    *
-   * @returns The Unix timestamp for the due date
+   * @returns The ISO 8601 string for the due date
    */
-  private convertDueDateToTimestamp(): number {
+  private convertDueDateToISO(): string {
     const [day, month, year] = this.dueDate.split('/');
     const dateObject = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-    return dateObject.getTime();
+    return dateObject.toISOString();
   }
 
   /**
    * Creates the task object with all form data.
    *
-   * @param dueDateTimestamp - The due date as a Unix timestamp
+   * @param dueDateISO - The due date as an ISO string
    * @returns The task object ready for creation
    */
-  private createTaskObject(dueDateTimestamp: number): Omit<Task, 'id' | 'createdAt'> {
+  private createTaskObject(dueDateISO: string): Omit<Task, 'id' | 'createdAt'> {
     return {
       title: this.title.trim(),
       description: this.description.trim(),
-      dueDate: dueDateTimestamp,
+      dueDate: dueDateISO,
       priority: this.priority,
       category: this.category,
       status: this.defaultStatus,

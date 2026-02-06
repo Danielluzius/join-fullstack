@@ -176,15 +176,21 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   /**
-   * Converts a due date (string or number) to a Date object.
+   * Converts a due date (string or ISO string) to a Date object.
    *
-   * @param dueDate - The due date as a string or Unix timestamp.
+   * @param dueDate - The due date as a string or ISO string.
    * @returns The corresponding Date object.
    */
   private getDateFromDueDate(dueDate: string | number): Date {
     if (typeof dueDate === 'string') {
-      const [day, month, year] = dueDate.split('/').map(Number);
-      return new Date(year, month - 1, day);
+      // Check if it's DD/MM/YYYY format or ISO string
+      if (dueDate.includes('/')) {
+        const [day, month, year] = dueDate.split('/').map(Number);
+        return new Date(year, month - 1, day);
+      } else {
+        // ISO string
+        return new Date(dueDate);
+      }
     } else {
       return new Date(dueDate);
     }

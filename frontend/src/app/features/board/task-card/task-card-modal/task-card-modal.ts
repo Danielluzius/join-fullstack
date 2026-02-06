@@ -69,7 +69,7 @@ export class TaskCardModal implements OnInit, OnChanges {
     }
   }
   /**
-   * Subscribes to live updates for the current task from Firestore.
+   * Subscribes to live updates for the current task from the backend.
    */
   private subscribeToTaskUpdates() {
     if (!this.task?.id) return;
@@ -256,14 +256,14 @@ export class TaskCardModal implements OnInit, OnChanges {
   }
 
   /**
-   * Formats a timestamp to a readable date string.
+   * Formats an ISO date string for display.
    *
-   * @param timestamp - Unix timestamp to format
+   * @param isoString - ISO 8601 date string to format
    * @returns Formatted date string in MM/DD/YYYY format
    */
-  formatDate(timestamp: any): string {
-    if (!timestamp) return '';
-    const date = new Date(timestamp);
+  formatDate(isoString: any): string {
+    if (!isoString) return '';
+    const date = new Date(isoString);
     return date.toLocaleDateString('en-US', {
       month: '2-digit',
       day: '2-digit',

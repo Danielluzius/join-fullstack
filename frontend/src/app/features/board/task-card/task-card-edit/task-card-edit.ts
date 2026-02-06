@@ -21,7 +21,7 @@ import { ContactAssignmentDropdownComponent } from '../../../../shared/component
 
 /**
  * Task card edit modal component for editing existing tasks.
- * Handles task form population, validation, and updates to Firestore.
+ * Handles task form population, validation, and updates to the backend.
  */
 @Component({
   selector: 'app-task-card-edit',
@@ -143,8 +143,8 @@ export class TaskCardEdit implements OnInit, OnChanges {
   }
 
   /**
-   * Populates the due date fields from the task's timestamp.
-   * Converts timestamp to DD/MM/YYYY format for display and YYYY-MM-DD for input.
+   * Populates the due date fields from the task's ISO date string.
+   * Converts ISO string to DD/MM/YYYY format for display and YYYY-MM-DD for input.
    */
   private populateDueDate() {
     if (!this.task?.dueDate) return;
@@ -239,7 +239,7 @@ export class TaskCardEdit implements OnInit, OnChanges {
 
   /**
    * Validates and submits the form.
-   * Updates the task in Firestore and emits the updated task.
+   * Updates the task in the backend and emits the updated task.
    */
   async onSubmit() {
     if (!this.validateForm() || !this.task?.id) return;
@@ -274,7 +274,7 @@ export class TaskCardEdit implements OnInit, OnChanges {
     return {
       title: this.title.trim(),
       description: this.description.trim(),
-      dueDate: new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).getTime(),
+      dueDate: new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).toISOString(),
       priority: this.priority,
       category: this.task!.category, // Keep existing category
       assignedTo: [...this.selectedContactIds],

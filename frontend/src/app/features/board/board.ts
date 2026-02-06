@@ -249,7 +249,7 @@ export class Board implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles task creation by saving to Firestore.
+   * Handles task creation by saving to the backend.
    * Closes the add task modal on success.
    *
    * @param task - The task data to create (without id and createdAt)
@@ -273,7 +273,7 @@ export class Board implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles task deletion by removing from Firestore.
+   * Handles task deletion by removing from the backend.
    * Closes the view modal on success.
    *
    * @param taskId - The ID of the task to delete
@@ -288,7 +288,7 @@ export class Board implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles subtask toggle by updating the task in Firestore.
+   * Handles subtask toggle by updating the task in the backend.
    * Reverts the toggle on error.
    *
    * @param event - Object containing the task and toggled subtask
@@ -304,7 +304,7 @@ export class Board implements OnInit, OnDestroy {
 
   /**
    * Handles task move request between columns.
-   * Updates the task status in Firestore.
+   * Updates the task status in the backend.
    *
    * @param event - Object containing the task and target column
    */

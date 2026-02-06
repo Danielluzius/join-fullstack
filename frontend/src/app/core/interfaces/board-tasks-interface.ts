@@ -4,28 +4,28 @@
  * @property id - (Optional) Unique identifier for the task.
  * @property title - The title of the task.
  * @property description - The detailed description of the task.
- * @property dueDate - The due date as a Unix timestamp (milliseconds).
+ * @property dueDate - The due date as an ISO 8601 string.
  * @property priority - The priority level: 'urgent', 'medium', or 'low'.
  * @property category - The category this task belongs to.
  * @property status - The current status: 'todo', 'inprogress', 'awaitfeedback', or 'done'.
  * @property assignedTo - Array of contact IDs assigned to this task.
  * @property subtasks - Array of subtasks belonging to this task.
- * @property createdAt - Unix timestamp when the task was created.
- * @property updatedAt - (Optional) Unix timestamp of the last update.
+ * @property createdAt - ISO 8601 string when the task was created.
+ * @property updatedAt - (Optional) ISO 8601 string of the last update.
  * @property order - (Optional) Order index for sorting.
  */
 export interface Task {
   id?: string;
   title: string;
   description: string;
-  dueDate: number;
+  dueDate: string;
   priority: 'urgent' | 'medium' | 'low';
   category: string;
   status: 'todo' | 'inprogress' | 'awaitfeedback' | 'done';
   assignedTo: string[];
   subtasks: Subtask[];
-  createdAt: number;
-  updatedAt?: number;
+  createdAt: string;
+  updatedAt?: string;
   order?: number;
 }
 
