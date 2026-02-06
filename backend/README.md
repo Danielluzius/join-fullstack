@@ -137,9 +137,8 @@ CORS_ALLOWED_ORIGINS=http://localhost:4200,http://127.0.0.1:4200
 
 **Generate a Secret Key:**
 
-```python
-from django.core.management.utils import get_random_secret_key
-print(get_random_secret_key())
+```bash
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 ```
 
 ---
