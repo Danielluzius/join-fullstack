@@ -98,6 +98,34 @@ def login_view(request):
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
+def guest_login_view(request):
+    """Guest login - creates guest user if not exists and logs in."""
+    guest_email = 'guest@join.com'
+    guest_password = 'guest123'
+    
+    try:
+        user = User.objects.get(email=guest_email)
+        if not user.has_usable_password():
+            user.set_password(guest_password)
+            user.save()
+    except User.DoesNotExist:
+        user = User.objects.create_user(
+            username='guest',
+            email=guest_email,
+            password=guest_password,
+            name='Guest User',
+            is_active=True,
+        )
+    
+    _create_contact_from_user(user)
+    
+    token, _ = Token.objects.get_or_create(user=user)
+    response_data = _prepare_user_response(user, token)
+    return Response(response_data)
+
+
+@api_view(['POST'])
 def logout_view(request):
     """
     Logout a user by deleting their auth token.

@@ -114,10 +114,7 @@ export class LogIn {
     this.isLoading = true;
     this.errorMessage = '';
 
-    const result = await this.authService.login({
-      email: 'guest@join.com',
-      password: 'guest123',
-    });
+    const result = await this.authService.guestLogin();
 
     this.isLoading = false;
 

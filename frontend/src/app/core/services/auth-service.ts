@@ -207,6 +207,26 @@ export class AuthService {
     }
   }
 
+  async guestLogin(): Promise<{ success: boolean; message: string; user?: User }> {
+    try {
+      const response = await this.http
+        .post<AuthResponse>(`${this.apiUrl}/auth/guest-login/`, {})
+        .toPromise();
+
+      if (response && response.user && response.token) {
+        const user = this.mapBackendUserToFrontend(response.user);
+        this.saveUserAndToken(user, response.token);
+        return { success: true, message: 'Guest login successful', user };
+      }
+
+      return { success: false, message: 'Guest login failed' };
+    } catch (error: any) {
+      console.error('Guest login error:', error);
+      const errorMessage = error.error?.error || 'Guest login failed';
+      return { success: false, message: errorMessage };
+    }
+  }
+
   /**
    * Logs out the current user by clearing localStorage, calling backend logout, and clearing the current user subject.
    */
