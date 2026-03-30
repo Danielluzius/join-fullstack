@@ -7,7 +7,7 @@ services:
     env_file:
       - ./backend/.env
     volumes:
-      - sqlite_data:/app/db.sqlite3
+      - sqlite_data:/app/data
 
 volumes:
   sqlite_data:
