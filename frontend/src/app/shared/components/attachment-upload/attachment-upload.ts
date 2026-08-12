@@ -60,11 +60,17 @@ export class AttachmentUploadComponent {
     this.isProcessing = true;
     for (const file of files) {
       const validationError = validateAttachment(file, this.attachments);
-      if (validationError) { this.showError(validationError); break; }
+      if (validationError) {
+        this.showError(validationError);
+        break;
+      }
       const attachment = await compressAndEncode(file);
       const updated = [...this.attachments, attachment];
       const sizeError = validateTotalSize(updated);
-      if (sizeError) { this.showError(sizeError); break; }
+      if (sizeError) {
+        this.showError(sizeError);
+        break;
+      }
       this.attachments = updated;
       this.attachmentsChange.emit(this.attachments);
       this.errorMessage = '';
