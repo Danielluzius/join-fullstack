@@ -14,6 +14,14 @@
  * @property updatedAt - (Optional) ISO 8601 string of the last update.
  * @property order - (Optional) Order index for sorting.
  */
+/** Represents a file attachment stored as Base64 within a task. */
+export interface TaskAttachment {
+  name: string;
+  type: string;
+  size: number;
+  base64: string;
+}
+
 export interface Task {
   id?: string;
   title: string;
@@ -24,6 +32,7 @@ export interface Task {
   status: 'todo' | 'inprogress' | 'awaitfeedback' | 'done';
   assignedTo: string[];
   subtasks: Subtask[];
+  attachments: TaskAttachment[];
   createdAt: string;
   updatedAt?: string;
   order?: number;

@@ -42,7 +42,7 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'description', 'due_date', 'priority',
             'category', 'status', 'assigned_to', 'subtasks',
-            'order', 'created_at', 'updated_at'
+            'attachments', 'order', 'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
     

@@ -69,6 +69,7 @@ export class AddTask {
       status: 'todo' as const,
       assignedTo: [...this.formFields.selectedContactIds],
       subtasks: this.formFields.subtasks,
+      attachments: [],
     };
   }
 

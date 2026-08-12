@@ -27,6 +27,7 @@ class Task(models.Model):
     category = models.CharField(max_length=100)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='todo')
     assigned_to = models.ManyToManyField(Contact, related_name='assigned_tasks', blank=True)
+    attachments = models.JSONField(default=list, blank=True)
     order = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

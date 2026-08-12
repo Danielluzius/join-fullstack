@@ -18,6 +18,7 @@ interface TaskApiResponse {
   status: 'todo' | 'inprogress' | 'awaitfeedback' | 'done';
   assigned_to: string[];
   subtasks: SubtaskApiResponse[];
+  attachments: { name: string; type: string; size: number; base64: string }[];
   order?: number;
   created_at: string;
   updated_at: string;
@@ -82,6 +83,7 @@ export class BoardTasksService {
         title: st.title,
         completed: st.completed,
       })),
+      attachments: apiTask.attachments ?? [],
       order: apiTask.order,
       createdAt: apiTask.created_at,
       updatedAt: apiTask.updated_at,

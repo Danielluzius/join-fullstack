@@ -1,0 +1,75 @@
+<section class="attachment-upload" aria-label="File attachments">
+
+  <div class="attachment-header">
+    <div class="attachment-labels">
+      <span class="attachment-title">Attachments</span>
+      <span class="attachment-subtitle">Allowed file types are JPEG and PNG</span>
+    </div>
+    @if (attachments.length > 0) {
+    <button type="button" class="btn-delete-all" (click)="removeAll()" aria-label="Delete all attachments">
+      <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
+        <path d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999 16.549 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.549 18.001 13 18H3ZM13 3H3V16H13V3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z" fill="currentColor"/>
+      </svg>
+      Delete all
+    </button>
+    }
+  </div>
+
+  <label
+    class="drop-zone"
+    [class.drag-over]="isDragOver"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+    aria-label="Drag a file or click to browse"
+  >
+    <input
+      type="file"
+      class="file-input"
+      accept="image/jpeg,image/png"
+      multiple
+      (change)="onFileSelect($event)"
+      aria-label="Select image files"
+      tabindex="0"
+    />
+    <span class="drop-zone-text">
+      @if (isProcessing) {
+        Processing...
+      } @else {
+        Drag a file or browse
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 1V15M1 8H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      }
+    </span>
+  </label>
+
+  @if (attachments.length > 0) {
+  <ul class="thumbnail-grid" aria-label="Uploaded attachments">
+    @for (attachment of attachments; track attachment.name; let i = $index) {
+    <li class="thumbnail-item">
+      <button
+        type="button"
+        class="thumbnail-remove"
+        (click)="removeAttachment(i)"
+        [attr.aria-label]="'Remove ' + attachment.name"
+      >✕</button>
+      <img
+        [src]="attachment.base64"
+        [alt]="attachment.name"
+        class="thumbnail-img"
+      />
+      <span class="thumbnail-name" [title]="attachment.name">{{ attachment.name }}</span>
+    </li>
+    }
+  </ul>
+  }
+
+</section>
+
+@if (errorMessage) {
+<div class="error-toast" role="alert" aria-live="assertive">
+  <span class="error-toast-text">{{ errorMessage }}</span>
+  <button type="button" class="error-toast-close" (click)="errorMessage = ''" aria-label="Dismiss error">✕</button>
+</div>
+}

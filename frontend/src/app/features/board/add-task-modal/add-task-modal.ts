@@ -236,6 +236,7 @@ export class AddTaskModal implements OnInit {
       status: this.defaultStatus,
       assignedTo: [...this.selectedContactIds],
       subtasks: this.subtasks,
+      attachments: [],
     };
   }
 
