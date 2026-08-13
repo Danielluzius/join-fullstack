@@ -15,6 +15,7 @@ import { ContactService } from '../../../../core/services/db-contact-service';
 import { BoardTasksService } from '../../../../core/services/board-tasks-service';
 import { TaskCardEdit } from '../task-card-edit/task-card-edit';
 import { PriorityIcon } from '../../../../shared/components/priority-icon/priority-icon';
+import { ImageViewerComponent } from '../../../../shared/components/image-viewer/image-viewer';
 import { OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
@@ -25,7 +26,7 @@ import { map, filter } from 'rxjs/operators';
  */
 @Component({
   selector: 'app-task-card-modal',
-  imports: [CommonModule, TaskCardEdit, PriorityIcon],
+  imports: [CommonModule, TaskCardEdit, PriorityIcon, ImageViewerComponent],
   templateUrl: './task-card-modal.html',
   styleUrl: './task-card-modal.scss',
   standalone: true,
@@ -44,6 +45,19 @@ export class TaskCardModal implements OnInit, OnChanges {
   contacts: Contact[] = [];
   assignedContacts: Contact[] = [];
   showEditModal = false;
+  viewerOpen = false;
+  viewerIndex = 0;
+
+  /** Opens the image viewer at the given attachment index. */
+  openViewer(index: number): void {
+    this.viewerIndex = index;
+    this.viewerOpen = true;
+  }
+
+  /** Closes the image viewer. */
+  closeViewer(): void {
+    this.viewerOpen = false;
+  }
 
   showCategoryDropdown = false;
   showContactDropdown = false;

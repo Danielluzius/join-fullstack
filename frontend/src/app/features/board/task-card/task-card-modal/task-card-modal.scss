@@ -241,6 +241,60 @@
   }
 }
 
+.attachments-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+
+  .label {
+    font-weight: 400;
+    font-size: clamp(18px, 1vw, 20px);
+    color: #2a3647;
+  }
+}
+
+.attachments-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.attachment-thumb-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  width: 90px;
+
+  &:hover {
+    border-color: #29abe2;
+  }
+}
+
+.attachment-thumb {
+  width: 76px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.attachment-thumb-name {
+  font-size: 11px;
+  color: #2a3647;
+  text-align: center;
+  width: 76px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .subtasks-section {
   display: flex;
   flex-direction: column;

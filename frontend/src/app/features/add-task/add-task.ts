@@ -1,7 +1,7 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Task, Subtask } from '../../core/interfaces/board-tasks-interface';
+import { Task, Subtask, TaskAttachment } from '../../core/interfaces/board-tasks-interface';
 import { BoardTasksService } from '../../core/services/board-tasks-service';
 import { AddTaskFormFields } from './add-task-form-fields/add-task-form-fields';
 
@@ -69,7 +69,7 @@ export class AddTask {
       status: 'todo' as const,
       assignedTo: [...this.formFields.selectedContactIds],
       subtasks: this.formFields.subtasks,
-      attachments: [],
+      attachments: [...this.formFields.attachments],
     };
   }
 

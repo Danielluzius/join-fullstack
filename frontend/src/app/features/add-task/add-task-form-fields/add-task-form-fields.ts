@@ -11,12 +11,13 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subtask } from '../../../core/interfaces/board-tasks-interface';
+import { Subtask, TaskAttachment } from '../../../core/interfaces/board-tasks-interface';
 import { Contact } from '../../../core/interfaces/db-contact-interface';
 import { ContactService } from '../../../core/services/db-contact-service';
 import { PrioritySelectorComponent } from '../../../shared/components/priority-selector/priority-selector';
 import { SubtaskManagerComponent } from '../../../shared/components/subtask-manager/subtask-manager';
 import { ContactAssignmentDropdownComponent } from '../../../shared/components/contact-assignment-dropdown/contact-assignment-dropdown';
+import { AttachmentUploadComponent } from '../../../shared/components/attachment-upload/attachment-upload';
 
 /**
  * Form fields component for task creation.
@@ -30,6 +31,7 @@ import { ContactAssignmentDropdownComponent } from '../../../shared/components/c
     PrioritySelectorComponent,
     SubtaskManagerComponent,
     ContactAssignmentDropdownComponent,
+    AttachmentUploadComponent,
   ],
   templateUrl: './add-task-form-fields.html',
   styleUrl: './add-task-form-fields.scss',
@@ -45,6 +47,7 @@ export class AddTaskFormFields implements OnInit {
   @Input() category = '';
   @Input() selectedContactIds: string[] = [];
   @Input() subtasks: Subtask[] = [];
+  @Input() attachments: TaskAttachment[] = [];
 
   @Output() titleChange = new EventEmitter<string>();
   @Output() descriptionChange = new EventEmitter<string>();
@@ -53,6 +56,7 @@ export class AddTaskFormFields implements OnInit {
   @Output() categoryChange = new EventEmitter<string>();
   @Output() selectedContactIdsChange = new EventEmitter<string[]>();
   @Output() subtasksChange = new EventEmitter<Subtask[]>();
+  @Output() attachmentsChange = new EventEmitter<TaskAttachment[]>();
 
   hiddenDateValue = '';
   minDate = this.getTodayDateString();

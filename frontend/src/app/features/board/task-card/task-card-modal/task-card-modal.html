@@ -44,6 +44,21 @@
         </div>
       </div>
 
+      @if (task.attachments && task.attachments.length > 0) {
+      <div class="attachments-section">
+        <span class="label">Attachments</span>
+        <div class="attachments-list">
+          @for (attachment of task.attachments; track attachment.name; let i = $index) {
+          <button type="button" class="attachment-thumb-btn" (click)="openViewer(i)"
+            [attr.aria-label]="'View ' + attachment.name">
+            <img [src]="attachment.base64" [alt]="attachment.name" class="attachment-thumb" />
+            <span class="attachment-thumb-name">{{ attachment.name }}</span>
+          </button>
+          }
+        </div>
+      </div>
+      }
+
       @if (task.subtasks && task.subtasks.length > 0) {
       <div class="subtasks-section">
         <span class="label">Subtasks</span>
@@ -86,4 +101,9 @@
 <app-task-card-edit [showModal]="showEditModal" [task]="task" (closeModal)="closeEditModal()"
   (taskUpdated)="handleTaskUpdated($event)">
 </app-task-card-edit>
+
+@if (viewerOpen && task.attachments.length) {
+<app-image-viewer [attachments]="task.attachments" [startIndex]="viewerIndex" (closeViewer)="closeViewer()">
+</app-image-viewer>
+}
 }

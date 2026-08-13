@@ -10,7 +10,7 @@ import {
   HostListener,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Task, Subtask } from '../../../../core/interfaces/board-tasks-interface';
+import { Task, Subtask, TaskAttachment } from '../../../../core/interfaces/board-tasks-interface';
 import { Contact } from '../../../../core/interfaces/db-contact-interface';
 import { ContactService } from '../../../../core/services/db-contact-service';
 import { BoardTasksService } from '../../../../core/services/board-tasks-service';
@@ -18,6 +18,7 @@ import { PrioritySelectorComponent } from '../../../../shared/components/priorit
 import { SubtaskManagerComponent } from '../../../../shared/components/subtask-manager/subtask-manager';
 import { TaskCardEditFormFields } from './task-card-edit-form-fields/task-card-edit-form-fields';
 import { ContactAssignmentDropdownComponent } from '../../../../shared/components/contact-assignment-dropdown/contact-assignment-dropdown';
+import { AttachmentUploadComponent } from '../../../../shared/components/attachment-upload/attachment-upload';
 
 /**
  * Task card edit modal component for editing existing tasks.
@@ -31,6 +32,7 @@ import { ContactAssignmentDropdownComponent } from '../../../../shared/component
     SubtaskManagerComponent,
     TaskCardEditFormFields,
     ContactAssignmentDropdownComponent,
+    AttachmentUploadComponent,
   ],
   templateUrl: './task-card-edit.html',
   styleUrl: './task-card-edit.scss',
@@ -53,6 +55,7 @@ export class TaskCardEdit implements OnInit, OnChanges {
   priority: 'urgent' | 'medium' | 'low' = 'medium';
   selectedContactIds: string[] = [];
   subtasks: Subtask[] = [];
+  attachments: TaskAttachment[] = [];
   contacts: Contact[] = [];
   titleError = false;
   dueDateError = false;
@@ -139,6 +142,7 @@ export class TaskCardEdit implements OnInit, OnChanges {
     this.priority = this.task.priority;
     this.selectedContactIds = this.task.assignedTo ? [...this.task.assignedTo] : [];
     this.subtasks = this.task.subtasks ? JSON.parse(JSON.stringify(this.task.subtasks)) : [];
+    this.attachments = this.task.attachments ? [...this.task.attachments] : [];
     this.populateDueDate();
   }
 
@@ -276,9 +280,10 @@ export class TaskCardEdit implements OnInit, OnChanges {
       description: this.description.trim(),
       dueDate: new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).toISOString(),
       priority: this.priority,
-      category: this.task!.category, // Keep existing category
+      category: this.task!.category,
       assignedTo: [...this.selectedContactIds],
       subtasks: [...this.subtasks],
+      attachments: [...this.attachments],
     };
   }
 
@@ -293,6 +298,7 @@ export class TaskCardEdit implements OnInit, OnChanges {
     this.priority = 'medium';
     this.selectedContactIds = [];
     this.subtasks = [];
+    this.attachments = [];
     this.resetErrors();
   }
 

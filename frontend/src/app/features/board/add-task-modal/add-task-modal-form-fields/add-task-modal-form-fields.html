@@ -35,14 +35,8 @@
                 <span class="field-error" [class.visible]="dueDateError">{{ dueDateErrorMessage }}</span>
             </div>
         </div>
-    </div>
 
-    <div class="form-right">
         <app-priority-selector [(priority)]="priority"></app-priority-selector>
-
-        <app-contact-assignment-dropdown [contacts]="contacts" [selectedContactIds]="selectedContactIds"
-            (selectedContactIdsChange)="onSelectedContactIdsChange($event)">
-        </app-contact-assignment-dropdown>
 
         <div class="form-group">
             <label>Category<span class="required">*</span></label>
@@ -70,8 +64,16 @@
                 <span class="field-error" [class.visible]="categoryError">This field is required</span>
             </div>
         </div>
+    </div>
+
+    <div class="form-right">
+        <app-attachment-upload [(attachments)]="attachments"></app-attachment-upload>
 
         <app-subtask-manager [subtasks]="subtasks" (subtasksChange)="onSubtasksChange($event)">
         </app-subtask-manager>
+
+        <app-contact-assignment-dropdown [contacts]="contacts" [selectedContactIds]="selectedContactIds"
+            (selectedContactIdsChange)="onSelectedContactIdsChange($event)">
+        </app-contact-assignment-dropdown>
     </div>
 </div>

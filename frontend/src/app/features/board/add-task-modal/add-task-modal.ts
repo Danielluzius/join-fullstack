@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Task, Subtask } from '../../../core/interfaces/board-tasks-interface';
+import { Task, Subtask, TaskAttachment } from '../../../core/interfaces/board-tasks-interface';
 import { ContactService } from '../../../core/services/db-contact-service';
 import { AddTaskModalFormFields } from './add-task-modal-form-fields/add-task-modal-form-fields';
 
@@ -41,6 +41,7 @@ export class AddTaskModal implements OnInit {
   category = '';
   selectedContactIds: string[] = [];
   subtasks: Subtask[] = [];
+  attachments: TaskAttachment[] = [];
 
   showSuccessToast = false;
 
@@ -236,7 +237,7 @@ export class AddTaskModal implements OnInit {
       status: this.defaultStatus,
       assignedTo: [...this.selectedContactIds],
       subtasks: this.subtasks,
-      attachments: [],
+      attachments: [...this.attachments],
     };
   }
 
@@ -272,6 +273,7 @@ export class AddTaskModal implements OnInit {
     this.category = '';
     this.selectedContactIds = [];
     this.subtasks = [];
+    this.attachments = [];
   }
 
   /**
