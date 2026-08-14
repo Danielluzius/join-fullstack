@@ -11,8 +11,9 @@
 
     <div class="tasks-container" cdkDropList [cdkDropListData]="tasks" [id]="columnId" [cdkDropListDisabled]="isMobile"
         [cdkDropListConnectedTo]="isMobile ? [] : ['todo', 'inprogress', 'awaitfeedback', 'done']"
-        (cdkDropListDropped)="onDrop($event)">
-        @if (tasks.length === 0) {
+        (cdkDropListDropped)="onDrop($event)" (cdkDropListEntered)="onDragEntered()"
+        (cdkDropListExited)="onDragExited()">
+        @if (tasks.length === 0 && !isDragOver) {
         <div class="empty-state">
             <p>No tasks {{ title }}</p>
         </div>

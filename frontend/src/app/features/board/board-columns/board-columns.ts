@@ -39,6 +39,7 @@ export class BoardColumns implements OnInit {
   isHovering = false;
   isMobile = false;
   isTabletOrBelow = false;
+  isDragOver = false;
   showMoveMenu: { [key: string]: boolean } = {};
 
   /**
@@ -195,6 +196,16 @@ export class BoardColumns implements OnInit {
     event.stopPropagation();
     this.moveTaskRequested.emit({ task, targetColumn });
     this.showMoveMenu[task.id!] = false;
+  }
+
+  /** Shows a drop indicator by hiding the empty state when a task is dragged over. */
+  onDragEntered(): void {
+    this.isDragOver = true;
+  }
+
+  /** Restores the empty state when a dragged task leaves this column. */
+  onDragExited(): void {
+    this.isDragOver = false;
   }
 
   /**
