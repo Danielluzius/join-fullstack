@@ -1,5 +1,5 @@
 .board-header {
-  height: 200px;
+  height: clamp(150px, 20vh, 200px);
   display: flex;
   flex-direction: row;
   align-items: center;

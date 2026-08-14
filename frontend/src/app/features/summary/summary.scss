@@ -84,7 +84,7 @@ body {
 }
 
 .header-container {
-  height: 200px;
+  height: clamp(150px, 20vh, 200px);
   display: flex;
   align-items: center;
   gap: 20px;

@@ -12,7 +12,7 @@
 }
 
 .header-container {
-  height: 200px;
+  height: clamp(150px, 20vh, 200px);
   display: flex;
   align-items: center;
   padding: clamp(30px, 4vw, 30px) clamp(20px, 6vw, 104px) 0;
