@@ -24,6 +24,9 @@ class SubtaskSerializer(serializers.ModelSerializer):
         return data
 
 
+ALLOWED_ATTACHMENT_TYPES = {'image/jpeg', 'image/png'}
+
+
 class TaskSerializer(serializers.ModelSerializer):
     """
     Serializer for Task model.
@@ -45,7 +48,19 @@ class TaskSerializer(serializers.ModelSerializer):
             'attachments', 'order', 'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
-    
+
+    def validate_attachments(self, value):
+        """Reject attachments whose MIME type is not JPEG or PNG."""
+        for attachment in value:
+            if not isinstance(attachment, dict):
+                raise serializers.ValidationError("Each attachment must be an object.")
+            mime = attachment.get('type', '')
+            if mime not in ALLOWED_ATTACHMENT_TYPES:
+                raise serializers.ValidationError(
+                    f"Attachment type '{mime}' is not allowed. Only image/jpeg and image/png are permitted."
+                )
+        return value
+
     def to_representation(self, instance):
         """
         Convert IDs to strings and format assigned_to as list of IDs.
