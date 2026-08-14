@@ -60,23 +60,34 @@ export class AttachmentUploadComponent {
   async processFiles(files: File[]): Promise<void> {
     this.isProcessing = true;
     for (const file of files) {
-      const validationError = validateAttachment(file, this.attachments);
-      if (validationError) {
-        this.showError(validationError);
-        break;
-      }
-      const attachment = await compressAndEncode(file);
-      const updated = [...this.attachments, attachment];
-      const sizeError = validateTotalSize(updated);
-      if (sizeError) {
-        this.showError(sizeError);
-        break;
-      }
-      this.attachments = updated;
-      this.attachmentsChange.emit(this.attachments);
-      this.errorMessage = '';
+      const shouldStop = await this.processSingleFile(file);
+      if (shouldStop) break;
     }
     this.isProcessing = false;
+  }
+
+  /** Validates and appends a single file. Returns true if processing should stop. */
+  private async processSingleFile(file: File): Promise<boolean> {
+    const validationError = validateAttachment(file, this.attachments);
+    if (validationError) {
+      this.showError(validationError);
+      return true;
+    }
+    return this.appendAttachment(await compressAndEncode(file));
+  }
+
+  /** Appends attachment after total-size check. Returns true if processing should stop. */
+  private appendAttachment(attachment: TaskAttachment): boolean {
+    const updated = [...this.attachments, attachment];
+    const sizeError = validateTotalSize(updated);
+    if (sizeError) {
+      this.showError(sizeError);
+      return true;
+    }
+    this.attachments = updated;
+    this.attachmentsChange.emit(this.attachments);
+    this.errorMessage = '';
+    return false;
   }
 
   /** Removes a single attachment at the given index. */
