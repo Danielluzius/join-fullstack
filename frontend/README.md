@@ -22,10 +22,10 @@ The application provides an intuitive user interface for task management with **
 
 | Feature              | Description                                              |
 | :------------------- | :------------------------------------------------------- |
-| 🔐 **Security**      | Token-basierte Authentifizierung mit HTTP Interceptors   |
-| 🎨 **UI/UX**         | Modern, responsive Layout mit Animationen                |
+| 🔐 **Security**      | Token-based authentication with HTTP Interceptors        |
+| 🎨 **UI/UX**         | Modern, responsive layout with animations                |
 | ⚡ **Performance**   | Lazy Loading, OnPush Change Detection, Optimized Queries |
-| 🧩 **Modular**       | Standalone Components, Feature-Module Struktur           |
+| 🧩 **Modular**       | Standalone Components, Feature Module structure          |
 | ♿ **Accessibility** | Keyboard Navigation, ARIA-Labels                         |
 
 ---
@@ -34,33 +34,37 @@ The application provides an intuitive user interface for task management with **
 
 ### 🎯 Kanban Board
 
-- **4 Spalten:** To Do, In Progress, Await Feedback, Done
-- **Drag & Drop** mit Angular CDK
-- Visuelle Feedback-Animationen
-- Task-Filter und Suche
-- Priority Indicators mit Farben
+- **4 Columns:** To Do, In Progress, Await Feedback, Done
+- **Drag & Drop** with Angular CDK
+- Visual feedback animations
+- Task filter and search
+- Priority indicators with color coding
 
 ### 📝 Task Management
 
 - Create, Read, Update, Delete (CRUD)
-- Subtasks mit Progress Tracking
-- Team-Mitglieder zuweisen
-- Kategorien und Prioritäten
-- Modal für detaillierte Ansicht
+- Subtasks with progress tracking
+- Assign team members
+- Categories and priorities
+- **File attachments** (JPEG/PNG, up to 5 files, max. 1 MB)
+  - Drag & Drop upload with Canvas compression to 800px
+  - Thumbnails with individual and bulk removal
+- **Image viewer** with zoom, download and image navigation
+- Modal for detailed view
 
 ### 👥 Contacts Dashboard
 
-- Kontakt-Verwaltung (CRUD)
-- Avatar-Generierung aus Initialen
-- Sortierung und Filterung
-- Schnelle Zuweisung zu Tasks
+- Contact management (CRUD)
+- Avatar generation from initials
+- Sorting and filtering
+- Quick assignment to tasks
 
 ### 🔐 Authentication
 
-- Registrierung mit Validierung
-- Login mit Token-Persistence
-- Auto-Logout bei ungültigem Token
-- Auth Guards für geschützte Routen
+- Registration with validation
+- Login with token persistence
+- Auto-logout on invalid token
+- Auth Guards for protected routes
 
 ---
 
@@ -163,6 +167,8 @@ frontend/src/app/
 │       ├── board-tasks-service.ts # Task CRUD & state
 │       ├── db-contact-service.ts  # Contact CRUD & state
 │       └── animation-state.service.ts
+│   └── utils/
+│       └── attachment-utils.ts   # Compression, validation & Base64 encoding
 │
 ├── features/                      # Feature modules
 │   ├── board/                    # Kanban board
@@ -184,6 +190,8 @@ frontend/src/app/
 │
 ├── shared/                        # Reusable components
 │   └── components/
+│       ├── attachment-upload/    # Drag & Drop file upload with preview
+│       ├── image-viewer/         # Full-screen image viewer
 │       └── priority-icon/        # Priority indicator
 │
 ├── app.config.ts                 # App configuration

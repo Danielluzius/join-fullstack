@@ -49,6 +49,7 @@ The backend provides a complete **REST API** with:
 - Status updates (todo, inprogress, awaitfeedback, done)
 - Priorities (urgent, medium, low)
 - Team assignment via contacts
+- File attachments stored as Base64 JSON (JPEG/PNG only, validated server-side)
 - Optimized queries with `prefetch_related`
 
 ### Contact Management
@@ -64,6 +65,7 @@ The backend provides a complete **REST API** with:
 - **Searching:** Across title, description, category
 - **Ordering:** By any field
 - **Custom Actions:** `update_status`, `toggle_subtask`
+- **Attachment Validation:** MIME-type check (image/jpeg and image/png only)
 
 ---
 

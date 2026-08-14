@@ -57,6 +57,8 @@ join-fullstack/
 - Assign team members
 - Categories and tags
 - Due dates
+- File attachments (JPEG/PNG, up to 5 files, max. 1 MB total)
+- Image viewer with zoom, download and navigation
 - Full CRUD operations
 
 ### Contact Management
