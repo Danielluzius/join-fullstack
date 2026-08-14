@@ -36,13 +36,16 @@
             </div>
         </div>
 
-        <app-priority-selector [(priority)]="priority"></app-priority-selector>
+        <div class="form-group">
+            <app-priority-selector [(priority)]="priority"></app-priority-selector>
+        </div>
 
         <div class="form-group">
             <label>Category<span class="required">*</span></label>
             <div class="input-wrapper">
                 <div class="dropdown-wrapper">
-                    <div class="dropdown-toggle" (click)="toggleCategoryDropdown()" [class.error]="categoryError">
+                    <div class="dropdown-toggle" #categoryToggle (click)="toggleCategoryDropdown()"
+                        [class.error]="categoryError">
                         <span>{{ category || 'Select task category' }}</span>
                         <img #categoryArrow
                             [src]="showCategoryDropdown ? 'assets/board/arrow-drop-up-transparent.png' : 'assets/board/arrow-drop-down-transparent.png'"
@@ -50,7 +53,7 @@
                     </div>
 
                     @if (showCategoryDropdown) {
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" [class.opens-up]="categoryDropdownOpensUp">
                         @for (cat of categories; track cat) {
                         <div class="dropdown-item" (click)="selectCategory(cat)">
                             {{ cat }}
@@ -63,6 +66,8 @@
             </div>
         </div>
     </div>
+
+    <div class="form-divider" aria-hidden="true"></div>
 
     <div class="form-right">
         <app-attachment-upload [(attachments)]="attachments"></app-attachment-upload>

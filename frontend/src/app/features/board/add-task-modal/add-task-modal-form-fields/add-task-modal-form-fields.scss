@@ -8,14 +8,7 @@
   padding-right: 8px;
 
   &::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    width: 1px;
-    height: 424px;
-    background: #d1d1d1;
-    transform: translateX(-50%);
+    display: none;
   }
 
   @media (max-width: 768px) {
@@ -25,10 +18,21 @@
   }
 }
 
+.form-divider {
+  width: 1px;
+  background: #d1d1d1;
+  align-self: stretch;
+  flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
 .form-left {
   display: flex;
   flex-direction: column;
-  gap: clamp(8px, 1vw, 10px);
+  gap: clamp(10px, 1.2vw, 16px);
   width: clamp(280px, 45%, 440px);
   flex-shrink: 1;
   min-width: 280px;
@@ -37,7 +41,7 @@
 .form-right {
   display: flex;
   flex-direction: column;
-  gap: clamp(8px, 1vw, 10px);
+  gap: clamp(10px, 1.2vw, 16px);
   width: clamp(280px, 45%, 440px);
   flex-shrink: 1;
   min-width: 280px;
@@ -47,15 +51,15 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: clamp(6px, 1vw, 8px);
+  gap: clamp(4px, 0.5vw, 6px);
   flex: none;
   align-self: stretch;
   flex-grow: 0;
-  padding-bottom: clamp(16px, 2vw, 20px);
+  padding-bottom: 0;
 
   &:has(.input-wrapper) {
     align-items: flex-start;
-    padding: 0px 0px clamp(16px, 2vw, 20px) 0px;
+    padding: 0;
     width: 100%;
   }
 
@@ -105,7 +109,9 @@
       color: #e60026;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.25s ease, visibility 0.25s ease;
+      transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
 
       &.visible {
         opacity: 1;
@@ -221,6 +227,7 @@
 .dropdown-wrapper {
   position: relative;
   width: 100%;
+  z-index: 100;
 }
 
 .dropdown-toggle {
@@ -258,14 +265,22 @@
   position: absolute;
   left: 0;
   right: 0;
+  top: 100%;
   background: #ffffff;
   border: 1px solid #d1d1d1;
   border-radius: clamp(8px, 1vw, 10px);
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   max-height: clamp(200px, 25vw, 244px);
   overflow-y: auto;
-  z-index: 10;
+  z-index: 1000;
   margin-top: 4px;
+
+  &.opens-up {
+    bottom: 100%;
+    top: auto;
+    margin-top: 0;
+    margin-bottom: 4px;
+  }
 
   .dropdown-item {
     padding: clamp(10px, 1.2vw, 12px) clamp(12px, 1.5vw, 16px);

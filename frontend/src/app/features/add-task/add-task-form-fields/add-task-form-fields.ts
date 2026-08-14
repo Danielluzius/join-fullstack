@@ -61,6 +61,7 @@ export class AddTaskFormFields implements OnInit {
   hiddenDateValue = '';
   minDate = this.getTodayDateString();
   showCategoryDropdown = false;
+  categoryDropdownOpensUp = false;
 
   contacts: Contact[] = [];
   categories = ['Technical Task', 'User Story'];
@@ -71,6 +72,7 @@ export class AddTaskFormFields implements OnInit {
   categoryError = false;
 
   @ViewChild('datePicker') datePicker!: ElementRef<HTMLInputElement>;
+  @ViewChild('categoryToggle') categoryToggle!: ElementRef<HTMLElement>;
 
   /**
    * Lifecycle hook that runs on component initialization.
@@ -114,11 +116,12 @@ export class AddTaskFormFields implements OnInit {
     }
   }
 
-  /**
-   * Toggles the category dropdown visibility.
-   * Opens dropdown if closed, closes if open.
-   */
+  /** Toggles the category dropdown and calculates whether it should open upward. */
   toggleCategoryDropdown() {
+    if (!this.showCategoryDropdown && this.categoryToggle) {
+      const rect = this.categoryToggle.nativeElement.getBoundingClientRect();
+      this.categoryDropdownOpensUp = window.innerHeight - rect.bottom < 160;
+    }
     this.showCategoryDropdown = !this.showCategoryDropdown;
   }
 

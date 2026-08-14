@@ -1,11 +1,14 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
+  HostListener,
   Input,
-  Output,
-  OnInit,
   OnChanges,
+  OnInit,
+  Output,
   SimpleChanges,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -23,6 +26,8 @@ import { Contact } from '../../../core/interfaces/db-contact-interface';
   standalone: true,
 })
 export class ContactAssignmentDropdownComponent implements OnInit, OnChanges {
+  private elementRef = inject(ElementRef);
+
   @Input() contacts: Contact[] = [];
   @Input() selectedContactIds: string[] = [];
   @Output() selectedContactIdsChange = new EventEmitter<string[]>();
@@ -216,6 +221,14 @@ export class ContactAssignmentDropdownComponent implements OnInit, OnChanges {
     }
     const index = Math.abs(hash) % this.colorPalette.length;
     return this.colorPalette[index];
+  }
+
+  /** Closes the dropdown when clicking outside the component. */
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.elementRef.nativeElement.contains(event.target) && this.showContactDropdown) {
+      this.closeDropdown();
+    }
   }
 
   /**

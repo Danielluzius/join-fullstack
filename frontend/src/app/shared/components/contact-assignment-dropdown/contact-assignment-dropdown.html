@@ -1,7 +1,3 @@
-@if (showContactDropdown) {
-<div class="dropdown-backdrop" (click)="closeDropdown()"></div>
-}
-
 <div class="form-field" [class.has-selected-contacts]="selectedContactIds.length > 0">
     <label for="assignedTo">Assigned to</label>
     <div class="dropdown-wrapper">
