@@ -25,6 +25,7 @@ export class AttachmentUploadComponent {
 
   isDragOver = false;
   errorMessage = '';
+  errorSubtext = '';
   isProcessing = false;
 
   /** Marks the drop zone as active and prevents default drag behavior. */
@@ -90,10 +91,15 @@ export class AttachmentUploadComponent {
     this.attachmentsChange.emit(this.attachments);
   }
 
-  /** Displays an error message and auto-dismisses it after 4 seconds. */
+  /** Splits message at '!' into title and subtext, auto-dismisses after 4 seconds. */
   private showError(message: string): void {
-    this.errorMessage = message;
-    setTimeout(() => (this.errorMessage = ''), 4000);
+    const idx = message.indexOf('!');
+    this.errorMessage = idx !== -1 ? message.slice(0, idx + 1) : message;
+    this.errorSubtext = idx !== -1 ? message.slice(idx + 1).trim() : '';
+    setTimeout(() => {
+      this.errorMessage = '';
+      this.errorSubtext = '';
+    }, 4000);
   }
 
   /** Converts a byte count to a human-readable KB or MB string. */

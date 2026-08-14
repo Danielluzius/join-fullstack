@@ -38,9 +38,15 @@
         @for (attachment of attachments; track attachment.name; let i = $index) {
         <li class="thumbnail-item">
             <button type="button" class="thumbnail-remove" (click)="removeAttachment(i)"
-                [attr.aria-label]="'Remove ' + attachment.name">✕</button>
+                [attr.aria-label]="'Remove ' + attachment.name">
+                <svg width="14" height="16" viewBox="0 0 16 18" fill="none">
+                    <path
+                        d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999 16.549 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.549 18.001 13 18H3ZM13 3H3V16H13V3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
+                        fill="white" />
+                </svg>
+            </button>
             <img [src]="attachment.base64" [alt]="attachment.name" class="thumbnail-img" />
-            <span class="thumbnail-name" [title]="attachment.name">{{ attachment.name }}</span>
+            <span class="thumbnail-overlay-name" [title]="attachment.name">{{ attachment.name }}</span>
         </li>
         }
     </ul>
@@ -50,7 +56,13 @@
 
 @if (errorMessage) {
 <div class="error-toast" role="alert" aria-live="assertive">
-    <span class="error-toast-text">{{ errorMessage }}</span>
-    <button type="button" class="error-toast-close" (click)="errorMessage = ''" aria-label="Dismiss error">✕</button>
+    <div class="error-toast-body">
+        <span class="error-toast-title">{{ errorMessage }}</span>
+        @if (errorSubtext) {
+        <span class="error-toast-subtext">{{ errorSubtext }}</span>
+        }
+    </div>
+    <button type="button" class="error-toast-close" (click)="errorMessage = ''; errorSubtext = ''"
+        aria-label="Dismiss error">✕</button>
 </div>
 }
