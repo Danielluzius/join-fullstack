@@ -219,6 +219,9 @@
     margin-bottom: 1px;
     opacity: 0;
     transition: opacity 0.25s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &.has-error {
@@ -335,7 +338,9 @@
   font-size: clamp(16px, 3vw, 21px);
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s, box-shadow 0.2s;
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s;
   border: none;
   background-color: #2a3647;
   color: white;

@@ -4,11 +4,6 @@
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  padding-bottom: 16px;
-
-  &.has-selected-contacts {
-    padding-bottom: 0;
-  }
 
   label {
     font-family: 'Inter', sans-serif;

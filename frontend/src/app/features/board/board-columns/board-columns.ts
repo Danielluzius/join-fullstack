@@ -216,6 +216,7 @@ export class BoardColumns implements OnInit {
    */
   async onDrop(event: CdkDragDrop<Task[]>) {
     if (this.isMobile) return;
+    this.isDragOver = false;
     const task = event.item.data as Task;
     if (event.previousContainer === event.container) {
       await this.handleReorderInSameColumn(event);
